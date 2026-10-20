@@ -1,5 +1,12 @@
 # SYLUTION Learn
 
+## Studio 2.0 UI/UX redesign
+
+The interface was redesigned around a premium porcelain-white, midnight-black and vivid-red visual identity. The updated experience includes a bold editorial Home dashboard with illustrated book hero, curated interest cards, premium course gallery, Language Lab and AI Tutor discovery; a redesigned course catalog and language hub; revamped AI Tutor, analytics and profile views; and consistent controls, typography, spacing and micro-interactions.
+
+The responsive CSS handles narrow phones (including 320px), conventional smartphones, tablets, desktop browsers and landscape screens. The new design layer is in `premium.css`, loaded after `styles.css`; the latter remains the foundational component CSS. Responsive rules use breakpoints at 330/390/640/820/1099/1500px. Local and simulated UI tests are helpful but not a substitute for visual QA on real devices.
+
+
 **Learn. Build. Grow.** — A premium education platform concept by **SYLUTION LTD**.
 
 ## What is included
@@ -67,7 +74,8 @@ User preference data, favorites, progress and drafts are kept **locally in the b
 
 ```
 index.html           App document
-styles.css           Reusable responsive visual design system
+styles.css           Base reusable visual styles
+premium.css          Studio 2.0 premium design and device-responsive refinements
 app.js               Screens, interactions, example content and routing
 icon.svg             SVG brand icon
 manifest.webmanifest Progressive web app metadata
