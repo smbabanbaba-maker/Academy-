@@ -575,3 +575,177 @@ main.container{min-height:65vh}
 @media(prefers-reduced-motion:reduce){
   *,*:before,*:after{animation-duration:0.01ms!important;transition-duration:0.01ms!important;scroll-behavior:auto!important}
 }
+
+/* Studio 2.1 — conversational learning, progress and identity */
+.ai-cover{background:radial-gradient(circle at 93% 73%,#70243b,transparent 39%),linear-gradient(125deg,#1b1a22,#27222d);border-radius:27px;display:flex;align-items:center;justify-content:space-between;gap:30px;position:relative;overflow:hidden;min-height:240px;padding:clamp(28px,4vw,42px);isolation:isolate}
+.ai-cover:before{content:"";position:absolute;width:440px;height:440px;top:-200px;right:-20px;border:1px solid #ffb9cb21;border-radius:50%;box-shadow:0 0 0 40px #ffb9cb0a,0 0 0 80px #ffb9cb05}
+.ai-cover-text{max-width:490px;position:relative;z-index:2}
+.ai-cover-text h2{font-size:clamp(25px,3vw,39px);color:#fff;line-height:1.2;margin:18px 0 10px}
+.ai-cover-text p{font-size:13px;color:#c7bfc9;margin:0;max-width:440px}
+.ai-cover-symbol{width:140px;height:140px;flex-shrink:0;background:#ffffff0a;border:1px solid #ffffff24;border-radius:38px;display:grid;place-items:center;transform:rotate(-9deg);position:relative;box-shadow:0 20px 40px #0004}
+.ai-cover-symbol svg{width:76px;height:76px;color:#ffc8d6;transform:rotate(9deg);stroke-width:1.1}
+.ai-cover-symbol span{position:absolute;top:-17px;right:-23px;font-size:55px;color:#ff4766}
+.ai-conversation-head{display:flex;align-items:center;gap:12px;padding:19px 5px 15px}
+.ai-conversation-head .bot-avatar{background:#fff0f2;color:var(--red);border:1px solid #ffdde5}
+.ai-conversation-head>span:nth-child(2){flex:1;min-width:0}
+.ai-conversation-head strong{display:block;font-size:13px}
+.ai-conversation-head small{display:block;color:#9996a0;font-size:10px;margin-top:3px}
+.chat-log{border-radius:20px;background:#fff;border:1px solid #efebee;min-height:325px;padding:20px}
+.bubble-row{gap:10px}
+.bubble{border-radius:17px;padding:15px 18px;font-size:13px;max-width:77%}
+.bubble.ai{background:#f7f6f7;border:1px solid #f1f0f1}
+.bubble.user{box-shadow:0 10px 15px #ed18331a}
+.bot-avatar{width:39px;height:39px}
+.suggest-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin:13px 0 23px;gap:10px}
+.suggest{position:relative;display:flex;flex-direction:column;min-height:127px;padding:17px;gap:11px}
+.suggest>svg:first-child{margin:0;background:#fff0f1;border-radius:11px;padding:7px;height:38px;width:38px}
+.suggest span{margin-top:auto}
+.suggest>svg:last-child{position:absolute;right:15px;top:20px;width:15px;color:#c8bdc2}
+.chat-form{padding:9px;border-radius:17px;background:#fff;box-shadow:0 16px 36px #15152018}
+.chat-form input{font-size:13px}
+.chat-form .btn{min-width:48px;min-height:48px;border-radius:13px}
+.chat-form .icon-button{border:none;background:#f5f5f6}
+/* Progress */
+.progress-overview{background:radial-gradient(circle at 73% 65%,#73253e,transparent 47%),#17171f;color:#fff;border-radius:27px;padding:35px 42px;display:grid;grid-template-columns:1fr 200px;gap:20px;position:relative;overflow:hidden;min-height:280px}
+.progress-overview:before{content:"✦";position:absolute;left:56%;top:-115px;font-size:330px;color:#ffffff06;transform:rotate(20deg)}
+.progress-headline{position:relative;z-index:2}
+.progress-headline h2{color:#fff;font-size:clamp(32px,3.6vw,49px);line-height:1.15;margin:19px 0 10px}
+.progress-headline h2 em{color:#ff4a67;font-style:normal}
+.progress-headline p{font-size:13px;color:#beb8c3;max-width:390px}
+.progress-headline .btn{margin-top:10px}
+.progress-orb{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px}
+.progress-orb .ring.large{width:155px;height:155px;background:conic-gradient(#ff3858 var(--percent),#ffffff28 0);box-shadow:0 15px 30px #0002}
+.progress-orb .ring.large>span{width:128px;height:128px;background:#28202d;color:white;font-size:35px}
+.progress-orb .ring.large small{color:#dabfc9}
+.progress-orb-caption{font-size:10px;color:#d9cbd1;font-weight:700;text-align:center}
+.progress-kpis,.profile-kpis{margin:19px 0 22px;gap:14px}
+.progress-kpis .stat-card,.profile-kpis .stat-card{display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-height:148px;padding:20px;box-shadow:0 8px 20px #16131d05}
+.kpi-icon{background:#fff0f2;color:var(--red);height:39px;width:39px;display:grid;place-items:center;border-radius:11px}
+.kpi-icon svg{width:20px;height:20px}
+.progress-kpis .stat-number,.profile-kpis .stat-number{font-size:28px;color:#211c24;line-height:1.1}
+.kpi-label{font-size:11px;color:#98919b;font-weight:700}
+.progress-grid{display:grid;grid-template-columns:1.5fr .85fr;gap:16px}
+.activity-panel{padding:25px;min-height:280px}
+.activity-panel h3{font-size:20px}
+.activity-panel p{margin:7px 0 0}
+.activity-panel .chart{height:190px;margin-top:4px}
+.activity-panel .chart-bar{max-width:35px}
+.activity-chip{color:#af7a89;border:1px solid #fae2e8;background:#fff6f8;font-size:10px;font-weight:800;padding:8px 10px;border-radius:9px}
+.momentum-panel{padding:24px;display:flex;flex-direction:column;align-items:flex-start;background:linear-gradient(140deg,#fff1f3,#fff);min-height:280px}
+.momentum-icon{border-radius:16px;background:white;color:var(--red);width:48px;height:48px;display:grid;place-items:center;margin-bottom:17px}
+.momentum-icon svg{height:26px;width:26px}
+.momentum-panel h2{font-size:27px;margin:7px 0 10px}
+.momentum-panel p{font-size:12px;color:#8b7984;max-width:240px}
+.momentum-panel .btn{margin-top:auto}
+.enrolled-paths{padding:9px}
+.enrolled-paths .settings-row{border-radius:15px}
+.enrolled-icon{display:grid;place-items:center;height:44px;width:44px;background:#fff0f2;color:var(--red);border-radius:12px}
+.enrolled-paths .settings-row .grow{display:flex;flex-direction:column;align-items:flex-start;gap:5px}
+.mini-progress{height:5px;background:#f6eaec;border-radius:6px;display:block;width:min(100%,270px);overflow:hidden}
+.mini-progress>span{display:block;height:100%;background:var(--red);border-radius:5px}
+.achievement{box-shadow:0 8px 20px #1c182109;border-color:#eee8eb}
+.achievement svg{width:33px;height:33px}
+/* Personal identity and profile */
+.profile-cover{min-height:230px;border-radius:27px;background:radial-gradient(circle at 83% 14%,#673348 0%,transparent 33%),linear-gradient(120deg,#1b1a22,#281923);position:relative;overflow:hidden}
+.profile-cover-light{position:absolute;right:4%;top:-95px;font-size:340px;line-height:1;color:#ffffff07}
+.profile-cover-inner{display:flex;gap:25px;padding:clamp(25px,4vw,45px);align-items:center;position:relative;z-index:2;min-height:230px}
+.profile-cover .avatar{width:104px;height:104px;border:4px solid #ffffff30;box-shadow:0 0 0 7px #ffffff15;flex-shrink:0}
+.profile-identity{flex:1;min-width:0}
+.profile-identity .micro-kicker{color:#ffc0cf}
+.profile-identity h2{font-size:clamp(24px,3.2vw,38px);color:#fff;margin:10px 0 7px}
+.profile-identity p{color:#c2b4bc;font-size:12px;margin-bottom:13px}
+.profile-member-tag{display:inline-flex;align-items:center;gap:6px;background:#ffffff1c;border:1px solid #ffffff29;border-radius:8px;padding:7px 9px;color:#ffdae0;font-size:10px;font-weight:800}
+.profile-member-tag svg{width:13px;height:13px}
+.profile-cover .btn{background:#ffffff1a;flex-shrink:0}
+.profile-kpis .stat-card{min-height:140px}
+.member-offer{display:flex;align-items:center;gap:18px;padding:25px;background:linear-gradient(120deg,#fff2f4,#ffe8ed);border:1px solid #ffe3e8;border-radius:23px}
+.member-symbol{width:58px;height:58px;background:var(--red);color:white;border-radius:17px;display:grid;place-items:center;flex-shrink:0;box-shadow:0 11px 20px #ed18333d}
+.member-symbol svg{height:28px;width:28px}
+.member-offer>div{flex:1}
+.member-offer h3{margin:6px 0 3px;font-size:20px}
+.member-offer p{font-size:12px;color:#93848b;margin:0}
+.profile-link-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+.profile-link{border:1px solid #eee8e9;border-radius:18px;background:white;display:flex;align-items:flex-start;flex-direction:column;padding:19px;min-height:125px;gap:13px;text-align:left;box-shadow:0 8px 20px #16131606;position:relative}
+.profile-link-icon{width:45px;height:45px;border-radius:13px;background:#fff0f2;color:var(--red);display:grid;place-items:center}
+.profile-link strong{font-size:12px}
+.profile-link>svg:last-child{width:16px;position:absolute;right:15px;bottom:17px;color:#b5a9b1}
+.profile-link:hover{background:#fff9fa;transform:translateY(-2px)}
+.settings-icon{background:#fff1f3;color:var(--red);height:39px;width:39px;display:grid;place-items:center;border-radius:11px}
+.settings-icon svg{width:19px;height:19px}
+.profile-screen .settings-row{padding:13px 19px;min-height:68px}
+/* Responsive refinements for redesigned secondary screens */
+@media(max-width:850px){
+  .profile-link-grid{grid-template-columns:repeat(2,1fr)}
+  .suggest-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .progress-grid{grid-template-columns:1fr 1fr}
+  .progress-overview{grid-template-columns:1fr 165px}
+  .progress-orb .ring.large{width:130px;height:130px}
+  .progress-orb .ring.large>span{width:108px;height:108px;font-size:30px}
+  .activity-panel .chart{height:175px}
+}
+@media(max-width:640px){
+  .ai-cover{padding:25px;min-height:220px}
+  .ai-cover-text{max-width:77%}
+  .ai-cover-text h2{font-size:25px}
+  .ai-cover-text p{font-size:11px}
+  .ai-cover-symbol{width:73px;height:73px;border-radius:20px;position:absolute;right:14px;bottom:18px}
+  .ai-cover-symbol svg{width:40px;height:40px}
+  .ai-cover-symbol span{font-size:34px;top:-15px;right:-7px}
+  .ai-conversation-head{padding-top:17px}
+  .ai-conversation-head strong{font-size:12px}
+  .ai-conversation-head small{font-size:9px}
+  .chat-log{min-height:260px;padding:15px}
+  .bubble{max-width:85%;padding:12px;font-size:12px}
+  .bot-avatar{height:33px;width:33px}
+  .bot-avatar svg{width:18px;height:18px}
+  .suggest-grid{gap:9px}
+  .suggest{min-height:110px;padding:13px;font-size:11px}
+  .suggest>svg:first-child{width:33px;height:33px}
+  .chat-form{bottom:96px}
+  .chat-form input{font-size:12px;padding-left:4px}
+  .chat-form .btn{min-width:41px;min-height:41px}
+  .progress-overview{padding:23px;grid-template-columns:1fr 100px;gap:7px;min-height:270px}
+  .progress-headline h2{font-size:30px}
+  .progress-headline p{font-size:11px}
+  .progress-headline .btn{font-size:10px;padding:0 10px}
+  .progress-orb .ring.large{width:100px;height:100px}
+  .progress-orb .ring.large>span{width:84px;height:84px;font-size:24px}
+  .progress-orb-caption{font-size:9px}
+  .progress-kpis,.profile-kpis{gap:8px}
+  .progress-kpis .stat-card,.profile-kpis .stat-card{padding:13px;min-height:127px}
+  .kpi-icon{height:35px;width:35px}
+  .progress-kpis .stat-number,.profile-kpis .stat-number{font-size:23px}
+  .kpi-label{font-size:9px}
+  .progress-grid{grid-template-columns:1fr;gap:12px}
+  .activity-panel{min-height:255px;padding:20px}
+  .activity-panel .chart{height:157px}
+  .momentum-panel{min-height:230px}
+  .momentum-panel h2{font-size:26px}
+  .profile-cover{min-height:220px}
+  .profile-cover-inner{padding:21px;flex-wrap:wrap;gap:15px}
+  .profile-cover .avatar{width:73px;height:73px;border-width:3px}
+  .profile-identity h2{font-size:22px}
+  .profile-identity p{font-size:11px}
+  .profile-cover .btn{margin-left:88px;padding:0 12px;min-height:37px;font-size:11px}
+  .member-offer{padding:17px;gap:11px;flex-wrap:wrap}
+  .member-symbol{height:45px;width:45px;border-radius:13px}
+  .member-offer h3{font-size:16px}
+  .member-offer p{font-size:10px}
+  .member-offer .btn{font-size:11px}
+  .profile-link-grid{gap:10px}
+  .profile-link{padding:14px;min-height:114px}
+  .profile-link-icon{width:39px;height:39px}
+  .profile-link strong{font-size:11px}
+  .settings-icon{width:34px;height:34px}
+  .profile-screen .settings-row strong{font-size:12px}
+  .profile-screen .settings-row small{font-size:10px}
+}
+@media(max-width:390px){
+  .profile-cover .btn{margin-left:0}
+  .progress-overview{grid-template-columns:1fr;min-height:0}
+  .progress-orb{flex-direction:row;justify-content:flex-start;margin-top:18px}
+  .progress-orb .ring.large{width:80px;height:80px}
+  .progress-orb .ring.large>span{width:67px;height:67px;font-size:18px}
+  .progress-orb-caption{font-size:10px}
+  .member-offer .btn{margin-left:auto}
+}
