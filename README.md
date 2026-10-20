@@ -1,13 +1,22 @@
 # SYLUTION Learn
 
-## Studio 2.0 UI/UX redesign
+## Signature Edition — UI/UX redesign
 
-The interface was redesigned around a premium porcelain-white, midnight-black and vivid-red visual identity. The updated experience includes a bold editorial Home dashboard with illustrated book hero, curated interest cards, premium course gallery, Language Lab and AI Tutor discovery; a redesigned course catalog and language hub; revamped AI Tutor, analytics and profile views; and consistent controls, typography, spacing and micro-interactions.
+This iteration replaces the experimental dark/pink theme with the **original approved visual direction**: predominantly white surfaces, sharp black typography, signal-red accents, clean course photographs, polished category icons, a photo-led featured banner, and discreet navigation.
 
-The responsive CSS handles narrow phones (including 320px), conventional smartphones, tablets, desktop browsers and landscape screens. The new design layer is in `premium.css`, loaded after `styles.css`; the latter remains the foundational component CSS. Responsive rules use breakpoints at 330/390/640/820/1099/1500px. Local and simulated UI tests are helpful but not a substitute for visual QA on real devices.
+### What changed
 
+- Rebuilt **Home** with search, category shortcuts, a working three-slide editorial feature banner, progress/continue learning, photo-rich popular course cards, discovery categories, and dedicated language learning discovery.
+- Rebuilt the **Course Catalog** with new cards, filtering, pricing indicators, proper all-courses reset, and search.
+- Rebuilt **Languages** with individual language cards, speaking practice shortcuts, progress visuals and a more approachable featured section.
+- Refined the typography, cards, forms, progress, chat, exam, course detail, lesson and profile styles to follow one visual system.
+- Device-adaptive layouts at 330px, 390px, 600px, 800px, 1050px and 1280px, including portrait phones, tablets, laptops, desktops and compact landscape screens.
 
-**Learn. Build. Grow.** — A premium education platform concept by **SYLUTION LTD**.
+### Visual and functional verification
+
+JavaScript page rendering and navigation smoke tests were run across all major screens. This does **not** mean the interface has been pixel-perfect validated on physical devices. In-browser review on Android, iPhone, tablet and desktop remains recommended.
+
+The design rules are in `premium.css`, loaded after `styles.css` for reusable baseline components.
 
 ## What is included
 
