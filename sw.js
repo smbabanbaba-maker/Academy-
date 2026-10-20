@@ -1,4 +1,4 @@
-const VERSION='sylution-learn-studio-2026-10-20-v2';
+const VERSION='sylution-learn-signature-2026-10-20-v3';
 const ASSETS=['./','./index.html','./styles.css','./premium.css','./app.js','./icon.svg','./manifest.webmanifest'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(VERSION).then(cache=>cache.addAll(ASSETS)));self.skipWaiting()});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==VERSION).map(key=>caches.delete(key)))));self.clients.claim()});
