@@ -118,7 +118,7 @@ const thumb=(c,klass)=>'<div class="thumb '+(klass||'')+'">'+img(c.image,c.title
 const favButton=id=>'<button class="favorite '+(state.saved.includes(id)?'saved':'')+'" aria-label="'+(state.saved.includes(id)?'Unsave course':'Save course')+'" data-action="favorite" data-id="'+id+'">'+ico('bookmark')+'</button>';
 const card=c=>'<article class="course-card"><div class="course-image-wrap"><button class="course-image-button" data-go="detail" data-id="'+c.id+'" aria-label="Open '+esc(c.title)+'">'+thumb(c,'')+'</button>'+favButton(c.id)+'</div><div class="course-card-content"><span class="card-eyebrow">'+esc(c.cat)+' <span>·</span> '+esc(c.level)+'</span><button class="course-title" data-go="detail" data-id="'+c.id+'">'+esc(c.title)+'</button><p>'+esc(c.desc)+'</p><div class="course-card-bottom"><span class="rating"><span class="star">★</span> '+c.rating+' <span class="muted">· sample</span></span><span class="price">'+money(c.price)+'</span></div></div></article>';
 const catData=[['Languages','book'],['Academics','cap'],['Digital Skills','laptop'],['Exams','file'],['Live Classes','radio']];
-const categories=(active,go)=>'<div class="category-strip">'+catData.map(([name,icon])=>'<button class="category '+(active===name?'active':'')+'" data-action="category" data-value="'+name+'" data-target="'+go+'"><span class="category-circle">'+ico(icon)+'</span><span class="category-name">'+esc(name)+'</span></button>').join('')+'</div>';
+const categories=(active,go)=>'<div class="category-strip">'+(state.page==='courses'?[['All','menu'],...catData,['Business','users'],['Engineering','settings']]:catData).map(([name,icon])=>'<button class="category '+(active===name?'active':'')+'" data-action="category" data-value="'+name+'" data-target="'+go+'"><span class="category-circle">'+ico(icon)+'</span><span class="category-name">'+esc(name)+'</span></button>').join('')+'</div>';
 const hero=(headline,emph,subtitle,action,photo)=>'<div class="hero elegant-hero"><div class="hero-content"><span class="hero-eyebrow">SYLUTION LEARN</span><h1>'+headline+'<br><span class="red">'+emph+'</span></h1><p>'+subtitle+'</p><button class="btn btn-primary" data-go="'+(action==='Languages'?'languages':'courses')+'">Explore '+action+' '+ico('arrow')+'</button></div>'+img(photo||PHOTOS.hero,'Learning at SYLUTION').replace('<img','<img class="hero-photo"')+'</div>';
 
 
@@ -349,7 +349,7 @@ const b=e.target.closest('[data-go],[data-action]');if(!b)return;
 const action=b.dataset.action;const go=b.dataset.go;const id=b.dataset.id;const val=b.dataset.value;
 if(go){if(go==='speaking'&&id)state.pronounce='';nav(go,id);return}
 if(!action)return;
-if(action==='category'){if(val==='Live Classes'){nav('live');return}if(val==='Exams'){nav('exam');return}state.category=val;nav('courses');return}
+if(action==='category'){if(val==='Languages'&&state.page==='home'){nav('languages');return}if(val==='Live Classes'){nav('live');return}if(val==='Exams'){nav('exam');return}state.category=val;nav('courses');return}
 if(action==='hero-slide'){state.heroIndex=Number(b.dataset.index)||0;render();return}
 if(action==='favorite'){favorite(id);return}
 if(action==='clear-filter'){state.category='All';state.search='';state.sort='popular';render();return}
