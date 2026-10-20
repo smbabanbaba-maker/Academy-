@@ -331,7 +331,7 @@ if(action==='quiz-retake'){state.quizIndex=0;state.answers={};state.quizEnds=Dat
 if(action==='pro'){state.modal='pro';render();return}
 if(action==='help'||action==='about'){state.modal=action;render();return}
 if(action==='session-alert'){state.modal='session';render();return}
-if(action==='close-modal'){if(e.target.closest('.modal')&&e.target===e.target.closest('.modal-layer'))return;state.modal=null;render();return}
+if(action==='close-modal'){if(b.classList&&b.classList.contains('modal-layer')&&e.target!==b)return;state.modal=null;render();return}
 });
 document.addEventListener('submit',e=>{
 if(e.target.id==='course-search'){e.preventDefault();state.search=String(new FormData(e.target).get('search')||'');render();return}
