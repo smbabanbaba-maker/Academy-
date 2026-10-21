@@ -1,5 +1,65 @@
 # SYLUTION Learn
 
+## YouTube video courses — live API integration
+
+SYLUTION Learn now includes a free-video learning journey in the existing application:
+
+1. **Home → Free video courses** or **Courses → Video library**
+2. Search full-length educational videos and YouTube playlists
+3. Select a course, read the named original creator and course curriculum
+4. Open chapters in the official **YouTube embedded player** inside SYLUTION Learn
+5. Track manually marked chapters locally and open study tools in the app
+
+### Available immediately, without credentials
+
+The `youtube.js` starter catalog contains six independently identified, long-form freeCodeCamp.org courses:
+
+| Subject | Original YouTube Video |
+| --- | --- |
+| Python | `rfscVS0vtbw` |
+| HTML | `pQN-pnXPaVg` |
+| JavaScript | `PkZNo7MFNFg` |
+| SQL | `HXV3zeQKqGY` |
+| C | `KJgsSFOSQv0` |
+| C++ | `vLnPwxZdW4Y` |
+
+Where possible, their curriculum is divided into chapter starting points from the original video's public description. Chapters in one long video are timestamp navigation, **not separate uploaded videos**.
+
+### Activate live YouTube search (API key required)
+
+The **YouTube Data API v3** uses a credential created in the owner's Google Cloud project. It is not a publicly shared universal API key. To enable searching across other courses and playlists:
+
+1. Open [Google Cloud Console](https://console.cloud.google.com/), choose or create a project controlled by SYLUTION LTD.
+2. Go to **APIs & Services → Library**, enable **YouTube Data API v3** for that project.
+3. Under **Credentials**, create an API key, restrict it to **YouTube Data API v3**, and keep it secret. For a cloud/serverless backend, application restriction strategy must account for the backend's network topology; API restrictions should always be applied. Rotate keys if leaked.
+4. Deploy the repository to a service that executes the **`api/youtube.js` Vercel serverless function** (for example Vercel). In **Project Settings → Environment Variables**, create `YOUTUBE_API_KEY` with the key value for the appropriate environment(s), then redeploy.
+5. Open the app's **Video Courses** library. Searches will call `/api/youtube?mode=search&q=...&kind=video` or `kind=playlist`; course playlists will load lesson videos from `mode=playlist&id=...`.
+
+**On GitHub Pages or by opening index.html directly**, the starter catalog and YouTube embeds can work, but the GitHub Pages static host cannot execute `api/youtube.js`; therefore live Data API search falls back gracefully to matching starter courses. No key is committed anywhere in this repository.
+
+The backend searches for long, embeddable video results or playlists, maps public metadata, applies bounded queries, and caches responses. YouTube's `search.list` costs significantly more quota than listing playlist items; monitor API quotas, implement production-grade request throttling/abuse controls, and curate results for quality before opening live search to all users.
+
+### Rules and limitations
+
+- Do not remove or cover the YouTube player, hide YouTube branding, represent a third-party video as SYLUTION's own video, or charge to watch an embedded YouTube video. Courses display their original creator.
+- This integration **does not** include paid course licenses or a white-label content agreement.
+- Embedded video availability, age restrictions and copyright holder permissions may change.
+- The learning progress button is a **manual study log**, not watched-time verification. It cannot issue an accredited certificate.
+- YouTube content must not be downloaded or copied without the appropriate permissions.
+- The API proxy requires an authorized deployment and a project-specific API key; until both exist, **live API results are not enabled**.
+
+### Integration files
+
+- `youtube.js` — Starter courses, chapter metadata, state and API client
+- `youtube-ui.js` — Browse, course, curriculum and watch screens
+- `youtube.css` — Responsive UI for YouTube discovery and video playback
+- `api/youtube.js` — Key-protected serverless search and playlist adapter (no credentials included)
+- `app.js` — Hooks video-course routes into the existing Academy
+- `index.html` and `sw.js` — App/PWA script loading and versioned cache
+
+Official API and policy references: [YouTube Data API](https://developers.google.com/youtube/v3), [Embedded Players](https://developers.google.com/youtube/player_parameters), [Developer Policies](https://developers.google.com/youtube/terms/developer-policies).
+
+
 ## Adaptive layout — Android, iPhone, tablet and laptop
 
 The device-responsive layer is `responsive.css`, loaded **after** `styles.css`, `premium.css`, and `palette.css`. It adds:
