@@ -1,5 +1,22 @@
 # SYLUTION Learn
 
+## Adaptive layout — Android, iPhone, tablet and laptop
+
+The device-responsive layer is `responsive.css`, loaded **after** `styles.css`, `premium.css`, and `palette.css`. It adds:
+
+- Safe-area-aware header and bottom navigation for notches and gesture bars on modern iPhones and Android devices.
+- `100dvh` viewport support, long-content overflow prevention, flexible grids, and phone touch targets.
+- Tablet portrait and landscape arrangements, small-laptop breakpoints, and full desktop navigation with Home, Courses, Languages, Exams, AI Tutor, and Progress.
+- Input sizing to prevent automatic iOS zoom, Android keyboard viewport-resize support, and an adaptive AI chat composer.
+- Special fallbacks for narrow phones, high zoom, small split-screen windows, device landscape rotation, and reduced-motion preferences.
+- App-shell service worker cache version bump, so returning users can load the new responsive stylesheet.
+
+### Device-preview QA page
+
+Open [device-check.html](./device-check.html) via a static file server or the deployed site. The QA page embeds the actual SYLUTION Learn app in selectable viewport sizes (320×640, 360×800, 375×667, 393×852, 430×932, 768×1024, 1024×768, 1366×768 and 1440×900) and offers an overflow check and a navigation visibility check. It is intended for visual review during development; it is not shown in the learner's primary navigation.
+
+**Important:** Simulated viewport rendering and static checks are not equivalent to running on physical Android and iPhone devices. Always perform a visual and interaction QA pass in Chrome for Android, Safari for iOS and at least one tablet/desktop browser before claiming device-perfect production readiness. This is a responsive **web/PWA interface**, not a compiled Android APK or native iOS app.
+
 ## Brand palette — role-based color system
 
 All eight requested colors are now implemented as design tokens in `palette.css` (loaded after `styles.css` and `premium.css`). Colors are applied intentionally, not scattered at random:
@@ -105,6 +122,8 @@ index.html           App document
 styles.css           Base reusable visual styles
 premium.css          Premium UI and device-responsive refinements
 palette.css             Semantic brand palette, category accents and screen-specific theming
+responsive.css          iPhone, Android, tablet and desktop layout safeguards
+device-check.html        Interactive device-viewport QA viewer
 app.js               Screens, interactions, example content and routing
 icon.svg             SVG brand icon
 manifest.webmanifest Progressive web app metadata
