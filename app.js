@@ -108,7 +108,7 @@ const course=id=>COURSES.find(c=>c.id===id)||COURSES[0];
 const lang=()=>LANGS.find(x=>x.key===state.lang)||LANGS[0];
 const ct=id=>state.completed[id]||0;
 const countCompleted=()=>Object.values(state.completed).filter(n=>n>=100).length;
-const nav=(page,arg)=>{state.page=page;if(arg){if(['detail','lesson'].includes(page))state.courseId=arg;if(['track','speaking'].includes(page))state.lang=arg;if(['ytcourse','ytwatch'].includes(page)&&VIDEO)VIDEO.select(arg)}state.modal=null;state.lessonPlaying=false;const hash='#/'+page+(arg?'/'+arg:'');if(location.hash!==hash)history.pushState(null,'',hash);render();window.scrollTo({top:0,behavior:'auto'})};
+const nav=(page,arg)=>{state.page=page;if(arg){if(['detail','lesson'].includes(page))state.courseId=arg;if(['track','speaking'].includes(page))state.lang=arg;if(['ytcourse','ytwatch'].includes(page)&&VIDEO.state.selected?.id!==arg)VIDEO.select(arg)}state.modal=null;state.lessonPlaying=false;const hash='#/'+page+(arg?'/'+arg:'');if(location.hash!==hash)history.pushState(null,'',hash);render();window.scrollTo({top:0,behavior:'auto'})};
 const toast=message=>{document.querySelector('.toast')?.remove();const el=document.createElement('div');el.className='toast';el.setAttribute('role','status');el.textContent=message;document.body.appendChild(el);clearTimeout(state.toastTimer);state.toastTimer=setTimeout(()=>el.remove(),3300)};
 const badge=(text,cl)=>'<span class="badge '+(cl||'')+'">'+esc(text)+'</span>';
 const heading=(title,link,pg)=>'<div class="section-head"><h2>'+title+'</h2>'+(link?'<button class="link" data-go="'+pg+'">'+link+' '+ico('arrow')+'</button>':'')+'</div>';
@@ -399,8 +399,20 @@ window.addEventListener('popstate',route);
 window.addEventListener('hashchange',route);
 setInterval(()=>{if(state.page==='exam')tickClock()},1000);
 function route(){
-const [page,arg]=decodeURI((location.hash||'#/home').replace(/^#\//,'')).split('/');
-if(page&&['ytlibrary','ytcourse','ytwatch','home','courses','detail','lesson','ai','languages','track','speaking','exam','results','progress','profile','saved','certificates','downloads','account','billing','notifications','live','instructor','welcome','signup'].includes(page)){state.page=page;if(arg){if(['detail','lesson'].includes(page))state.courseId=arg;if(['track','speaking'].includes(page))state.lang=arg}}else state.page='home';render()
+const [page,arg]=decodeURI((location.hash||'#/home').slice(2)).split('/');
+const supported=['ytlibrary','ytcourse','ytwatch','home','courses','detail','lesson','ai','languages','track','speaking','exam','results','progress','profile','saved','certificates','downloads','account','billing','notifications','live','instructor','welcome','signup'];
+if(page&&supported.includes(page)){
+ state.page=page;
+ if(arg){
+  if(['detail','lesson'].includes(page))state.courseId=arg;
+  if(['track','speaking'].includes(page))state.lang=arg;
+  if(['ytcourse','ytwatch'].includes(page)&&VIDEO.state.selected?.id!==arg)VIDEO.select(arg);
+ }
+}else state.page='home';
+render();
+if((page==='ytcourse'||page==='ytwatch')&&VIDEO.state.selected?.type==='playlist'&&!VIDEO.state.playlistLessons.length){
+ VIDEO.getLessons().then(()=>{if(state.page===page)render()})
+}
 }
 route();
 })();
