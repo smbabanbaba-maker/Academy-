@@ -50,9 +50,9 @@ if(V.state.selected.type==='playlist')V.getLessons().then(()=>{if(location.hash.
 }
 function action(name,data,tools){
 if(name==='yt-open'){open(data.id,tools.nav,tools.render,tools.toast);return true}
-if(name==='yt-start'){V.setLesson(0);tools.nav('ytwatch');return true}
-if(name==='yt-lesson'){V.setLesson(Number(data.index));tools.nav('ytwatch');return true}
-if(name==='yt-back'){tools.nav('ytcourse');return true}
+if(name==='yt-start'){V.setLesson(0);tools.nav('ytwatch',V.state.selected.id);return true}
+if(name==='yt-lesson'){V.setLesson(Number(data.index));tools.nav('ytwatch',V.state.selected.id);return true}
+if(name==='yt-back'){tools.nav('ytcourse',V.state.selected.id);return true}
 if(name==='yt-complete'){let p=V.finish();tools.render();tools.toast('Lesson added to your study log: '+p+'%');return true}
 if(name==='yt-reset'){V.state.items=V.curated.slice();V.state.status='curated';V.state.query='';V.state.kind='video';V.state.message='Six verified complete courses ready. Server API key required for live YouTube search.';tools.render();return true}
 return false
