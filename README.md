@@ -1,5 +1,24 @@
 # SYLUTION Learn
 
+## Brand palette — role-based color system
+
+All eight requested colors are now implemented as design tokens in `palette.css` (loaded after `styles.css` and `premium.css`). Colors are applied intentionally, not scattered at random:
+
+| Color | Hex | Design role |
+| --- | --- | --- |
+| Signature Red | `#E51B3D` | Brand, global primary CTAs, selected main navigation |
+| Royal Blue | `#2563EB` | Academic categories, exam questions and CBT selection, course discovery |
+| Royal Purple | `#7047EB` | AI Tutor, study prompts, digital skills and technology |
+| Emerald Teal | `#087F8C` | Languages, speaking/microphone, pronunciation and language progress |
+| Luxury Gold | `#F5B942` | Certificates, achievements and premium membership accents |
+| Midnight Black | `#171923` | Headings, premium membership and selected dark hero surfaces |
+| Soft White | `#FAFAFC` | Main application background |
+| Cool Gray | `#F0F2F6` | Neutral cards, dividers and muted interface surfaces |
+
+A dark gold text tone (`#795005`) is used for text on pale gold backgrounds, while white or dark text is used on saturated surfaces as appropriate. Global primary actions remain red for consistency.
+
+**Checks:** JavaScript page/interaction smoke tests, color class verification, CSS loading order, responsive token rules, and cached shell update were performed. Contrast ratios for the core accents on white were checked against WCAG AA normal-text contrast (all four tested accent pairs passed 4.5:1). This is not a substitute for complete visual QA or an accessibility audit on physical devices.
+
 ## Signature Edition — UI/UX redesign
 
 This iteration replaces the experimental dark/pink theme with the **original approved visual direction**: predominantly white surfaces, sharp black typography, signal-red accents, clean course photographs, polished category icons, a photo-led featured banner, and discreet navigation.
@@ -84,7 +103,8 @@ User preference data, favorites, progress and drafts are kept **locally in the b
 ```
 index.html           App document
 styles.css           Base reusable visual styles
-premium.css          Studio 2.0 premium design and device-responsive refinements
+premium.css          Premium UI and device-responsive refinements
+palette.css             Semantic brand palette, category accents and screen-specific theming
 app.js               Screens, interactions, example content and routing
 icon.svg             SVG brand icon
 manifest.webmanifest Progressive web app metadata
