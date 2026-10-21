@@ -82,7 +82,7 @@ function check(){
   el("overflow-status").textContent=overflow<=1?"No document-wide horizontal overflow":"Horizontal overflow: "+overflow+"px";
   el("overflow-status").className=overflow<=1?"pass":"fail";
   const widthNumber=Number(dev.value.split("x")[0]);
-  const useTop=widthNumber>=1150;
+  const useTop=widthNumber>=1024;
   const visible=useTop?desktop&&getComputedStyle(desktop).display!=="none":nav&&getComputedStyle(nav).display!=="none";
   el("navigation-status").textContent=(useTop?"Desktop navigation":"Mobile navigation")+(visible?" visible":" hidden");
   el("navigation-status").className=visible?"pass":"fail";
