@@ -1,0 +1,449 @@
+/* SYLUTION Learn — Universal responsive foundation
+   Last-loaded layout layer. Covers iPhone safe areas, Android keyboards,
+   tablets, split-screen, portrait/landscape and desktop widths.
+   Visual identity remains defined in palette.css. */
+
+/* 1. Fluid foundation and platform safe areas */
+:root{
+  --site-width:1220px;
+  --layout-gutter:clamp(14px,3vw,40px);
+  --nav-mobile-height:72px;
+  --header-height:78px;
+}
+html{
+  min-width:0;
+  width:100%;
+  scroll-padding-top:calc(var(--header-height) + 16px);
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+body{
+  width:100%;
+  min-width:0;
+  margin:0;
+  overflow-x:clip;
+  overscroll-behavior-x:none;
+}
+#app,.app-shell{width:100%;min-width:0;max-width:100%}
+.app-shell{
+  min-height:100vh;
+  min-height:100dvh;
+  padding-bottom:calc(var(--nav-mobile-height) + 38px + env(safe-area-inset-bottom,0px));
+  overflow-x:clip;
+}
+.container{
+  width:100%;
+  max-width:var(--site-width);
+  padding-left:max(var(--layout-gutter),env(safe-area-inset-left,0px));
+  padding-right:max(var(--layout-gutter),env(safe-area-inset-right,0px));
+}
+main.container{min-width:0;max-width:var(--site-width)}
+.screen{width:100%;min-width:0}
+.screen :is(h1,h2,h3,h4,p),.course-title,.settings-row strong,.module-text,.profile-identity{
+  overflow-wrap:break-word;
+}
+:is(.row,.row-between,.grid-2,.split,.panel,.course-card,.course-card-content,
+.course-image-wrap,.resume-card,.resume-body,.detail-copy,.language-feature,
+.language-choice,.lang-card,.stat-card,.profile-link,.form-card,.settings-row,
+.chat-log,.chat-form,.searchbar,.hero-content,.footer-tile,.quick-card,.bubble,
+.continue-card,.section-head,.topbar-inner,.top-actions,.screen-header,
+.catalog-tools,.modal,.language-feature>div,.footer-tiles,.profile-cover-inner){
+  min-width:0;
+}
+img,video,canvas{max-width:100%}
+img{display:block}
+svg{flex-shrink:0}
+button,input,textarea,select{max-width:100%}
+textarea{resize:vertical;min-width:0}
+input,textarea{min-width:0}
+button{touch-action:manipulation}
+button:disabled{cursor:not-allowed}
+:focus-visible{scroll-margin:16px}
+:is(.course-card,.panel,.form-card,.lang-card){max-width:100%}
+.section-head h2{min-width:0}
+.section-head .link{flex-shrink:0}
+.row-between{min-width:0}
+.searchbar input,.chat-form input,.field input,.field textarea,.field select{min-width:0}
+.form-card{width:min(100%,540px)}
+.form-card :is(input,select,textarea){width:100%;max-width:100%}
+.modal-layer{padding:calc(16px + env(safe-area-inset-top,0px)) max(14px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px))}
+.modal{width:min(100%,500px);max-width:100%;max-height:min(88dvh,760px);overflow-y:auto;overscroll-behavior:contain}
+:where(.thumb,.course-image-wrap,.resume-image,.detail-banner,.lesson-visual){isolation:isolate}
+:where(.thumb,.detail-banner,.lesson-visual,.continue-visual,.resume-image) img{object-fit:cover}
+
+/* 2. Header, navigation and keyboard-aware composer */
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:60;
+  height:auto;
+  min-height:calc(var(--header-height) + env(safe-area-inset-top,0px));
+}
+.topbar-inner{
+  min-height:calc(var(--header-height) + env(safe-area-inset-top,0px));
+  height:auto;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:0;
+  gap:clamp(9px,1.8vw,22px);
+}
+.desktop-navigation{min-width:0;flex:1;justify-content:center}
+.desktop-navigation button{white-space:nowrap}
+.new-brand{flex:0 0 auto}
+.new-brand .brand-name{white-space:nowrap;line-height:1.14}
+.new-brand .brand-caption{white-space:nowrap}
+.top-actions{flex:0 0 auto}
+.nav-wrapper{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:65;
+  padding-left:env(safe-area-inset-left,0px);
+  padding-right:env(safe-area-inset-right,0px);
+  background:transparent;
+}
+.bottom-nav{
+  width:100%;
+  max-width:650px;
+  min-height:calc(var(--nav-mobile-height) + env(safe-area-inset-bottom,0px));
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  margin:0 auto;
+  display:flex;
+  justify-content:space-around;
+  align-items:stretch;
+  box-shadow:0 -9px 22px rgba(23,25,35,.065);
+}
+.nav-item{
+  flex:1 1 20%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+  min-height:54px;
+  white-space:nowrap;
+}
+.nav-item>span{display:block;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.nav-item svg{width:clamp(19px,2.6vw,23px);height:clamp(19px,2.6vw,23px)}
+.chat-form{
+  width:100%;
+  max-width:100%;
+  position:sticky;
+  z-index:20;
+  bottom:calc(var(--nav-mobile-height) + env(safe-area-inset-bottom,0px) + 9px);
+}
+.chat-form .btn,.chat-form .icon-button{flex-shrink:0}
+.chat-form input{flex:1 1 auto;width:0;min-width:0}
+:where(.select,.field select){text-overflow:ellipsis}
+
+/* 3. Fluid content grids and cards */
+.course-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.horizontal-scroll,.category-strip,.detail-tabs,.pills{
+  min-width:0;
+  max-width:100%;
+  overflow-x:auto;
+  overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;
+}
+.horizontal-scroll>*{scroll-snap-align:start}
+.course-card .thumb{width:100%;aspect-ratio:1.45;height:auto}
+.course-card .thumb img{width:100%;height:100%}
+.popular-list .course-card{flex:0 0 clamp(200px,21vw,260px);min-width:200px;max-width:260px}
+.discovery-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.footer-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
+.polished-language-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+.language-choice{min-width:0}
+.resume-card{grid-template-columns:minmax(0,32%) minmax(0,1fr)}
+.resume-image{height:100%;min-height:176px}
+.resume-body{min-width:0}
+.resume-meter{display:flex}
+.resume-meter .progress-track{min-width:0;flex:1}
+.hero-carousel{min-width:0;max-width:100%}
+.premium-home-banner{
+  height:auto;
+  min-height:300px;
+  position:relative;
+}
+.premium-home-banner .hero-content{
+  padding:clamp(18px,3vw,39px);
+  width:61%;
+  min-width:0;
+  max-width:61%;
+  min-height:300px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-start;
+}
+.premium-home-banner .hero-content p{max-width:min(100%,340px)}
+.premium-home-banner h1{font-size:clamp(26px,3.6vw,42px)}
+.premium-home-banner .banner-photo{max-width:none}
+.detail-copy{overflow-wrap:break-word}
+.detail-tabs{scrollbar-width:thin}
+.detail-tab{flex:0 0 auto}
+.language-feature{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}
+.language-feature-art{min-width:0}
+.language-feature-art span{flex-shrink:0}
+.speak-box h1{font-size:clamp(26px,4vw,46px);overflow-wrap:anywhere}
+.speak-box .btn{white-space:normal;text-align:center}
+.stats-inline{display:flex;flex-wrap:wrap}
+.stat-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.profile-cover-inner{min-width:0}
+.profile-identity{flex:1 1 180px}
+.profile-link-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.profile-screen .member-offer{min-width:0}
+.profile-screen .member-offer .btn{flex-shrink:0}
+.settings-row .grow{min-width:0}
+.question-card{max-width:100%}
+.question-card h2{font-size:clamp(21px,2.7vw,29px)}
+.answer{text-align:left;white-space:normal;min-width:0}
+.answer span:last-child{overflow-wrap:anywhere}
+.achievements{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.achievement{min-width:0;max-width:100%}
+.progress-overview{min-width:0;grid-template-columns:minmax(0,1fr) minmax(120px,185px)}
+.progress-headline{min-width:0}
+.progress-headline .btn{white-space:normal;line-height:1.2;text-align:center}
+.progress-grid{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
+:where(.chart,.chart-col){min-width:0}
+.chart-col small{white-space:nowrap;font-size:10px}
+.language-actions{grid-template-columns:repeat(4,minmax(0,1fr))}
+.language-actions button{min-width:0;white-space:normal;text-align:center}
+.more-grid,.quick-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+/* 4. Large desktop and laptop; expose all destinations in top navigation */
+@media(min-width:1150px){
+  :root{--header-height:86px;--nav-mobile-height:0px}
+  .topbar-inner{gap:19px}
+  .desktop-navigation{display:flex;gap:2px}
+  .desktop-navigation button{padding:10px 10px;font-size:12px}
+  .nav-wrapper{display:none}
+  .app-shell{padding-bottom:20px}
+  .chat-form{bottom:12px}
+  .course-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .popular-list .course-card{min-width:228px}
+  .footer-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+/* 5. Small laptops, landscape tablets and 2/3-size browser windows */
+@media(min-width:901px) and (max-width:1149px){
+  :root{--header-height:78px}
+  .desktop-navigation{display:none}
+  .course-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .discovery-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .polished-language-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .profile-link-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .footer-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+/* 6. Tablets including iPad mini, iPad Air, Android tablets */
+@media(min-width:641px) and (max-width:900px){
+  :root{--header-height:74px}
+  .desktop-navigation{display:none}
+  .course-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .course-card .thumb{aspect-ratio:1.3}
+  .discovery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .polished-language-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .language-actions{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .premium-home-banner .hero-content{width:66%;max-width:66%}
+  .premium-home-banner{min-height:285px}
+  .premium-home-banner .hero-content{min-height:285px}
+  .resume-card{grid-template-columns: minmax(0,36%) minmax(0,1fr)}
+  .footer-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .footer-tiles .footer-tile:last-child{grid-column:1/-1}
+  .achievements{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .progress-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .profile-link-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+/* 7. Phones: shared Android/iOS touch-friendly layout */
+@media(max-width:640px){
+  :root{--header-height:69px;--nav-mobile-height:70px;--layout-gutter:16px}
+  html{scroll-padding-top:calc(var(--header-height) + env(safe-area-inset-top,0px) + 14px)}
+  .desktop-navigation{display:none}
+  .topbar-inner{gap:9px}
+  .new-brand{min-width:0}
+  .new-brand .brand-name{font-size:clamp(18px,5.6vw,23px)}
+  .new-brand .brand-caption{font-size:10px}
+  .top-actions{gap:5px}
+  .top-actions .icon-button{width:38px;height:40px}
+  .profile-avatar-button .avatar{width:36px;height:36px}
+  .screen{padding-top:15px}
+  .searchbar{min-height:53px}
+  :is(.home-search,.catalog-search,.chat-form) input{font-size:16px}
+  :is(.field input,.field select,.field textarea,.select, .chat-form input){font-size:16px}
+  .category-strip{gap:7px;padding-bottom:16px}
+  .category{min-width:74px;flex:0 0 auto}
+  .category-name{font-size:10px}
+  .category-circle{width:48px;height:48px}
+  .premium-home-banner{height:auto;min-height:255px;overflow:hidden}
+  .premium-home-banner .hero-content{
+    width:76%;max-width:76%;min-height:255px;
+    padding:20px 15px;
+  }
+  .premium-home-banner h1{font-size:clamp(23px,6.5vw,32px);line-height:1.16}
+  .premium-home-banner p{font-size:clamp(11px,3.1vw,13px);max-width:195px}
+  .premium-home-banner .btn{min-height:42px;white-space:normal;text-align:center;line-height:1.2}
+  .premium-home-banner .banner-photo{width:56%;object-position:center 36%}
+  .premium-home-banner .banner-photo-fade{background:linear-gradient(90deg,#FFF2F4 32%,#FFF2F4e8 50%,#FFF2F454 75%,transparent)}
+  .banner-doodle{display:none}
+  .section-head{gap:8px}
+  .section-head h2{font-size:clamp(18px,5vw,22px)}
+  .section-head .link{font-size:11px}
+  .resume-card{grid-template-columns:minmax(0,38%) minmax(0,1fr);gap:11px;padding:10px}
+  .resume-image{min-height:150px}
+  .resume-body{padding:0}
+  .resume-body h3{font-size:clamp(13px,3.5vw,16px)}
+  .resume-body p{font-size:11px}
+  .resume-actions{gap:6px}
+  .resume-actions .btn{min-height:40px;min-width:0;font-size:11px;padding-inline:10px}
+  .resume-more{height:40px;width:40px;flex-shrink:0}
+  .course-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .popular-list .course-card{flex:0 0 clamp(165px,54vw,230px);min-width:165px;max-width:230px}
+  .course-card{min-width:0}
+  .course-card .thumb{aspect-ratio:1.27}
+  .course-card-content p{font-size:11px}
+  .course-card-bottom{flex-wrap:wrap}
+  .discovery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .discovery-card{min-width:0;min-height:165px}
+  .languages-promo{grid-template-columns:minmax(0,1fr) minmax(60px,25%);gap:9px}
+  .promo-language-orbs{gap:3px}
+  .promo-language-orbs span{flex-shrink:0}
+  .footer-tiles{grid-template-columns:1fr}
+  .footer-tiles .footer-tile:last-child{grid-column:auto}
+  .catalog-tools{flex-wrap:wrap}
+  .catalog-tools>div{flex:1;min-width:135px}
+  .catalog-tools .select{width:auto;flex:0 1 160px}
+  .language-feature{grid-template-columns:minmax(0,1fr) minmax(60px,26%)}
+  .language-feature-art{gap:5px}
+  .language-feature-art span{width:clamp(32px,9vw,45px);height:clamp(32px,9vw,45px);font-size:clamp(19px,5vw,25px)}
+  .language-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .language-actions button{min-height:48px;gap:7px}
+  .polished-language-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .language-choice{min-height:180px}
+  .language-tip{flex-wrap:wrap}
+  .language-tip>div{flex:1 1 160px}
+  .language-tip .btn{width:100%}
+  .ai-cover{min-height:190px}
+  .ai-cover-text{width:min(100%,78%);max-width:78%}
+  .ai-cover-symbol{flex:0 0 60px}
+  .chat-log{min-height:260px}
+  .bubble{max-width:86%;overflow-wrap:anywhere}
+  .suggest-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .chat-form{bottom:calc(var(--nav-mobile-height) + env(safe-area-inset-bottom,0px) + 5px)}
+  .chat-form .btn{width:43px;min-width:43px;padding:0}
+  .chat-form .icon-button{min-width:42px;width:42px}
+  .progress-overview{grid-template-columns:minmax(0,1fr) minmax(90px,115px)}
+  .progress-headline h2{font-size:clamp(25px,6.5vw,32px)}
+  .progress-headline .btn{white-space:normal;min-height:43px}
+  .progress-grid{grid-template-columns:1fr}
+  .stat-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .progress-kpis .stat-card,.profile-kpis .stat-card{min-width:0;padding:11px}
+  .profile-link-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .profile-cover-inner{flex-wrap:wrap}
+  .profile-cover .btn-hero-outline{min-height:41px}
+  .member-offer{flex-wrap:wrap;gap:11px}
+  .member-offer>div{min-width:0;flex:1 1 145px}
+  .member-offer .btn{min-height:43px}
+  .detail-banner{min-height:240px;height:auto;aspect-ratio:16/10}
+  .detail-banner img{width:100%;height:100%}
+  .detail-copy{max-width:78%;top:clamp(18px,4vw,30px);left:clamp(17px,4vw,27px)}
+  .detail-copy h1{font-size:clamp(23px,6vw,31px)}
+  .detail-copy p{font-size:12px}
+  .stats-inline{gap:10px;font-size:12px}
+  .detail-tabs{gap:0}
+  .detail-tab{padding:13px 14px}
+  .lesson-visual{height:auto;aspect-ratio:16/10;min-height:215px}
+  .lesson-visual img{width:100%;height:100%}
+  .lesson-body .row-between{align-items:flex-start;flex-wrap:wrap}
+  .question-card{padding:16px}
+  .question-card h2{font-size:21px}
+  .answer{min-height:52px}
+  .form-card{padding:clamp(16px,5vw,30px)}
+  .footer{margin-top:35px}
+  .nav-wrapper{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+  .bottom-nav{max-width:none;border-radius:0;border-left:0;border-right:0}
+  .nav-item{font-size:clamp(9px,2.8vw,11px)}
+  .nav-item svg{height:21px;width:21px}
+}
+
+/* 8. Narrow phones and iPhone SE: do not squeeze learning content into two columns */
+@media(max-width:374px){
+  :root{--layout-gutter:13px;--header-height:65px}
+  .top-actions .header-saved{display:none}
+  .new-brand .brand-caption{font-size:9px}
+  .category{min-width:71px}
+  .premium-home-banner{min-height:245px}
+  .premium-home-banner .hero-content{max-width:80%;width:80%;min-height:245px}
+  .premium-home-banner h1{font-size:clamp(22px,6.9vw,27px)}
+  .premium-home-banner .banner-photo{width:60%;opacity:.82}
+  .premium-home-banner .banner-photo-fade{background:linear-gradient(90deg,#FFF2F4 30%,#FFF2F4e8 56%,#FFF2F45c 83%,transparent)}
+  .resume-card{grid-template-columns:1fr}
+  .resume-image{min-height:135px;height:135px}
+  .resume-body{padding:7px}
+  .resume-body h3{font-size:17px}
+  .resume-body p{font-size:12px}
+  .course-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .course-card .course-title{font-size:12px}
+  .course-art-title{font-size:12px}
+  .course-card-bottom .rating{font-size:10px}
+  .course-card-content p{font-size:10px}
+  .discovery-card strong{font-size:12px}
+  .discovery-card small{font-size:10px}
+  .language-feature{grid-template-columns:1fr}
+  .language-feature-art{display:none}
+  .language-choice{padding:12px}
+  .speak-box{padding:20px 12px}
+  .ai-cover-symbol{display:none}
+  .ai-cover-text{max-width:100%;width:100%}
+  .progress-overview{grid-template-columns:1fr}
+  .progress-orb{flex-direction:row;justify-content:flex-start}
+  .progress-kpis .stat-card,.profile-kpis .stat-card{padding:9px}
+  .profile-cover-inner .btn{margin-left:0}
+  .catalog-tools{align-items:flex-start}
+  .catalog-tools .select{min-height:44px}
+}
+
+/* 9. Ultra narrow multi-window and high font zoom */
+@media(max-width:330px){
+  .course-grid{grid-template-columns:1fr}
+  .course-card .thumb{aspect-ratio:1.8}
+  .discovery-grid{grid-template-columns:1fr}
+  .discovery-card{min-height:132px}
+  .polished-language-grid{grid-template-columns:1fr}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .stat-grid .stat-card:last-child{grid-column:1/-1}
+  .category{min-width:66px}
+  .searchbar{gap:8px}
+  .new-brand .brand-name{font-size:17px}
+  .premium-home-banner .hero-content{max-width:90%;width:90%}
+  .premium-home-banner .banner-photo{opacity:.42}
+  .premium-home-banner .banner-photo-fade{background:linear-gradient(90deg,#FFF2F4 40%,#FFF2F4bb)}
+  .resume-actions{flex-wrap:wrap}
+  .nav-item{font-size:9px}
+}
+
+/* 10. landscape phones, including iPhones with horizontal safe-area insets */
+@media(orientation:landscape) and (max-height:500px) and (max-width:1000px){
+  :root{--header-height:56px;--nav-mobile-height:53px}
+  .topbar-inner{gap:9px}
+  .screen{padding-top:12px}
+  .nav-wrapper{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+  .bottom-nav{min-height:calc(53px + env(safe-area-inset-bottom,0px))}
+  .nav-item{gap:2px;padding:5px 3px;font-size:10px;min-height:45px}
+  .nav-item svg{width:18px;height:18px}
+  .premium-home-banner{min-height:235px}
+  .premium-home-banner .hero-content{min-height:235px}
+  .chat-form{bottom:calc(53px + env(safe-area-inset-bottom,0px) + 5px)}
+  .modal{max-height:calc(90dvh - env(safe-area-inset-top,0px))}
+}
+
+/* 11. reduced motion / high-contrast text and accessibility */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .course-card,.category,.btn,.nav-item{animation:none;transition:none}
+}
+@media(prefers-contrast:more){
+  :root{--muted:#4B5563;--line:#C8CFD9}
+  .course-card,.panel,.answer,.searchbar{border-color:var(--line)}
+  .nav-item:focus-visible,.btn:focus-visible{outline-width:3px}
+}
