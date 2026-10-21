@@ -1,4 +1,4 @@
-const VERSION='sylution-learn-adaptive-devices-2026-10-21-v5';
+const VERSION='sylution-learn-adaptive-layout-2026-10-21-v6';
 const ASSETS=['./','./index.html','./styles.css','./premium.css','./palette.css','./responsive.css','./app.js','./icon.svg','./manifest.webmanifest'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(VERSION).then(cache=>cache.addAll(ASSETS)));self.skipWaiting()});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==VERSION).map(key=>caches.delete(key)))));self.clients.claim()});
