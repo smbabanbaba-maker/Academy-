@@ -83,7 +83,7 @@ function check(){
   el("overflow-status").className=overflow<=1?"pass":"fail";
   const widthNumber=Number(dev.value.split("x")[0]);
   const useTop=widthNumber>=1024;
-  const visible=useTop?desktop&&getComputedStyle(desktop).display!=="none":nav&&getComputedStyle(nav).display!=="none";
+  const visible=useTop?desktop&&frame.contentWindow.getComputedStyle(desktop).display!=="none":nav&&frame.contentWindow.getComputedStyle(nav).display!=="none";
   el("navigation-status").textContent=(useTop?"Desktop navigation":"Mobile navigation")+(visible?" visible":" hidden");
   el("navigation-status").className=visible?"pass":"fail";
  }catch(e){
