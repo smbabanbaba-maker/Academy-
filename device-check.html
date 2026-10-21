@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>SYLUTION Learn · Device QA</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0}body{background:#f5f6f9;color:#171923;font:14px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:#fff;border-bottom:1px solid #e9ebf2;padding:17px max(20px,calc((100% - 1280px)/2));display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+header strong{font-size:19px;letter-spacing:-.03em}header em{font-style:normal;color:#e51b3d}header a{color:#e51b3d;font-weight:700;text-decoration:none}
+.container{max-width:1280px;margin:auto;padding:23px 20px}h1{font-size:clamp(22px,3vw,32px);margin:0 0 8px;letter-spacing:-.04em}p{color:#707989;margin:0 0 17px}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:18px;border:1px solid #e9ecf0;border-radius:16px;background:#fff}
+label{font-weight:750;display:flex;flex-direction:column;gap:5px;min-width:165px;flex:1}
+select,button{font:inherit;background:#fff;border:1px solid #dce0e8;border-radius:10px;min-height:42px;padding:9px 12px;color:#181923}
+button{background:#e51b3d;color:#fff;font-weight:700;cursor:pointer;border-color:#e51b3d}button:focus-visible,select:focus-visible{outline:3px solid #ffb0bf}
+.status{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.status>span{background:#fff;padding:9px 13px;border:1px solid #e8ecf1;border-radius:10px;font-size:12px;font-weight:700}
+.status .pass{color:#076c61;border-color:#9dd8c9}.status .fail{color:#bb1835;border-color:#ffc2cb}
+.stage{background:repeating-linear-gradient(45deg,#e9eaf1 0 11px,#f2f3f8 11px 22px);margin-top:18px;padding:24px 12px;border:1px solid #e8e9f1;border-radius:18px;min-height:300px;display:flex;justify-content:center;align-items:flex-start;overflow:auto}
+.device{position:relative;background:#fff;border:8px solid #1b1d23;border-radius:27px;box-shadow:0 25px 46px #17192325;overflow:hidden;flex-shrink:0}
+.device iframe{border:0;display:block;background:#fff;width:100%;height:100%}
+.device.desktop{border-width:5px;border-radius:10px}
+.device.tablet{border-width:7px;border-radius:18px}
+.stage-inner{position:relative;flex-shrink:0;transform-origin:top center}
+small{color:#8a91a1;font-size:12px}
+footer{margin:18px auto;text-align:center;color:#808998}
+@media(max-width:600px){.controls{padding:13px}.container{padding:14px 11px}.stage{padding:10px 4px}.status>span{font-size:11px}.device{border-width:5px}}
+</style>
+</head>
+<body>
+<header><strong>SYLUTION <em>Learn</em> · Device QA</strong><a href="./index.html#/home">Open app</a></header>
+<main class="container">
+  <h1>Responsive device preview</h1>
+  <p>Developer QA: change device and screen, then inspect the actual app in a matching iframe viewport. Test navigation, course cards, dialogs and text on a real device before publishing.</p>
+  <div class="controls">
+    <label>Device viewport <select id="device">
+      <option value="320x640|phone">Small Android · 320 × 640</option>
+      <option value="360x800|phone">Android · 360 × 800</option>
+      <option value="375x667|phone">iPhone SE · 375 × 667</option>
+      <option value="393x852|phone" selected>iPhone · 393 × 852</option>
+      <option value="430x932|phone">Large iPhone · 430 × 932</option>
+      <option value="768x1024|tablet">Tablet portrait · 768 × 1024</option>
+      <option value="1024x768|tablet">Tablet landscape · 1024 × 768</option>
+      <option value="1366x768|desktop">Laptop · 1366 × 768</option>
+      <option value="1440x900|desktop">Desktop · 1440 × 900</option>
+    </select></label>
+    <label>App screen <select id="screen">
+      <option value="home">Home</option><option value="courses">Courses</option><option value="languages">Languages</option>
+      <option value="ai">AI Tutor</option><option value="exam">CBT Exam</option><option value="progress">Progress</option>
+      <option value="profile">Profile</option><option value="detail/english">Course Details</option>
+      <option value="lesson/english">Lesson Player</option><option value="speaking/spanish">Speaking Practice</option>
+      <option value="track/arabic">Language Track</option><option value="signup">Signup</option>
+    </select></label>
+    <button type="button" id="check">Check overflow</button>
+  </div>
+  <div class="status"><span id="viewport-status">Viewport</span><span id="overflow-status">Waiting for screen</span><span id="navigation-status">Navigation</span></div>
+  <div class="stage" id="stage"><div class="stage-inner" id="stage-inner"><div class="device" id="device-frame"><iframe id="preview" src="./index.html#/home" title="SYLUTION Learn device preview" loading="eager"></iframe></div></div></div>
+  <footer><small>This QA frame simulates viewport dimensions. Native iPhone/Android notch, keyboard and browser chrome must still be checked on physical devices.</small></footer>
+</main>
+<script>
+const el=id=>document.getElementById(id),dev=el("device"),screen=el("screen"),frame=el("preview"),stage=el("stage"),inner=el("stage-inner"),frameBox=el("device-frame");
+function refreshSize(){
+ const [dimensions,kind]=dev.value.split("|"),[w,h]=dimensions.split("x").map(Number),border=kind==="desktop"?10:kind==="tablet"?14:16;
+ frameBox.className="device "+kind;
+ frameBox.style.width=(w+border)+"px";frameBox.style.height=(h+border)+"px";
+ const room=Math.max(180,stage.clientWidth-16);
+ const scale=Math.min(1,room/(w+border));
+ inner.style.width=(w+border)*scale+"px";
+ inner.style.height=(h+border)*scale+"px";
+ frameBox.style.transformOrigin="top left";
+ frameBox.style.transform="scale("+scale+")";
+ el("viewport-status").textContent="Viewport: "+w+" × "+h+" CSS px";
+ el("overflow-status").textContent="Checking...";
+ requestAnimationFrame(()=>setTimeout(check,600));
+}
+function check(){
+ try{
+  const d=frame.contentDocument,root=d.documentElement,body=d.body;
+  const width=root.clientWidth,documentWidth=Math.max(root.scrollWidth,body.scrollWidth);
+  const overflow=Math.max(0,documentWidth-width);
+  const nav=d.querySelector(".bottom-nav"),desktop=d.querySelector(".desktop-navigation");
+  el("overflow-status").textContent=overflow<=1?"No document-wide horizontal overflow":"Horizontal overflow: "+overflow+"px";
+  el("overflow-status").className=overflow<=1?"pass":"fail";
+  const widthNumber=Number(dev.value.split("x")[0]);
+  const useTop=widthNumber>=1150;
+  const visible=useTop?desktop&&getComputedStyle(desktop).display!=="none":nav&&getComputedStyle(nav).display!=="none";
+  el("navigation-status").textContent=(useTop?"Desktop navigation":"Mobile navigation")+(visible?" visible":" hidden");
+  el("navigation-status").className=visible?"pass":"fail";
+ }catch(e){
+  el("overflow-status").textContent="Could not inspect frame; serve from the same local origin.";
+  el("navigation-status").textContent="Manual check needed";
+ }
+}
+dev.addEventListener("change",refreshSize);
+screen.addEventListener("change",()=>{frame.src="./index.html#/"+encodeURI(screen.value);});
+el("check").addEventListener("click",check);
+frame.addEventListener("load",()=>setTimeout(check,100));
+window.addEventListener("resize",refreshSize);
+refreshSize();
+</script>
+</body>
+</html>
