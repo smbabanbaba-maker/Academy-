@@ -211,7 +211,7 @@ button:disabled{cursor:not-allowed}
 .more-grid,.quick-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 
 /* 4. Large desktop and laptop; expose all destinations in top navigation */
-@media(min-width:1150px){
+@media(min-width:1024px){
   :root{--header-height:86px;--nav-mobile-height:0px}
   .topbar-inner{gap:19px}
   .desktop-navigation{display:flex;gap:2px}
@@ -225,7 +225,7 @@ button:disabled{cursor:not-allowed}
 }
 
 /* 5. Small laptops, landscape tablets and 2/3-size browser windows */
-@media(min-width:901px) and (max-width:1149px){
+@media(min-width:901px) and (max-width:1023px){
   :root{--header-height:78px}
   .desktop-navigation{display:none}
   .course-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
