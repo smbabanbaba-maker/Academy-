@@ -6,7 +6,7 @@ The device-responsive layer is `responsive.css`, loaded **after** `styles.css`, 
 
 - Safe-area-aware header and bottom navigation for notches and gesture bars on modern iPhones and Android devices.
 - `100dvh` viewport support, long-content overflow prevention, flexible grids, and phone touch targets.
-- Tablet portrait and landscape arrangements, small-laptop breakpoints, and full desktop navigation with Home, Courses, Languages, Exams, AI Tutor, and Progress.
+- Tablet portrait and landscape arrangements, small-laptop breakpoints, and full desktop navigation from 1024px with Home, Courses, Languages, Exams, AI Tutor, and Progress.
 - Input sizing to prevent automatic iOS zoom, Android keyboard viewport-resize support, and an adaptive AI chat composer.
 - Special fallbacks for narrow phones, high zoom, small split-screen windows, device landscape rotation, and reduced-motion preferences.
 - App-shell service worker cache version bump, so returning users can load the new responsive stylesheet.
