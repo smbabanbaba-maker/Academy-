@@ -399,4 +399,5 @@ if((page==='ytcourse'||page==='ytwatch')&&VIDEO.state.selected?.type==='playlist
 }
 }
 route();
+if(VIDEO&&typeof VIDEO.verifyCatalog==='function')VIDEO.verifyCatalog().then(changed=>{if(changed&&['home','courses','ytlibrary','ytcourse','ytwatch'].includes(state.page))render()}).catch(()=>{});
 })();
