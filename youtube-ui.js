@@ -15,6 +15,7 @@ const visibleCourses=()=>{
  if(V.state.category&&V.state.category!=='All')list=list.filter(c=>(c.category||'YouTube Courses')===V.state.category);
  if(V.state.sort==='az')list.sort((a,b)=>a.title.localeCompare(b.title));
  else if(V.state.sort==='beginner')list.sort((a,b)=>(a.level==='Beginner'?0:1)-(b.level==='Beginner'?0:1)||a.title.localeCompare(b.title));
+ else if(V.state.sort==='saved')list=list.filter(c=>V.state.saved.includes(c.id));
  else if(V.state.sort==='featured')list.sort((a,b)=>Number(Boolean(b.featured))-Number(Boolean(a.featured)));
  return list;
 };
@@ -28,7 +29,7 @@ return '<section class="screen yt-library"><div class="yt-title-row"><div><div c
 '<div class="yt-premium-subhead"><span class="yt-eyebrow">EXPLORE SUBJECTS</span><h2>Browse by interest</h2><p>Find a course that matches your next goal.</p></div>'+
 '<div class="yt-category-filters" role="group" aria-label="Filter courses">'+groups.map(group=>'<button class="yt-filter '+(s.category===group?'active':'')+'" data-action="yt-filter" data-value="'+esc(group)+'" aria-pressed="'+(s.category===group?'true':'false')+'">'+esc(group)+'</button>').join('')+'</div>'+
 '<div class="yt-source-note" role="status">'+icon('info')+' <span>'+esc(s.message)+'</span></div>'+
-'<div class="yt-sort-bar"><span class="yt-eyebrow">COURSE DIRECTORY</span><div class="yt-sort-buttons"><button class="'+(s.sort==='featured'?'active':'')+'" data-action="yt-sort" data-value="featured">Recommended</button><button class="'+(s.sort==='az'?'active':'')+'" data-action="yt-sort" data-value="az">A–Z</button><button class="'+(s.sort==='beginner'?'active':'')+'" data-action="yt-sort" data-value="beginner">Beginner</button></div></div>'+ '<div class="yt-grid-head"><h2>'+(s.category&&s.category!=='All'?esc(s.category):s.status==='curated'?'All curated courses':'Course search results')+'</h2><span>'+displayed.length+' courses</span></div>'+
+'<div class="yt-sort-bar"><span class="yt-eyebrow">COURSE DIRECTORY</span><div class="yt-sort-buttons"><button class="'+(s.sort==='featured'?'active':'')+'" data-action="yt-sort" data-value="featured">Recommended</button><button class="'+(s.sort==='az'?'active':'')+'" data-action="yt-sort" data-value="az">A–Z</button><button class="'+(s.sort==='beginner'?'active':'')+'" data-action="yt-sort" data-value="beginner">Beginner</button><button class="'+(s.sort==='saved'?'active':'')+'" data-action="yt-sort" data-value="saved">♥ Saved ('+s.saved.length+')</button></div></div>'+ '<div class="yt-grid-head"><h2>'+(s.category&&s.category!=='All'?esc(s.category):s.status==='curated'?'All curated courses':'Course search results')+'</h2><span>'+displayed.length+' courses</span></div>'+
 (displayed.length?'<div class="yt-course-grid">'+displayed.map(card).join('')+'</div>':'<div class="empty">'+icon('search')+'<h3>No courses found</h3><p>Try another subject or browse verified starter courses.</p><button class="btn btn-primary" data-action="yt-reset">Show starter courses</button></div>')+
 '<div class="yt-ethical"><strong>Source and permissions</strong><p>These videos are created by the original YouTube channels, not by SYLUTION. They play through the official embedded YouTube player with creator attribution. YouTube may display its normal controls and ads. Availability can change.</p></div></section>';
 }
@@ -64,7 +65,7 @@ if(V.state.selected.type==='playlist')V.getLessons().then(()=>{if(location.hash.
 function action(name,data,tools){
 if(name==='yt-save'){const yes=V.toggleSaved(data.id);tools.render();tools.toast(yes?'Saved to your learning list.':'Removed from saved.');return true}
 if(name==='yt-filter'){V.state.category=String(data.value||'All');tools.render();return true}
-if(name==='yt-sort'){V.state.sort=['featured','az','beginner'].includes(data.value)?data.value:'featured';tools.render();return true}
+if(name==='yt-sort'){V.state.sort=['featured','az','beginner','saved'].includes(data.value)?data.value:'featured';tools.render();return true}
 if(name==='yt-open'){open(data.id,tools.nav,tools.render,tools.toast);return true}
 if(name==='yt-start'){V.setLesson(0);tools.nav('ytwatch',V.state.selected.id);return true}
 if(name==='yt-lesson'){V.setLesson(Number(data.index));tools.nav('ytwatch',V.state.selected.id);return true}
