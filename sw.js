@@ -1,6 +1,6 @@
 /* SYLUTION Learn PWA: network-first updates, no API response caching. */
-const VERSION='sylution-learn-vercel-production-20261023r11';
-const ASSETS=['./','./index.html','./styles.css','./premium.css','./palette.css','./responsive.css','./youtube.css','./youtube.js','./youtube-ui.js','./app.js','./icon.svg','./manifest.webmanifest'];
+const VERSION='sylution-learn-home-premium-20261023r12';
+const ASSETS=['./','./index.html','./styles.css','./premium.css','./palette.css','./responsive.css','./youtube.css','./home-premium.css','./youtube.js','./youtube-ui.js','./app.js','./icon.svg','./manifest.webmanifest'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(VERSION).then(cache=>cache.addAll(ASSETS)));
  self.skipWaiting();
