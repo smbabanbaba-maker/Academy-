@@ -9,6 +9,21 @@ module.exports=async function handler(req,res){
   if(!key)return res.status(503).json({error:'YouTube API is not configured on this deployment. Set the YOUTUBE_API_KEY server environment variable.'});
   const q=req.query||{},mode=String(q.mode||'search'),max=mode==='search'?12:50;
   const params=new URLSearchParams({key,part:'snippet',maxResults:String(max)});
+  if(mode==='validate'){
+    const ids=String(q.ids||'').split(',').filter(Boolean);
+    if(!ids.length||ids.length>50||ids.some(id=>!/^[a-zA-Z0-9_-]{11}$/.test(id)))
+      return res.status(400).json({error:'Supply 1–50 valid YouTube video IDs.'});
+    const args=new URLSearchParams({key,part:'snippet,status',id:ids.join(','),maxResults:'50'});
+    try{
+      const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),9000);
+      let r;try{r=await fetch('https://www.googleapis.com/youtube/v3/videos?'+args.toString(),{signal:ctrl.signal})}finally{clearTimeout(timer)}
+      if(!r.ok)return res.status(503).json({error:'Verification unavailable; keep previously selected catalog until checked.'});
+      const data=await r.json();
+      const available=(data.items||[]).filter(v=>v?.status?.privacyStatus==='public'&&v?.status?.embeddable===true).map(v=>v.id);
+      res.setHeader('Cache-Control','public, s-maxage=1800, stale-while-revalidate=3600');
+      return res.status(200).json({available,checked:ids.length,source:'YouTube Data API videos.list'});
+    }catch(e){return res.status(503).json({error:'Video verification is temporarily unavailable.'})}
+  }
   if(mode==='search'){
     const keyword=String(q.q||'').trim().slice(0,80);
     if(keyword.length<2)return res.status(400).json({error:'Enter at least two characters to search.'});
