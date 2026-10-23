@@ -1,70 +1,43 @@
 # SYLUTION Learn
 
-## Expanded course library — October 2026
+## Premium home and verified-source course library — October 2026
 
-The **Free Video Courses** section now contains **31 selected YouTube educational videos** from **12 subject areas**, organized through responsive course cards, a featured shelf, category chips, A–Z / beginner / recommended sorting, a saved-courses filter, chapter navigation, and in-app embedded YouTube playback.
+SYLUTION Learn now uses **Home, Courses, AI Tutor, Progress, and Profile** in the primary mobile navigation. Video learning lives inside **Courses**, not a separate bottom-bar screen.
 
-Subject coverage includes Programming, Web Development, Artificial Intelligence, Data & Analytics, Design & Creative, Business & Office, Cybersecurity, Engineering & IoT, Mathematics & Science, Languages, Agriculture, and AI & Data Science.
+### What changed
 
-A sample of **publicly identified original videos**:
+- New mobile-first editorial Home with compact dark hero, real course thumbnails, working search, subject chips, featured selections and learner tools
+- Courses is a browsable video catalog from real, credited YouTube educators; old illustrative priced course cards no longer appear in primary Home or Courses
+- Reduced the prior 31-video list to **11 video pages with independently identifiable public YouTube watch-page results** as of October 23, 2026. The 20 other entries are not recommended until separately validated
+- Restructured saved courses and learning progress around locally recorded video bookmarks and manually marked chapters rather than sample enrollments
+- Removed fake profile counts, unconnected Pro subscription promotion, billing links, placeholder certificates and simulated course marketing from the main browsing flow
+- Improved mobile breakpoints and cache versioning to pick up the current release on Android and iPhone
 
-| Subject | Video | Original source |
+### Curated videos available without an API key
+
+These are **original third-party videos**, not owned by SYLUTION LTD. Even public watch-page results cannot guarantee embedding or geographic availability; a live API check is required to verify those conditions at runtime.
+
+| Subject | Original YouTube video | Source |
 | --- | --- | --- |
-| Programming | Python full course | [freeCodeCamp](https://www.youtube.com/watch?v=rfscVS0vtbw) |
-| University computing | CS50 2026 full computer science | [Harvard CS50 on freeCodeCamp](https://www.youtube.com/watch?v=gmuTjeQUbTM) |
-| Creative design | Figma UI/UX full course 2026 | [freeCodeCamp](https://www.youtube.com/watch?v=mT_Jjn8RJdo) |
-| Artificial Intelligence | Machine learning with scikit-learn | [freeCodeCamp](https://www.youtube.com/watch?v=hDKCxebp88A) |
-| Analytics | Python for Data Science | [freeCodeCamp](https://www.youtube.com/watch?v=CMEWVn1uZpQ) |
-| Business software | Excel formulas and functions 2026 | [freeCodeCamp](https://www.youtube.com/watch?v=gvhsKtjAmgc) |
-| Engineering | Arduino project course | [freeCodeCamp](https://www.youtube.com/watch?v=DPqiIzK97K0) |
-| Mathematics | College Algebra full course | [freeCodeCamp](https://www.youtube.com/watch?v=i7vOAcUo5iA) |
-| Languages | French beginner foundations | [Learn French With Alexa](https://www.youtube.com/watch?v=RxCR3g6aYJ0) |
-| Agriculture | Greenhouse production introduction | [Virginia Cooperative Extension](https://www.youtube.com/watch?v=DryKoaxh3I8) |
+| Python | [Full course for beginners](https://www.youtube.com/watch?v=rfscVS0vtbw) | freeCodeCamp |
+| JavaScript | [Full course for beginners](https://www.youtube.com/watch?v=PkZNo7MFNFg) | freeCodeCamp |
+| SQL | [Full database course](https://www.youtube.com/watch?v=HXV3zeQKqGY) | freeCodeCamp |
+| C Programming | [C tutorial](https://www.youtube.com/watch?v=KJgsSFOSQv0) | freeCodeCamp |
+| Arduino | [Arduino course for everybody](https://www.youtube.com/watch?v=DPqiIzK97K0) | freeCodeCamp |
+| Excel | [Full tutorial](https://www.youtube.com/watch?v=Vl0H-qTclOg) | freeCodeCamp |
+| Data Science | [Python for Data Science](https://www.youtube.com/watch?v=CMEWVn1uZpQ) | freeCodeCamp |
+| Machine Learning | [Python and Scikit-learn](https://www.youtube.com/watch?v=hDKCxebp88A) | freeCodeCamp |
+| Data Analytics | [Data Analyst Bootcamp](https://www.youtube.com/watch?v=PSNXoAs2FtQ) | freeCodeCamp |
+| Python Analytics | [Python for Data Analytics](https://www.youtube.com/watch?v=wUSDVGivd-8) | Luke Barousse |
+| UI/UX | [Design in Figma](https://www.youtube.com/watch?v=c9Wg6Cb_YlU) | Original YouTube instructor |
 
-**Quality and rights:** Not all entries are full multi-hour courses: the agriculture and some language entries are single practical learning videos. The catalog distinguishes courses, lessons and demonstrations through duration/description. Third-party videos always retain original creator attribution and are shown only with official YouTube embeds. No provider-owned video has been copied, downloaded, or rebranded as SYLUTION-produced. Embedding may be blocked by individual creators, regions or YouTube policy; **live embeddability of every entry has not been individually device-tested**. No student is charged for watching these free YouTube embeds.
+### Runtime video validation
 
-A **Google Cloud server-side YouTube API key is still required** to enable live search beyond the curated library. The curated 31 items do not require that key. User bookmarks and completion are stored in browser localStorage only, not securely synchronized across devices.
+The server's `api/youtube.js` endpoint supports `mode=validate&ids=...`, using the official **YouTube Data API v3 videos.list** fields `status.privacyStatus` and `status.embeddable` to remove videos that are no longer publicly embeddable. On app startup, `youtube.js` requests this validation if a server API key exists. If the check cannot run, it preserves the smaller handpicked list rather than declaring videos confirmed available.
 
+**Important:** The Vercel project does not currently list a `YOUTUBE_API_KEY` environment variable, so **automated live embeddability checks and live YouTube search cannot run yet**. No API key is hardcoded. Users can always try the “Watch on YouTube” link if the embed is restricted. We have not successfully tested every player in a physical device browser.
 
-## YouTube video courses — live API integration
-
-SYLUTION Learn now includes a free-video learning journey in the existing application:
-
-1. **Home → Free video courses** or **Courses → Video library**
-2. Search full-length educational videos and YouTube playlists
-3. Select a course, read the named original creator and course curriculum
-4. Open chapters in the official **YouTube embedded player** inside SYLUTION Learn
-5. Track manually marked chapters locally and open study tools in the app
-
-### Available immediately, without credentials
-
-The built-in `youtube.js` catalog now contains **31 selected educational videos across 12 categories**, including programming, design, analytics, cybersecurity, AI, business tools, engineering/IoT, mathematics, languages and agriculture. The experience has:
-
-- Responsive premium course cards with real video thumbnail images and visible creator credit
-- Featured video shelf and category chips to explore the subject library
-- Search results scoped to the curated catalog when the server API is not configured
-- Recommended, alphabetical, beginner and saved-course filtering
-- Separate course-detail pages, video curriculum timestamps, and an in-app YouTube embed
-- Locally saved favorites and manually marked study progress
-
-**Content-type note:** Some sources are comprehensive full courses; some are introductory lessons or practical field tutorials (especially in agriculture and languages). These are not represented as third-party accredited courses, nor as SYLUTION-owned recordings.
-
-Representative public sources (YouTube IDs), with original owners retained:
-
-| Field | Selected original lesson/video |
-| --- | --- |
-| Office productivity | Excel `Vl0H-qTclOg`, freeCodeCamp.org |
-| Design | Figma `jwCmIBJ8Jtc`, freeCodeCamp.org |
-| Artificial intelligence | ML with Python `hDKCxebp88A`, freeCodeCamp.org |
-| Analytics | Data Analyst Bootcamp `PSNXoAs2FtQ`, freeCodeCamp.org |
-| Engineering & IoT | Arduino `zJ-LqeX_fLU`, freeCodeCamp.org |
-| Cybersecurity | Harvard CS50 Cybersecurity `9HOpanT0GRs`, freeCodeCamp.org |
-| Agriculture | Greenhouse introduction `DryKoaxh3I8`, Virginia Cooperative Extension |
-| Agriculture | Garden management `RSsZl5lIdJo`, FAO PROMOVE Agribiz |
-
-Curated YouTube IDs are catalog references, **not proof of continued embeddability**. The original videos can become private, restricted, removed, region-blocked or unavailable for embedding. Playback and image loading still require a network connection.
-
-Where chapter markers are supplied, they jump to timestamp positions inside the original upload. They are **not** independently hosted lessons.
+Bookmarks and completion markers are browser-local and not synchronized across accounts or devices. Video chapters are manually supplied timestamps and are not separately uploaded lessons. Certificates, instructor billing, live AI services, and real student enrollment/payment backends are not claimed by this free catalog.
 
 ### Activate live YouTube search (API key required)
 
