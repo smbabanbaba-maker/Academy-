@@ -193,3 +193,49 @@
 .yt-shelf-copy{padding:9px}.yt-shelf-copy strong{font-size:10px}
 .yt-category-filters{margin-right:-13px}
 }
+
+
+/* Curated course collection — premium editor polish */
+.yt-course-card{position:relative;isolation:isolate}
+.yt-course-card:focus-within{outline:3px solid #f5a6b3;outline-offset:2px}
+.yt-card-image{border-radius:0}
+.yt-card-badge{
+ position:absolute;top:12px;left:12px;z-index:4;
+ font-size:10px;font-weight:800;letter-spacing:.015em;
+ color:#261a24;background:#fffef0;border:1px solid #f6deaa;
+ border-radius:7px;padding:7px 10px;box-shadow:0 6px 16px #0003
+}
+.yt-save{
+ display:grid;place-items:center;position:absolute;right:12px;top:12px;z-index:6;
+ width:39px;height:39px;border-radius:13px;border:1px solid #e4e6ed;
+ color:#687180;background:#fffefb;font-size:25px;line-height:1;
+ box-shadow:0 6px 15px #12121220;
+}
+.yt-save:hover,.yt-save.on{background:#e51b3d;border-color:#e51b3d;color:white}
+.yt-save:focus-visible{outline:3px solid #ff8fa7;outline-offset:2px}
+.yt-card-body{min-height:185px}
+.yt-card-name{letter-spacing:-.036em}
+.yt-card-type{color:#7646d8}
+.yt-card-bottom .yt-free-label{background:#e7f7f3;color:#077967}
+.yt-category-filters{scrollbar-width:thin}
+.yt-filter.active{background:#171923;color:white;border-color:#171923}
+.yt-filter:focus-visible,.yt-sort-buttons button:focus-visible{outline:3px solid #e51b3d;outline-offset:2px}
+.yt-sort-buttons{flex-wrap:wrap}
+.yt-sort-buttons button.active{background:#e51b3d;color:white;border-color:#e51b3d}
+.yt-feature-premium{background:radial-gradient(circle at 88% 61%,#642943,transparent 40%),linear-gradient(120deg,#171923,#292638)}
+.yt-premium-metrics span{border-radius:100px}
+.yt-shelf-card{box-shadow:0 9px 22px rgba(23,25,35,.07);transition:transform .17s,box-shadow .17s}
+.yt-shelf-card:hover{transform:translateY(-3px);box-shadow:0 17px 30px rgba(23,25,35,.15)}
+.yt-lesson-row:focus-visible,.yt-sidebar-lesson:focus-visible{outline:3px solid #e51b3d;outline-offset:-2px}
+.yt-course-grid{align-items:stretch}
+.yt-source-note{border-left-color:#087f8c;background:#effbf9}
+.yt-source-note svg{color:#087f8c}
+@media(max-width:640px){
+ .yt-save{width:34px;height:34px;top:8px;right:8px;border-radius:10px;font-size:21px}
+ .yt-card-badge{padding:5px 7px;font-size:9px;top:8px;left:8px}
+ .yt-card-type{font-size:9px;min-height:14px}
+ .yt-card-body{min-height:175px}
+ .yt-sort-buttons button{min-height:39px}
+ .yt-filter{min-height:41px}
+ .yt-lesson-row{min-height:60px}
+}
