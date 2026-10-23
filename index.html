@@ -14,17 +14,25 @@
   <link rel="icon" type="image/svg+xml" href="./icon.svg"/>
   <link rel="manifest" href="./manifest.webmanifest"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <link rel="stylesheet" href="./styles.css"/>
-  <link rel="stylesheet" href="./premium.css"/>
-  <link rel="stylesheet" href="./palette.css"/>
-  <link rel="stylesheet" href="./responsive.css"/>
-  <link rel="stylesheet" href="./youtube.css"/>
+  <link rel="stylesheet" href="./styles.css?v=20261023r10"/>
+  <link rel="stylesheet" href="./premium.css?v=20261023r10"/>
+  <link rel="stylesheet" href="./palette.css?v=20261023r10"/>
+  <link rel="stylesheet" href="./responsive.css?v=20261023r10"/>
+  <link rel="stylesheet" href="./youtube.css?v=20261023r10"/>
 </head>
 <body>
   <div id="app"></div>
-  <script src="./youtube.js" defer></script>
-  <script src="./youtube-ui.js" defer></script>
-  <script src="./app.js" defer></script>
-  <script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}))}</script>
+  <script src="./youtube.js?v=20261023r10" defer></script>
+  <script src="./youtube-ui.js?v=20261023r10" defer></script>
+  <script src="./app.js?v=20261023r10" defer></script>
+  <script>
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.addEventListener("controllerchange",()=>{
+    const key="sylution-learn-controller-20261023r10";
+    if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,"1");location.reload()}
+  });
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?release=20261023r10",{updateViaCache:"none"}).then(reg=>reg.update()).catch(()=>{}));
+}
+</script>
 </body>
 </html>
