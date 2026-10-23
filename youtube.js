@@ -5,50 +5,453 @@
 (function(){
 'use strict';
 const curate=[
-{id:'rfscVS0vtbw',title:'Learn Python — Full Course for Beginners',creator:'freeCodeCamp.org',category:'Programming',level:'Beginner',description:'Start programming with Python: setup, variables, functions, loops, files and projects.',hours:'4h 26m',chapters:[['Introduction',0],['Install Python & Set Up',105],['Variables and Data Types',906],['Strings, Numbers and Input',1623],['Lists and Functions',3800],['Conditions and Loops',6006],['Files and Modules',11561],['Classes and Final Quiz',13436]]},
-{id:'pQN-pnXPaVg',title:'HTML Full Course — Build a Website',creator:'freeCodeCamp.org',category:'Web Development',level:'Beginner',description:'HTML tags, formatting, links, images, tables, forms and embedding media.',hours:'2h',chapters:[['Introduction',0],['Text Editor and First HTML File',114],['Basic HTML Tags',1231],['Styling and Formatting',2533],['Links and Images',3556],['Videos, Lists and Tables',4572],['Divs, Forms and Meta Tags',5841]]},
-{id:'PkZNo7MFNFg',title:'JavaScript — Full Course for Beginners',creator:'freeCodeCamp.org',category:'Programming',level:'Beginner',description:'Complete fundamentals from variables and arrays to objects, loops and ES6.',hours:'3h 20m+',chapters:[['Introduction & JavaScript Setup',0],['Variables and Operators',356],['Strings',1279],['Arrays',2444],['Functions and Scope',3101],['Conditions and Objects',4104],['Loops',7815],['Modern JavaScript and ES6',9456]]},
-{id:'HXV3zeQKqGY',title:'SQL Tutorial — Full Database Course',creator:'freeCodeCamp.org',category:'Data & Analytics',level:'Beginner',description:'Learn SQL and database basics, tables, queries, joins and database design.',hours:'4h+',chapters:[['What Is a Database?',156],['Tables and Keys',1390],['SQL Basics and Setup',2611],['Creating Tables and Data',4549],['Queries and Functions',6971],['Joins and Nested Queries',10896],['ER Diagrams and Database Design',13332]]},
-{id:'KJgsSFOSQv0',title:'C Programming Tutorial for Beginners',creator:'freeCodeCamp.org',category:'Programming',level:'Beginner',description:'Programming fundamentals with C, variables, arrays, functions, loops and pointers.',hours:'3h 45m+',chapters:[['Introduction',0],['Setup and Hello World',82],['Variables and Data Types',1256],['Input and Arrays',3600],['Functions and Decisions',5804],['Loops and Structs',8487],['Pointers and Memory',11350],['Writing and Reading Files',12757]]},
-{id:'vLnPwxZdW4Y',title:'C++ Tutorial for Beginners — Full Course',creator:'freeCodeCamp.org',category:'Programming',level:'Beginner',description:'Get started with C++ syntax, functions, control flow, classes and objects.',hours:'4h',chapters:[['Introduction and Installation',0],['Variables and Data Types',1195],['Strings, Numbers and Input',2355],['Arrays and Functions',4425],['Conditions and Loops',5722],['Pointers',10751],['Classes, Objects and Inheritance',11606]]},
-{"id":"Vl0H-qTclOg","title":"Microsoft Excel — Complete Beginner Course","creator":"freeCodeCamp.org","category":"Business & Office","level":"Beginner","description":"Learn spreadsheets, formulas, charts, VLOOKUP and pivot tables through practical projects.","hours":"2h+","featured":true,"chapters":[["Course Introduction",0],["Build a Payroll Spreadsheet",254],["Gradebook Project",2375],["Decision Factors",3442],["Sales Database",3880],["Car Inventory",4980],["Problem-Solving Templates",7169]]},
-{"id":"jwCmIBJ8Jtc","title":"Figma UI Design — From Basics to Mobile Apps","creator":"freeCodeCamp.org","category":"Design & Creative","level":"Beginner","description":"Master Figma interface, typography, auto layout, components, responsive design and mobile UI.","hours":"9h+","featured":true,"chapters":[["Introduction and Figma Setup",0],["Shapes, Selection and Editing",287],["Typography in Figma",2174],["Color and Design Systems",4844],["Auto Layout and Constraints",6968],["Styles and Components",10825],["Responsive Design",14482],["Mobile App Design",31554]]},
-{"id":"c9Wg6Cb_YlU","title":"UI/UX Design — Wireframes to Prototypes","creator":"freeCodeCamp.org","category":"Design & Creative","level":"Beginner","description":"Follow a real website design process from wireframes through UI layout to polished Figma mockups.","hours":"1h+","chapters":[["Introduction",0],["Wireframing",87],["User Interface Layout",1858],["Polished Mockup",3998]]},
-{"id":"zJ-LqeX_fLU","title":"Arduino & Electronics — Practical Starter Course","creator":"freeCodeCamp.org","category":"Engineering & IoT","level":"Beginner","description":"Electronics fundamentals, Arduino IDE, sensors, digital and analog I/O, loops and functions.","hours":"4h+","featured":true,"chapters":[["Electronics Foundations",0],["Introduction to Arduino Board",1706],["Arduino IDE and First Setup",2338],["Programming Basics",4606],["Variables and Data Types",5451],["Loops and Control Structures",8001],["Functions and Inputs",11714],["Arduino Libraries",14185]]},
-{"id":"PSNXoAs2FtQ","title":"Data Analyst Bootcamp — SQL, Excel, Power BI & Python","creator":"freeCodeCamp.org","category":"Data & Analytics","level":"Beginner","description":"A project-based data analytics bootcamp spanning SQL, spreadsheets, Tableau, Power BI and Python.","hours":"19h+","featured":true,"chapters":[["Introduction to Data Analysis",0],["SQL Fundamentals",908],["SQL Portfolio Project",8217],["Excel Projects",16121],["Tableau Visualizations",26209],["Power BI Projects",32031],["Python Fundamentals",39931],["Pandas and Data Cleaning",50433],["Portfolio and Career Preparation",66183]]},
-{"id":"CMEWVn1uZpQ","title":"Python for Data Science — Hands-on Projects","creator":"freeCodeCamp.org","category":"Data & Analytics","level":"Beginner","description":"Python, Pandas, NumPy, data scraping, data visualization, cleaning and machine-learning projects.","hours":"17h+","chapters":[["Install and Set Up Python",0],["Python Basics",1643],["Pandas and NumPy",6101],["Web Scraping Project",12375],["Filtering and Reshaping Data",14616],["Data Visualizations",28259],["Aggregations and Merging",32200],["Data Cleaning Project",45945],["Machine Learning Project",51465]]},
-{"id":"hDKCxebp88A","title":"Machine Learning with Python & Scikit-Learn","creator":"freeCodeCamp.org","category":"AI & Data Science","level":"Intermediate","description":"Learn linear regression, classification, decision trees, model evaluation and real ML projects.","hours":"17h+","chapters":[["ML Introduction",0],["Linear Regression",25],["Logistic Regression",8250],["Random Forests and Decision Trees",17606],["Building ML Projects",26729],["Gradient Boosting and XGBoost",36373],["Unsupervised Learning",44457],["Real-World ML Project",49998],["Deploy a Model with Flask",60347]]},
-{"id":"ua-CiDNNj30","title":"Data Science Foundations — Beginner Course","creator":"freeCodeCamp.org","category":"Data & Analytics","level":"Beginner","description":"Introduction to the foundations of data science: data collection, coding, mathematics and statistics.","hours":"5h+","chapters":[["What Is Data Science?",0],["Collecting and Sourcing Data",5986],["Coding Tools for Data Science",9162],["Mathematics for Data Science",14469],["Statistics Fundamentals",17043]]},
-{"id":"9HOpanT0GRs","title":"Harvard CS50 — Introduction to Cybersecurity","creator":"freeCodeCamp.org · Harvard CS50","category":"Cybersecurity","level":"Beginner","description":"Professor David J. Malan explains protecting accounts, data, systems, software and personal privacy.","hours":"8h+","featured":true,"chapters":[["Introduction to Cybersecurity",0],["Securing Accounts",191],["Securing Data",4578],["Securing Systems",11500],["Securing Software",16128],["Preserving Privacy",23174]]},
-{"id":"gmuTjeQUbTM","title":"Harvard CS50 (2026) — Complete Computer Science Course","creator":"freeCodeCamp.org · Harvard CS50","category":"Programming","level":"Beginner","description":"Learn programming from the foundations: Scratch, C, arrays, algorithms, Python, SQL, AI, web development and Flask.","hours":"24h+","badge":"2026 edition","featured":true,"chapters":[["Scratch — Lecture 0",0],["C programming",7060],["Arrays",16078],["Algorithms",24812],["Memory",31987],["Data structures",40382],["Python",47955],["SQL",56926],["Artificial intelligence",65059],["HTML, CSS and JavaScript",67927],["Flask",76459],["Course conclusion",85254]]},
-{"id":"YtHdaXuOAks","title":"Build an AI Coding Agent — Python & Gemini","creator":"freeCodeCamp.org","category":"AI & Data Science","level":"Intermediate","description":"Create a Python coding agent with model tools, file operations, iterative execution and debugging.","hours":"2h+","chapters":[["Introduction to AI Coding Agents",0],["Build the Agent — Complete Walkthrough",74]]},
-{"id":"nJ25yl34Uqw","title":"Generative AI Essentials — Complete Course","creator":"freeCodeCamp.org","category":"AI & Data Science","level":"Beginner","description":"Learn generative AI concepts, prompt engineering, development workflows, RAG and agents.","hours":"22h+","chapters":[["Introduction",0],["AI and Machine Learning Foundations",3256],["Generative AI Fundamentals",10941],["LLMs and AI Assistants",13676],["Prompt Engineering",22337],["Development Workflows",31040],["RAG and AI Agents",73564]]}
-,
-{"id":"mT_Jjn8RJdo","title":"Figma UI/UX Design — Full Course (2026)","creator":"freeCodeCamp.org","category":"Design & Creative","level":"Beginner","hours":"6h 16m","badge":"New for 2026","description":"Learn Figma tools, color systems, wireframes, components, Auto Layout and practical website/app designs.","chapters":[["Introduction",86],["Figma editor and tools",1329],["Color palette and wireframes",2522],["Components and constraints",3307],["Travel website project",5457],["Food delivery app project",9567],["Advanced components",19953]],"featured":true},
-{"id":"gvhsKtjAmgc","title":"Excel Formulas & Functions — Complete Course","creator":"freeCodeCamp.org","category":"Business & Office","level":"Beginner","hours":"1h 41m","badge":"New for 2026","description":"Build practical Excel skills with cell references, IF, XLOOKUP, date functions and dynamic arrays.","chapters":[["Course introduction",0],["Operators and formula evaluation",308],["Cell references",814],["Logic functions",1739],["Aggregation and lookups",2078],["Text functions",3981],["Dynamic arrays",5034]],"featured":true},
-{"id":"Vl0H-qTclOg","title":"Microsoft Excel — Six Real-World Projects","creator":"freeCodeCamp.org","category":"Business & Office","level":"Beginner","hours":"2h 30m","description":"Practice payroll, gradebooks, charts, inventory, pivot tables and lookups with Excel.","chapters":[["Complete Excel workshop",0]]},
-{"id":"dX8396ZmSPk","title":"HTML & CSS — Complete Web Development","creator":"freeCodeCamp.org","category":"Web Development","level":"Beginner","hours":"19h+","description":"A structured journey from HTML and CSS to responsive design, GitHub and publishing projects.","chapters":[["Introduction and HTML/CSS basics",0],["Advanced HTML and CSS",8055],["Building from a mockup",16944],["Git and deployment",24479],["Responsive design and Flexbox",32382],["Mobile-first assignment",41544],["Bootstrap",45103],["Scientific calculator",53811],["Express web framework",59674],["Portfolio website project",66621]],"featured":true},
-{"id":"CMEWVn1uZpQ","title":"Python for Data Science — Practical Projects","creator":"freeCodeCamp.org","category":"Data & Analytics","level":"Beginner","hours":"17h+","description":"Learn Python, NumPy, Pandas, visualizations, data cleaning and introductory machine learning.","chapters":[["Installation and Python basics",0],["Pandas and NumPy",6101],["Web scraping project",12375],["Filtering and extraction",14736],["Data reshaping",27117],["Visualization project",28259],["GroupBy and merging",32199],["Data cleaning project",45945],["Machine learning introduction",51465]],"featured":true},
-{"id":"hDKCxebp88A","title":"Machine Learning with Python & Scikit-Learn","creator":"freeCodeCamp.org","category":"Artificial Intelligence","level":"Intermediate","hours":"18h+","description":"Build supervised and unsupervised learning models and deploy a real machine-learning project.","chapters":[["Introduction",0],["Linear regression",25],["Logistic regression",8250],["Decision trees and forests",17606],["ML project workflow",26729],["XGBoost",36373],["Unsupervised learning",44457],["End-to-end ML project",49998],["Deploy with Flask",60347]],"featured":true},
-{"id":"PSNXoAs2FtQ","title":"Data Analyst Bootcamp — SQL, Excel & Power BI","creator":"freeCodeCamp.org","category":"Data & Analytics","level":"Beginner","hours":"19h+","description":"Career-oriented analytics bootcamp with SQL, Tableau, Power BI, Python, Excel and portfolio projects.","chapters":[["Bootcamp introduction",0],["Becoming a data analyst",70],["SQL setup",908],["SQL SELECT queries",1484],["SQL WHERE clauses",1857]]},
-{"id":"wUSDVGivd-8","title":"Python for Data Analytics — Full Tutorial","creator":"Luke Barousse","category":"Data & Analytics","level":"Beginner","hours":"11h 9m","description":"Learn Python, Pandas, Matplotlib and practical data analyst portfolio projects.","chapters":[["Welcome and setup",0],["Python basics",522],["Lists and dictionaries",5640],["Functions",10332],["Pandas intro",15776],["Charts with Matplotlib",19039],["Data analysis techniques",21056],["Final portfolio project",35140]]},
-{"id":"ug8W0sFiVJo","title":"Hands-On Cybersecurity & Defensive Security","creator":"freeCodeCamp.org","category":"Cybersecurity","level":"Beginner","hours":"Full workshop","description":"Understand Linux basics, networking, security auditing and defensive principles through demonstrations.","chapters":[["Introduction and lab environment",0],["Basic Linux commands",123],["Networking fundamentals",5125],["Network discovery basics",5735],["Security monitoring with Wireshark",10887]]},
-{"id":"DPqiIzK97K0","title":"Arduino & Electronics — Project-Based Course","creator":"freeCodeCamp.org","category":"Engineering & IoT","level":"Beginner","hours":"10h 28m","description":"Build Arduino circuits, LED projects, voltmeters, buzzers, sensors and an LED matrix display.","chapters":[["Getting started with Arduino",0],["Breadboards and LEDs",292],["Traffic light project",3412],["Analog pins",4370],["Voltmeter project",5681],["Sound and buzzer projects",7998],["Temperature sensors",11867],["Pushbuttons and RGB LED",14877],["7-segment displays",22324],["8x8 LED matrix",33357]],"featured":true},
-{"id":"zJ-LqeX_fLU","title":"Electronics Foundations with Arduino","creator":"freeCodeCamp.org","category":"Engineering & IoT","level":"Beginner","hours":"4h 5m","description":"Learn electricity, Arduino hardware, circuits, variables, input/output and embedded functions.","chapters":[["Electricity and electronics",0],["Arduino boards",1706],["Arduino IDE",2338],["Breadboards and safety",2824],["Programming fundamentals",4606],["Variables and data types",5451],["Loops and conditionals",8001],["Reading sensors",12920]]},
-{"id":"i7vOAcUo5iA","title":"College Algebra — Complete Mathematics Course","creator":"freeCodeCamp.org","category":"Mathematics & Science","level":"Beginner","hours":"15h+","description":"Learn algebraic equations, functions, graphs, systems, quadratics, exponents and logarithms.","chapters":[["Introduction",0],["Ratios and proportions",842],["Solving equations",1942],["Functions",6033],["Graphs and slopes",8233],["Factoring",12533],["Systems of equations",20169],["Quadratic equations",27029],["Polynomials",34484],["Interest and logarithms",39919]],"featured":true},
-{"id":"RxCR3g6aYJ0","title":"French from Scratch — A1 Beginner Course","creator":"Learn French With Alexa","category":"Languages","level":"Beginner","hours":"1h 3m","description":"Start speaking French with greetings, numbers, alphabet, calendar words and articles.","chapters":[["Greetings in French",0],["Numbers 1–20",571],["French alphabet",1029],["Days of the week",1519],["Months of the year",1914],["Weather and seasons",2432],["Definite articles",3113]],"featured":true},
-{"id":"sreUBIPwkIs","title":"Learn Arabic — Four Essential Foundations","creator":"Learn with Usama Sarsari","category":"Languages","level":"Beginner","hours":"Introductory course","description":"A beginner introduction to essential Arabic vocabulary, nouns, verbs and key grammar rules.","chapters":[["Complete Arabic foundations lesson",0]]},
-{"id":"p2UE5ZVUcQc","title":"English Conversations for Beginners (A1–A2)","creator":"English Chat","category":"Languages","level":"Beginner","hours":"2h","description":"Practice everyday English for shops, travel, friends, work and daily conversations.","chapters":[["Everyday English conversation practice",0]]},
-{"id":"7xuW_rwgS-U","title":"Hydroponic Vegetable Growing — Seed to Harvest","creator":"Januri Nurhidayat","category":"Agriculture","level":"Beginner","hours":"Practical demonstration","description":"A practical walkthrough of growing vegetables in a simple hydroponic system, from seedlings to harvest.","chapters":[["Hydroponic vegetable growing demonstration",0]]},
-{"id":"DryKoaxh3I8","title":"Getting Started in Greenhouse Production","creator":"Virginia Cooperative Extension","category":"Agriculture","level":"Beginner","hours":"Introduction","description":"Overview of greenhouse production by an extension horticulture educator.","chapters":[["Getting started in greenhouse production",0]]},
-{"id":"RSsZl5lIdJo","title":"Home Vegetable Garden — Garden Management","creator":"FAO PROMOVE Agribiz","category":"Agriculture","level":"Beginner","hours":"Video lesson","description":"Learn practical vegetable garden management within a series on sustainable crop production.","chapters":[["Garden management lesson",0]]}
+ {
+  "id": "rfscVS0vtbw",
+  "title": "Learn Python — Full Course for Beginners",
+  "creator": "freeCodeCamp.org",
+  "category": "Programming",
+  "level": "Beginner",
+  "description": "Start programming with Python: setup, variables, functions, loops, files and projects.",
+  "hours": "4h 26m",
+  "chapters": [
+   [
+    "Introduction",
+    0
+   ],
+   [
+    "Install Python & Set Up",
+    105
+   ],
+   [
+    "Variables and Data Types",
+    906
+   ],
+   [
+    "Strings, Numbers and Input",
+    1623
+   ],
+   [
+    "Lists and Functions",
+    3800
+   ],
+   [
+    "Conditions and Loops",
+    6006
+   ],
+   [
+    "Files and Modules",
+    11561
+   ],
+   [
+    "Classes and Final Quiz",
+    13436
+   ]
+  ],
+  "featured": false
+ },
+ {
+  "id": "PkZNo7MFNFg",
+  "title": "JavaScript — Full Course for Beginners",
+  "creator": "freeCodeCamp.org",
+  "category": "Programming",
+  "level": "Beginner",
+  "description": "Complete fundamentals from variables and arrays to objects, loops and ES6.",
+  "hours": "3h 20m+",
+  "chapters": [
+   [
+    "Introduction & JavaScript Setup",
+    0
+   ],
+   [
+    "Variables and Operators",
+    356
+   ],
+   [
+    "Strings",
+    1279
+   ],
+   [
+    "Arrays",
+    2444
+   ],
+   [
+    "Functions and Scope",
+    3101
+   ],
+   [
+    "Conditions and Objects",
+    4104
+   ],
+   [
+    "Loops",
+    7815
+   ],
+   [
+    "Modern JavaScript and ES6",
+    9456
+   ]
+  ],
+  "featured": false
+ },
+ {
+  "id": "HXV3zeQKqGY",
+  "title": "SQL Tutorial — Full Database Course",
+  "creator": "freeCodeCamp.org",
+  "category": "Data & Analytics",
+  "level": "Beginner",
+  "description": "Learn SQL and database basics, tables, queries, joins and database design.",
+  "hours": "4h+",
+  "chapters": [
+   [
+    "What Is a Database?",
+    156
+   ],
+   [
+    "Tables and Keys",
+    1390
+   ],
+   [
+    "SQL Basics and Setup",
+    2611
+   ],
+   [
+    "Creating Tables and Data",
+    4549
+   ],
+   [
+    "Queries and Functions",
+    6971
+   ],
+   [
+    "Joins and Nested Queries",
+    10896
+   ],
+   [
+    "ER Diagrams and Database Design",
+    13332
+   ]
+  ],
+  "featured": false
+ },
+ {
+  "id": "KJgsSFOSQv0",
+  "title": "C Programming Tutorial for Beginners",
+  "creator": "freeCodeCamp.org",
+  "category": "Programming",
+  "level": "Beginner",
+  "description": "Programming fundamentals with C, variables, arrays, functions, loops and pointers.",
+  "hours": "3h 45m+",
+  "chapters": [
+   [
+    "Introduction",
+    0
+   ],
+   [
+    "Setup and Hello World",
+    82
+   ],
+   [
+    "Variables and Data Types",
+    1256
+   ],
+   [
+    "Input and Arrays",
+    3600
+   ],
+   [
+    "Functions and Decisions",
+    5804
+   ],
+   [
+    "Loops and Structs",
+    8487
+   ],
+   [
+    "Pointers and Memory",
+    11350
+   ],
+   [
+    "Writing and Reading Files",
+    12757
+   ]
+  ],
+  "featured": false
+ },
+ {
+  "id": "DPqiIzK97K0",
+  "title": "Arduino & Electronics — Project-Based Course",
+  "creator": "freeCodeCamp.org",
+  "category": "Engineering & IoT",
+  "level": "Beginner",
+  "description": "Build Arduino circuits, LED projects, voltmeters, buzzers, sensors and an LED matrix display.",
+  "hours": "10h 28m",
+  "chapters": [
+   [
+    "Getting started with Arduino",
+    0
+   ],
+   [
+    "Breadboards and LEDs",
+    292
+   ],
+   [
+    "Traffic light project",
+    3412
+   ],
+   [
+    "Analog pins",
+    4370
+   ],
+   [
+    "Voltmeter project",
+    5681
+   ],
+   [
+    "Sound and buzzer projects",
+    7998
+   ],
+   [
+    "Temperature sensors",
+    11867
+   ],
+   [
+    "Pushbuttons and RGB LED",
+    14877
+   ],
+   [
+    "7-segment displays",
+    22324
+   ],
+   [
+    "8x8 LED matrix",
+    33357
+   ]
+  ],
+  "featured": true
+ },
+ {
+  "id": "Vl0H-qTclOg",
+  "title": "Microsoft Excel — Six Real-World Projects",
+  "creator": "freeCodeCamp.org",
+  "category": "Business & Office",
+  "level": "Beginner",
+  "description": "Practice payroll, gradebooks, charts, inventory, pivot tables and lookups with Excel.",
+  "hours": "2h 30m",
+  "chapters": [
+   [
+    "Complete Excel workshop",
+    0
+   ]
+  ],
+  "featured": false
+ },
+ {
+  "id": "CMEWVn1uZpQ",
+  "title": "Python for Data Science — Practical Projects",
+  "creator": "freeCodeCamp.org",
+  "category": "Data & Analytics",
+  "level": "Beginner",
+  "description": "Learn Python, NumPy, Pandas, visualizations, data cleaning and introductory machine learning.",
+  "hours": "17h+",
+  "chapters": [
+   [
+    "Installation and Python basics",
+    0
+   ],
+   [
+    "Pandas and NumPy",
+    6101
+   ],
+   [
+    "Web scraping project",
+    12375
+   ],
+   [
+    "Filtering and extraction",
+    14736
+   ],
+   [
+    "Data reshaping",
+    27117
+   ],
+   [
+    "Visualization project",
+    28259
+   ],
+   [
+    "GroupBy and merging",
+    32199
+   ],
+   [
+    "Data cleaning project",
+    45945
+   ],
+   [
+    "Machine learning introduction",
+    51465
+   ]
+  ],
+  "featured": true
+ },
+ {
+  "id": "hDKCxebp88A",
+  "title": "Machine Learning with Python & Scikit-Learn",
+  "creator": "freeCodeCamp.org",
+  "category": "Artificial Intelligence",
+  "level": "Intermediate",
+  "description": "Build supervised and unsupervised learning models and deploy a real machine-learning project.",
+  "hours": "18h+",
+  "chapters": [
+   [
+    "Introduction",
+    0
+   ],
+   [
+    "Linear regression",
+    25
+   ],
+   [
+    "Logistic regression",
+    8250
+   ],
+   [
+    "Decision trees and forests",
+    17606
+   ],
+   [
+    "ML project workflow",
+    26729
+   ],
+   [
+    "XGBoost",
+    36373
+   ],
+   [
+    "Unsupervised learning",
+    44457
+   ],
+   [
+    "End-to-end ML project",
+    49998
+   ],
+   [
+    "Deploy with Flask",
+    60347
+   ]
+  ],
+  "featured": true
+ },
+ {
+  "id": "PSNXoAs2FtQ",
+  "title": "Data Analyst Bootcamp — SQL, Excel & Power BI",
+  "creator": "freeCodeCamp.org",
+  "category": "Data & Analytics",
+  "level": "Beginner",
+  "description": "Career-oriented analytics bootcamp with SQL, Tableau, Power BI, Python, Excel and portfolio projects.",
+  "hours": "19h+",
+  "chapters": [
+   [
+    "Bootcamp introduction",
+    0
+   ],
+   [
+    "Becoming a data analyst",
+    70
+   ],
+   [
+    "SQL setup",
+    908
+   ],
+   [
+    "SQL SELECT queries",
+    1484
+   ],
+   [
+    "SQL WHERE clauses",
+    1857
+   ]
+  ],
+  "featured": false
+ },
+ {
+  "id": "wUSDVGivd-8",
+  "title": "Python for Data Analytics — Full Tutorial",
+  "creator": "Luke Barousse",
+  "category": "Data & Analytics",
+  "level": "Beginner",
+  "description": "Learn Python, Pandas, Matplotlib and practical data analyst portfolio projects.",
+  "hours": "11h 9m",
+  "chapters": [
+   [
+    "Welcome and setup",
+    0
+   ],
+   [
+    "Python basics",
+    522
+   ],
+   [
+    "Lists and dictionaries",
+    5640
+   ],
+   [
+    "Functions",
+    10332
+   ],
+   [
+    "Pandas intro",
+    15776
+   ],
+   [
+    "Charts with Matplotlib",
+    19039
+   ],
+   [
+    "Data analysis techniques",
+    21056
+   ],
+   [
+    "Final portfolio project",
+    35140
+   ]
+  ],
+  "featured": false
+ },
+ {
+  "id": "c9Wg6Cb_YlU",
+  "title": "UI/UX Design — Wireframes to Prototypes",
+  "creator": "freeCodeCamp.org",
+  "category": "Design & Creative",
+  "level": "Beginner",
+  "description": "Follow a real website design process from wireframes through UI layout to polished Figma mockups.",
+  "hours": "1h+",
+  "chapters": [
+   [
+    "Introduction",
+    0
+   ],
+   [
+    "Wireframing",
+    87
+   ],
+   [
+    "User Interface Layout",
+    1858
+   ],
+   [
+    "Polished Mockup",
+    3998
+   ]
+  ],
+  "featured": false
+ }
 ];
 const photo=id=>'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg';
 const validVideo=id=>/^[a-zA-Z0-9_-]{11}$/.test(String(id||''));
 const validPlaylist=id=>/^[a-zA-Z0-9_-]{12,60}$/.test(String(id||''));
 const normalizeCourse=c=>Object.assign({},c,{type:c.type||'video',image:c.image||photo(c.id),source:'YouTube',hours:c.hours||'See YouTube',chapters:c.chapters||[['Watch the video',0]],format:c.category==='Agriculture'?'Practical lesson':'Video course'});
 const curated=Array.from(new Map(curate.filter(c=>validVideo(c.id)).map(c=>[c.id,normalizeCourse(c)])).values()).sort((a,b)=>Number(!!b.featured)-Number(!!a.featured));
-const state={category:'All',sort:'featured',saved:(()=>{try{const a=JSON.parse(localStorage.getItem('sylution_yt-saved'));return Array.isArray(a)?a.filter(validVideo):[]}catch(e){return[]}})(),items:curated.slice(),query:'',kind:'video',status:'curated',message:'Browse '+curated.length+' selected video courses across technology, design, analytics, cybersecurity, business and engineering. Live YouTube search needs a Google Cloud API key.',page:null,selected:curated[0],lesson:0,playlistLessons:[],courseProgress:(()=>{try{return JSON.parse(localStorage.getItem('sylution_yt-progress'))||{}}catch(e){return{}}})()};
+const state={category:'All',sort:'featured',saved:(()=>{try{const a=JSON.parse(localStorage.getItem('sylution_yt-saved'));return Array.isArray(a)?a.filter(validVideo):[]}catch(e){return[]}})(),items:curated.slice(),query:'',kind:'video',status:'curated',message:'Selected courses confirmed as public YouTube video pages. Playback permission may vary; unavailable embeds can be opened on YouTube.',page:null,selected:curated[0],lesson:0,playlistLessons:[],courseProgress:(()=>{try{return JSON.parse(localStorage.getItem('sylution_yt-progress'))||{}}catch(e){return{}}})()};
 const searchApi=async(q,kind,token)=>{const u=new URL('./api/youtube',location.href.split('#')[0]);u.searchParams.set('mode','search');u.searchParams.set('q',q);u.searchParams.set('kind',kind);if(token)u.searchParams.set('pageToken',token);const res=await fetch(u.href,{headers:{'Accept':'application/json'}});const data=await res.json().catch(()=>({error:'Server response was not JSON'}));if(!res.ok)throw Error(data.error||'YouTube search is not configured');return data};
 const listPlaylist=async(id,token)=>{if(!validPlaylist(id))throw Error('Invalid playlist');const u=new URL('./api/youtube',location.href.split('#')[0]);u.searchParams.set('mode','playlist');u.searchParams.set('id',id);if(token)u.searchParams.set('pageToken',token);const res=await fetch(u.href);const data=await res.json().catch(()=>({error:'Could not read server response'}));if(!res.ok)throw Error(data.error||'Playlist unavailable');return data};
 function sanitize(item){
