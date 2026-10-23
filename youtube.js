@@ -47,8 +47,8 @@ const photo=id=>'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg';
 const validVideo=id=>/^[a-zA-Z0-9_-]{11}$/.test(String(id||''));
 const validPlaylist=id=>/^[a-zA-Z0-9_-]{12,60}$/.test(String(id||''));
 const normalizeCourse=c=>Object.assign({},c,{type:c.type||'video',image:c.image||photo(c.id),source:'YouTube',hours:c.hours||'See YouTube',chapters:c.chapters||[['Watch the video',0]],format:c.category==='Agriculture'?'Practical lesson':'Video course'});
-const curated=Array.from(new Map(curate.filter(c=>validVideo(c.id)).map(c=>[c.id,normalizeCourse(c)])).values());
-const state={category:'All',sort:'featured',items:curated.slice(),query:'',kind:'video',status:'curated',message:'Browse '+curated.length+' selected video courses across technology, design, analytics, cybersecurity, business and engineering. Live YouTube search needs a Google Cloud API key.',page:null,selected:curated[0],lesson:0,playlistLessons:[],courseProgress:(()=>{try{return JSON.parse(localStorage.getItem('sylution_yt-progress'))||{}}catch(e){return{}}})()};
+const curated=Array.from(new Map(curate.filter(c=>validVideo(c.id)).map(c=>[c.id,normalizeCourse(c)])).values()).sort((a,b)=>Number(!!b.featured)-Number(!!a.featured));
+const state={category:'All',sort:'featured',saved:(()=>{try{const a=JSON.parse(localStorage.getItem('sylution_yt-saved'));return Array.isArray(a)?a.filter(validVideo):[]}catch(e){return[]}})(),items:curated.slice(),query:'',kind:'video',status:'curated',message:'Browse '+curated.length+' selected video courses across technology, design, analytics, cybersecurity, business and engineering. Live YouTube search needs a Google Cloud API key.',page:null,selected:curated[0],lesson:0,playlistLessons:[],courseProgress:(()=>{try{return JSON.parse(localStorage.getItem('sylution_yt-progress'))||{}}catch(e){return{}}})()};
 const searchApi=async(q,kind,token)=>{const u=new URL('./api/youtube',location.href.split('#')[0]);u.searchParams.set('mode','search');u.searchParams.set('q',q);u.searchParams.set('kind',kind);if(token)u.searchParams.set('pageToken',token);const res=await fetch(u.href,{headers:{'Accept':'application/json'}});const data=await res.json().catch(()=>({error:'Server response was not JSON'}));if(!res.ok)throw Error(data.error||'YouTube search is not configured');return data};
 const listPlaylist=async(id,token)=>{if(!validPlaylist(id))throw Error('Invalid playlist');const u=new URL('./api/youtube',location.href.split('#')[0]);u.searchParams.set('mode','playlist');u.searchParams.set('id',id);if(token)u.searchParams.set('pageToken',token);const res=await fetch(u.href);const data=await res.json().catch(()=>({error:'Could not read server response'}));if(!res.ok)throw Error(data.error||'Playlist unavailable');return data};
 function sanitize(item){
@@ -60,7 +60,7 @@ return {id,type,title:String(item.title||'Untitled course').slice(0,200),creator
 async function search(query,kind){
 const q=String(query||'').trim().slice(0,80);
 if(q.length<2){state.items=curated.slice();state.status='curated';state.message='Showing '+curated.length+' selected courses. Enter at least two letters to search.';return state}
-state.query=q;state.kind=kind==='playlist'?'playlist':'video';state.status='loading';state.message='Searching YouTube...';
+state.query=q;state.kind=kind==='playlist'?'playlist':'video';state.category='All';state.sort='featured';state.status='loading';state.message='Searching YouTube...';
 try{const result=await searchApi(q,state.kind);state.items=(result.items||[]).map(sanitize).filter(Boolean);state.page=result.nextPageToken||null;state.status='api';state.message=state.items.length?'Live YouTube results. Videos and playlists belong to their original creators.':'No results. Try another subject.'}
 catch(e){state.items=curated.filter(c=>(c.title+' '+c.category+' '+c.description+' '+c.creator).toLowerCase().includes(q.toLowerCase()));state.status='fallback';state.page=null;state.message='Live YouTube search is not configured. Showing '+state.items.length+' matching curated courses instead.'}
 return state
@@ -95,5 +95,19 @@ try{localStorage.setItem('sylution_yt-progress',JSON.stringify(state.courseProgr
 return all.length?Math.round(entry.length/all.length*100):0
 }
 function progress(c){if(!c)return 0;const key=c.type+':'+c.id;const entry=state.courseProgress[key]||[];const n=c.type==='playlist'?state.playlistLessons.length:(c.chapters||[]).length||1;return n?Math.round(entry.length/n*100):0}
-window.SYLUTION_VIDEO={curated,state,search,select,getLessons,lessons,currentLesson,setLesson,finish,progress,validVideo,photo};
+function toggleSaved(id){
+if(!validVideo(id))return false;
+const n=state.saved.indexOf(id);if(n>=0)state.saved.splice(n,1);else state.saved.push(id);
+try{localStorage.setItem('sylution_yt-saved',JSON.stringify(state.saved))}catch(e){}
+return state.saved.includes(id)
+}
+const categories=['All','Programming','Artificial Intelligence','Data & Analytics','Business & Office','Web Development','Design & Creative','Cybersecurity','Engineering & IoT','Mathematics & Science','Languages','Agriculture'];
+const filtered=()=>{
+let list=state.items.filter(c=>state.category==='All'||c.category===state.category);
+if(state.sort==='az')list=list.sort((a,b)=>a.title.localeCompare(b.title));
+else if(state.sort==='saved')list=list.filter(c=>state.saved.includes(c.id));
+else if(state.sort==='featured')list=list.sort((a,b)=>Number(!!b.featured)-Number(!!a.featured));
+return list
+};
+window.SYLUTION_VIDEO={curated,state,categories,filtered,toggleSaved,search,select,getLessons,lessons,currentLesson,setLesson,finish,progress,validVideo,photo};
 })();
