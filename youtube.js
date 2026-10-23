@@ -512,5 +512,33 @@ else if(state.sort==='saved')list=list.filter(c=>state.saved.includes(c.id));
 else if(state.sort==='featured')list=list.sort((a,b)=>Number(!!b.featured)-Number(!!a.featured));
 return list
 };
-window.SYLUTION_VIDEO={curated,state,categories,filtered,toggleSaved,search,select,getLessons,lessons,currentLesson,setLesson,finish,progress,validVideo,photo};
+/* Once configured, the server checks YouTube's authoritative status.embeddable
+   and privacyStatus fields. Do not delete courses based on network errors. */
+let verificationInFlight=null;
+async function verifyCatalog(){
+ if(verificationInFlight)return verificationInFlight;
+ verificationInFlight=(async()=>{
+  try{
+   const ids=curated.map(x=>x.id).filter(validVideo);
+   if(!ids.length)return false;
+   const u=new URL('./api/youtube',location.href.split('#')[0]);
+   u.searchParams.set('mode','validate');u.searchParams.set('ids',ids.join(','));
+   const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),10500);
+   let response;try{response=await fetch(u.href,{signal:ctrl.signal,headers:{Accept:'application/json'}})}finally{clearTimeout(timer)}
+   if(!response.ok)return false;
+   const result=await response.json();
+   if(!Array.isArray(result.available)||result.checked!==ids.length)return false;
+   const validIds=new Set(result.available.filter(validVideo));
+   const removed=curated.filter(c=>!validIds.has(c.id)).map(c=>c.id);
+   if(!removed.length)return false;
+   for(let i=curated.length-1;i>=0;i--)if(!validIds.has(curated[i].id))curated.splice(i,1);
+   state.items=state.items.filter(c=>!removed.includes(c.id));
+   if(state.selected&&!validIds.has(state.selected.id))state.selected=curated[0]||null;
+   state.message=removed.length+' unavailable or unembeddable videos were excluded from this session.';
+   return true;
+  }catch(e){return false}
+ })();
+ return verificationInFlight;
+}
+window.SYLUTION_VIDEO={curated,state,categories,filtered,toggleSaved,search,select,getLessons,lessons,currentLesson,setLesson,finish,progress,validVideo,photo,verifyCatalog};
 })();
