@@ -122,3 +122,74 @@
 @media(max-width:920px){.yt-course-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.yt-watch-layout{grid-template-columns:1fr}.yt-watch-sidebar{margin-bottom:16px}.yt-sidebar-list{max-height:340px}.yt-home-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.yt-home-grid .yt-card-body{padding:12px}.yt-home-grid .yt-card-name{font-size:13px}.yt-detail-content{max-width:85%}}
 @media(max-width:640px){.yt-title-row{margin-bottom:17px}.yt-title-row h1{font-size:27px}.yt-title-row .yt-source-tag{display:none}.yt-feature{grid-template-columns:1fr 85px;min-height:172px;padding:19px;border-radius:18px}.yt-feature h2{font-size:24px}.yt-feature p{font-size:11px}.yt-feature-art{width:66px;height:66px;border-radius:20px}.yt-feature-art svg{height:34px;width:34px}.yt-search-form{padding:9px}.yt-search-form .searchbar{gap:7px}.yt-search-form .searchbar input{font-size:16px;min-width:0}.yt-search-form .searchbar .btn{padding:0 10px;min-height:40px;font-size:11px}.yt-search-types{gap:8px}.yt-search-types label{font-size:11px}.yt-search-types>button{font-size:11px}.yt-source-note{font-size:11px}.yt-course-grid,.yt-home-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.yt-card-body{padding:11px}.yt-card-name{font-size:12px;min-height:41px}.yt-card-type{font-size:9px}.yt-author{font-size:10px}.yt-view{font-size:10px}.yt-free-label{font-size:9px;padding:5px 6px}.yt-card-bottom{gap:3px}.yt-play-round{width:36px;height:36px}.yt-play-round svg{width:19px;height:19px}.yt-home-promo,.yt-catalog-strip{flex-wrap:wrap;padding:15px;gap:10px}.yt-home-promo .btn,.yt-catalog-strip .btn{width:100%;min-height:42px}.yt-home-promo strong{font-size:15px}.yt-detail-hero{min-height:290px}.yt-detail-content{padding:22px;max-width:95%}.yt-detail-content h1{font-size:24px}.yt-detail-content>p{font-size:11px}.yt-detail-hero:after{background:linear-gradient(90deg,#171923 5%,#171923de 68%,#17192380)}.yt-facts{gap:7px}.yt-facts span{font-size:10px;padding:9px}.yt-facts svg{width:15px}.yt-curriculum-head{align-items:flex-start;flex-wrap:wrap}.yt-curriculum-head h2{font-size:21px}.yt-lesson-row{padding:12px;gap:9px}.yt-lesson-number{height:33px;width:33px;font-size:12px}.yt-video-ratio{border-radius:13px}.yt-video-meta h1{font-size:24px}.yt-watch-tools .btn{flex:1;min-height:45px;font-size:11px}.yt-watch-sidebar{border-radius:14px}.yt-ethical{padding:14px}}
 @media(max-width:365px){.yt-course-grid,.yt-home-grid{grid-template-columns:1fr}.yt-card-image{aspect-ratio:16/8}.yt-card-name{min-height:0;font-size:15px}.yt-card-body{padding:15px}.yt-feature{grid-template-columns:1fr}.yt-feature-art{display:none}.yt-search-types>button{width:100%;text-align:left;margin-left:0}.yt-watch-tools .btn{width:100%}}
+
+/* Curated learning magazine — category-first premium UI */
+.yt-premium-headline{margin:28px 0 14px;display:flex;flex-direction:column;align-items:flex-start;gap:5px}
+.yt-premium-headline h2,.yt-premium-subhead h2{font-size:clamp(23px,2.9vw,31px);margin:2px 0 3px;letter-spacing:-.055em}
+.yt-premium-headline p,.yt-premium-subhead p{color:#7b8492;font-size:13px;margin:0}
+.yt-eyebrow{font-weight:800;letter-spacing:.15em;font-size:10px;color:#e51b3d}
+.yt-premium-metrics{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin-top:11px}
+.yt-premium-metrics span{display:inline-flex;align-items:center;border:1px solid #ebedf2;border-radius:10px;background:#fff;padding:8px 11px;color:#4c5360;font-size:11px;font-weight:800}
+.yt-featured-shelf{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;min-width:0;margin:14px 0 28px}
+.yt-shelf-card{min-width:0;border:1px solid #e8ebf1;background:#fff;border-radius:17px;padding:0;overflow:hidden;text-align:left;display:flex;flex-direction:column;box-shadow:0 10px 24px #1516210a;transition:transform .18s,box-shadow .18s}
+.yt-shelf-card:hover{transform:translateY(-3px);box-shadow:0 17px 29px #15162116;border-color:#ffc7d1}
+.yt-shelf-picture{position:relative;aspect-ratio:16/9;width:100%;background:#e9eaf1;overflow:hidden}
+.yt-shelf-picture:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#19192338,transparent 60%)}
+.yt-shelf-picture img{width:100%;height:100%;object-fit:cover;transition:transform .25s}
+.yt-shelf-card:hover img{transform:scale(1.04)}
+.yt-shelf-copy{display:flex;flex-direction:column;gap:8px;flex:1;padding:13px}
+.yt-shelf-copy small{font-size:9px;text-transform:uppercase;font-weight:800;letter-spacing:.06em;color:#e51b3d}
+.yt-shelf-copy strong{font:800 clamp(12px,1.3vw,15px)/1.42 "Plus Jakarta Sans",sans-serif;letter-spacing:-.03em;min-height:40px;color:#21242f}
+.yt-shelf-copy em{font-style:normal;color:#e51b3d;font-size:11px;font-weight:800;margin-top:auto}
+.yt-premium-subhead{display:flex;flex-direction:column;gap:4px;margin:26px 0 12px}
+.yt-category-filters{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 17px;min-width:0}
+.yt-filter{border:1px solid #e4e8f0;background:#fff;padding:12px 15px;border-radius:12px;font-size:12px;font-weight:750;color:#566074;transition:background .16s,color .16s,border-color .16s;min-height:43px}
+.yt-filter:hover{border-color:#e51b3d;color:#e51b3d;background:#fff5f7}
+.yt-filter.active{background:#171923;color:#fff;border-color:#171923;box-shadow:0 6px 12px #17192317}
+.yt-filter.active:hover{background:#222430;color:#fff}
+.yt-sort-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:24px 0 9px}
+.yt-sort-buttons{display:flex;gap:5px;border:1px solid #e5e9ef;border-radius:12px;background:#fff;padding:4px;max-width:100%;overflow-x:auto}
+.yt-sort-buttons button{border:0;border-radius:9px;background:transparent;color:#7b8191;padding:8px 12px;font-size:11px;font-weight:800;white-space:nowrap}
+.yt-sort-buttons button.active{background:#fff0f3;color:#c81532}
+.yt-sort-buttons button:hover{color:#e51b3d}
+.yt-course-duration{font-size:11px;color:#6a7584;margin:-9px 0 16px}
+.yt-course-card .yt-card-type{min-height:16px}
+.yt-course-card .yt-card-name{font-size:clamp(13px,1.45vw,16px);line-height:1.32;min-height:42px}
+.yt-feature-premium{background:radial-gradient(circle at 89% 61%,#80344c 0%,transparent 38%),linear-gradient(110deg,#171923,#2a2938);min-height:240px}
+.yt-feature-premium h2{font-size:clamp(29px,3.7vw,42px);letter-spacing:-.055em}
+.yt-library .yt-grid-head{margin-top:8px}
+.yt-library .yt-grid-head span{font-weight:800}
+.yt-library .yt-ethical{background:#f8f9fc;border-color:#e8ebf0}
+.yt-library .yt-search-form{margin:16px 0 22px}
+.yt-course-card:focus-within{outline:2px solid #ef7a8d;outline-offset:3px}
+.yt-shelf-card:focus-visible,.yt-filter:focus-visible{outline:2px solid #e51b3d;outline-offset:3px}
+@media(max-width:1024px){
+.yt-featured-shelf{grid-template-columns:repeat(2,minmax(0,1fr))}
+.yt-shelf-card{display:grid;grid-template-columns:minmax(0,46%) minmax(0,1fr);min-height:142px}
+.yt-shelf-picture{aspect-ratio:auto;height:100%}
+.yt-shelf-copy strong{min-height:0}
+}
+@media(max-width:640px){
+.yt-premium-headline{margin:23px 0 12px}.yt-premium-headline h2,.yt-premium-subhead h2{font-size:23px}
+.yt-premium-headline p,.yt-premium-subhead p{font-size:11px}
+.yt-premium-metrics{gap:6px}.yt-premium-metrics span{padding:7px 8px;font-size:10px}
+.yt-featured-shelf{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:11px 0 22px}
+.yt-shelf-card{display:flex;min-height:0;border-radius:13px}
+.yt-shelf-picture{aspect-ratio:16/10;height:auto}
+.yt-shelf-copy{padding:11px;gap:6px}.yt-shelf-copy small{font-size:8px}
+.yt-shelf-copy strong{font-size:11px;min-height:0;line-height:1.42}.yt-shelf-copy em{font-size:9px}
+.yt-category-filters{gap:7px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;scroll-snap-type:x proximity;padding-bottom:9px;margin-right:-16px}
+.yt-category-filters::-webkit-scrollbar{display:none}
+.yt-filter{flex:0 0 auto;scroll-snap-align:start;font-size:10px;min-height:40px;padding:10px 12px;border-radius:10px}
+.yt-sort-bar{flex-direction:column;align-items:flex-start;gap:8px;margin:19px 0 10px}
+.yt-sort-buttons button{font-size:10px;padding:8px 10px}
+.yt-course-duration{font-size:10px}
+.yt-course-card .yt-card-name{font-size:12px;min-height:44px}
+.yt-feature-premium{min-height:205px}
+.yt-feature-premium h2{font-size:26px}
+}
+@media(max-width:365px){
+.yt-featured-shelf{grid-template-columns:1fr 1fr}
+.yt-shelf-copy{padding:9px}.yt-shelf-copy strong{font-size:10px}
+.yt-category-filters{margin-right:-13px}
+}
