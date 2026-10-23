@@ -38,18 +38,33 @@ SYLUTION Learn now includes a free-video learning journey in the existing applic
 
 ### Available immediately, without credentials
 
-The `youtube.js` starter catalog began with six independently identified, long-form freeCodeCamp.org courses; the current collection is expanded to 31 videos spanning 12 areas:
+The built-in `youtube.js` catalog now contains **31 selected educational videos across 12 categories**, including programming, design, analytics, cybersecurity, AI, business tools, engineering/IoT, mathematics, languages and agriculture. The experience has:
 
-| Subject | Original YouTube Video |
+- Responsive premium course cards with real video thumbnail images and visible creator credit
+- Featured video shelf and category chips to explore the subject library
+- Search results scoped to the curated catalog when the server API is not configured
+- Recommended, alphabetical, beginner and saved-course filtering
+- Separate course-detail pages, video curriculum timestamps, and an in-app YouTube embed
+- Locally saved favorites and manually marked study progress
+
+**Content-type note:** Some sources are comprehensive full courses; some are introductory lessons or practical field tutorials (especially in agriculture and languages). These are not represented as third-party accredited courses, nor as SYLUTION-owned recordings.
+
+Representative public sources (YouTube IDs), with original owners retained:
+
+| Field | Selected original lesson/video |
 | --- | --- |
-| Python | `rfscVS0vtbw` |
-| HTML | `pQN-pnXPaVg` |
-| JavaScript | `PkZNo7MFNFg` |
-| SQL | `HXV3zeQKqGY` |
-| C | `KJgsSFOSQv0` |
-| C++ | `vLnPwxZdW4Y` |
+| Office productivity | Excel `Vl0H-qTclOg`, freeCodeCamp.org |
+| Design | Figma `jwCmIBJ8Jtc`, freeCodeCamp.org |
+| Artificial intelligence | ML with Python `hDKCxebp88A`, freeCodeCamp.org |
+| Analytics | Data Analyst Bootcamp `PSNXoAs2FtQ`, freeCodeCamp.org |
+| Engineering & IoT | Arduino `zJ-LqeX_fLU`, freeCodeCamp.org |
+| Cybersecurity | Harvard CS50 Cybersecurity `9HOpanT0GRs`, freeCodeCamp.org |
+| Agriculture | Greenhouse introduction `DryKoaxh3I8`, Virginia Cooperative Extension |
+| Agriculture | Garden management `RSsZl5lIdJo`, FAO PROMOVE Agribiz |
 
-Where possible, their curriculum is divided into chapter starting points from the original video's public description. Chapters in one long video are timestamp navigation, **not separate uploaded videos**.
+Curated YouTube IDs are catalog references, **not proof of continued embeddability**. The original videos can become private, restricted, removed, region-blocked or unavailable for embedding. Playback and image loading still require a network connection.
+
+Where chapter markers are supplied, they jump to timestamp positions inside the original upload. They are **not** independently hosted lessons.
 
 ### Activate live YouTube search (API key required)
 
