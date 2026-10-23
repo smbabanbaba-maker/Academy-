@@ -1,5 +1,31 @@
-const VERSION='sylution-learn-vercel-production-20261023r10';
+/* SYLUTION Learn PWA: network-first updates, no API response caching. */
+const VERSION='sylution-learn-vercel-production-20261023r11';
 const ASSETS=['./','./index.html','./styles.css','./premium.css','./palette.css','./responsive.css','./youtube.css','./youtube.js','./youtube-ui.js','./app.js','./icon.svg','./manifest.webmanifest'];
-self.addEventListener('install',event=>{event.waitUntil(caches.open(VERSION).then(cache=>cache.addAll(ASSETS)));self.skipWaiting()});
-self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==VERSION).map(key=>caches.delete(key)))));self.clients.claim()});
-self.addEventListener('fetch',event=>{const req=event.request;if(req.method!=='GET'||new URL(req.url).origin!==location.origin)return;event.respondWith(fetch(req).then(resp=>{if(resp.ok){const copy=resp.clone();caches.open(VERSION).then(cache=>cache.put(req,copy))}return resp}).catch(()=>caches.match(req).then(hit=>hit||caches.match('./index.html'))))});
+self.addEventListener('install',event=>{
+ event.waitUntil(caches.open(VERSION).then(cache=>cache.addAll(ASSETS)));
+ self.skipWaiting();
+});
+self.addEventListener('activate',event=>{
+ event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==VERSION&&/^(sylution-learn|sylution-video|sylution-courses)/.test(key)).map(key=>caches.delete(key)))));
+ self.clients.claim();
+});
+self.addEventListener('fetch',event=>{
+ const req=event.request;
+ if(req.method!=='GET')return;
+ const url=new URL(req.url);
+ if(url.origin!==self.location.origin || url.pathname.startsWith('/api/'))return;
+ event.respondWith(
+   fetch(req).then(resp=>{
+     if(resp.ok){
+       const copy=resp.clone();
+       event.waitUntil(caches.open(VERSION).then(cache=>cache.put(req,copy)).catch(()=>{}));
+     }
+     return resp;
+   }).catch(async()=>{
+     const cached=await caches.match(req);
+     if(cached)return cached;
+     if(req.mode==='navigate')return await caches.match('./index.html')||Response.error();
+     return Response.error();
+   })
+ );
+});
