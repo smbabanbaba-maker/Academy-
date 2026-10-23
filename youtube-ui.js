@@ -9,14 +9,27 @@ const icon=k=>'<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20
 const source=()=>'<span class="yt-source-tag">'+icon('play')+' YouTube</span>';
 const btn=(title,action,id)=>'<button class="btn btn-primary" data-action="'+esc(action)+'"'+(id?' data-id="'+esc(id)+'"':'')+'>'+title+' '+icon('arrow')+'</button>';
 const card=c=>'<article class="yt-course-card"><button class="yt-card-image" data-action="yt-open" data-id="'+esc(c.id)+'" aria-label="View '+esc(c.title)+'"><img src="'+esc(c.image)+'" alt="" loading="lazy"/><span class="yt-play-round">'+icon('play')+'</span></button><div class="yt-card-body"><span class="yt-card-type">'+icon('play')+' YouTube · '+(c.type==='playlist'?'Playlist':'Full course')+'</span><button class="yt-card-name" data-action="yt-open" data-id="'+esc(c.id)+'">'+esc(c.title)+'</button><p class="yt-author">Original creator: '+esc(c.creator)+'</p><div class="yt-card-bottom"><span class="yt-free-label">Free viewing</span><button class="yt-view" data-action="yt-open" data-id="'+esc(c.id)+'">View course '+icon('arrow')+'</button></div></div></article>';
+const catalogCategories=()=>['All',...new Set(V.state.items.map(x=>x.category||'YouTube Courses'))];
+const visibleCourses=()=>{
+ let list=V.state.items.slice();
+ if(V.state.category&&V.state.category!=='All')list=list.filter(c=>(c.category||'YouTube Courses')===V.state.category);
+ if(V.state.sort==='az')list.sort((a,b)=>a.title.localeCompare(b.title));
+ else if(V.state.sort==='beginner')list.sort((a,b)=>(a.level==='Beginner'?0:1)-(b.level==='Beginner'?0:1)||a.title.localeCompare(b.title));
+ else if(V.state.sort==='featured')list.sort((a,b)=>Number(Boolean(b.featured))-Number(Boolean(a.featured)));
+ return list;
+};
 function library(){
-const s=V.state;
+const s=V.state,displayed=visibleCourses(),groups=catalogCategories(),featured=V.curated.filter(c=>c.featured).slice(0,4);
 return '<section class="screen yt-library"><div class="yt-title-row"><div><div class="page-eyebrow">FREE EDUCATIONAL VIDEO COURSES</div><h1>Learn with complete <span class="red">video courses.</span></h1><p class="muted">Discover original educators through SYLUTION Learn.</p></div>'+source()+'</div>'+
-'<div class="yt-feature"><div><span class="yt-feature-kicker">FREE · SELF-PACED · FLEXIBLE</span><h2>From first lesson to final project.</h2><p>Programming, web development, databases and more. Find full-length videos or multi-lesson playlists.</p></div><div class="yt-feature-art">'+icon('play')+'</div></div>'+
+'<div class="yt-feature yt-feature-premium"><div><span class="yt-feature-kicker">FREE · SELF-PACED · FLEXIBLE</span><h2>From first lesson to final project.</h2><p>Programming, web development, databases and more. Find full-length videos or multi-lesson playlists.</p></div><div class="yt-feature-art">'+icon('play')+'</div></div>'+
+'<div class="yt-premium-headline"><span class="yt-eyebrow">DISCOVER GREAT COURSES</span><h2>Start learning. Keep growing.</h2><p>Handpicked full-length courses from trusted educational channels.</p><div class="yt-premium-metrics"><span>'+V.curated.length+' handpicked courses</span><span>'+new Set(V.curated.map(c=>c.category)).size+' subject areas</span><span>100% free video viewing</span></div></div>'+
+'<div class="yt-featured-shelf">'+featured.map(c=>'<button class="yt-shelf-card" data-action="yt-open" data-id="'+esc(c.id)+'"><span class="yt-shelf-picture"><img src="'+esc(c.image)+'" alt="" loading="lazy"/></span><span class="yt-shelf-copy"><small>'+esc(c.category)+'</small><strong>'+esc(c.title)+'</strong><em>Start learning →</em></span></button>').join('')+'</div>'+
 '<form id="yt-search-form" class="yt-search-form"><div class="searchbar">'+icon('search')+'<input type="search" required minlength="2" name="query" aria-label="Search YouTube courses" placeholder="Try: robotics, agriculture, French, AI..." value="'+esc(s.query)+'"/><button type="submit" class="btn btn-primary">Search '+icon('arrow')+'</button></div><div class="yt-search-types"><label><input type="radio" name="kind" value="video" '+(s.kind!=='playlist'?'checked':'')+'/> Full-length videos</label><label><input type="radio" name="kind" value="playlist" '+(s.kind==='playlist'?'checked':'')+'/> Course playlists</label><button type="button" data-action="yt-reset">Starter courses</button></div></form>'+
+'<div class="yt-premium-subhead"><span class="yt-eyebrow">EXPLORE SUBJECTS</span><h2>Browse by interest</h2><p>Find a course that matches your next goal.</p></div>'+
+'<div class="yt-category-filters" role="group" aria-label="Filter courses">'+groups.map(group=>'<button class="yt-filter '+(s.category===group?'active':'')+'" data-action="yt-filter" data-value="'+esc(group)+'" aria-pressed="'+(s.category===group?'true':'false')+'">'+esc(group)+'</button>').join('')+'</div>'+
 '<div class="yt-source-note" role="status">'+icon('info')+' <span>'+esc(s.message)+'</span></div>'+
-'<div class="yt-grid-head"><h2>'+(s.status==='curated'?'Selected full courses':'Course search results')+'</h2><span>'+s.items.length+' courses</span></div>'+
-(s.items.length?'<div class="yt-course-grid">'+s.items.map(card).join('')+'</div>':'<div class="empty">'+icon('search')+'<h3>No courses found</h3><p>Try another subject or browse verified starter courses.</p><button class="btn btn-primary" data-action="yt-reset">Show starter courses</button></div>')+
+'<div class="yt-sort-bar"><span class="yt-eyebrow">COURSE DIRECTORY</span><div class="yt-sort-buttons"><button class="'+(s.sort==='featured'?'active':'')+'" data-action="yt-sort" data-value="featured">Recommended</button><button class="'+(s.sort==='az'?'active':'')+'" data-action="yt-sort" data-value="az">A–Z</button><button class="'+(s.sort==='beginner'?'active':'')+'" data-action="yt-sort" data-value="beginner">Beginner</button></div></div>'+ '<div class="yt-grid-head"><h2>'+(s.category&&s.category!=='All'?esc(s.category):s.status==='curated'?'All curated courses':'Course search results')+'</h2><span>'+displayed.length+' courses</span></div>'+
+(displayed.length?'<div class="yt-course-grid">'+displayed.map(card).join('')+'</div>':'<div class="empty">'+icon('search')+'<h3>No courses found</h3><p>Try another subject or browse verified starter courses.</p><button class="btn btn-primary" data-action="yt-reset">Show starter courses</button></div>')+
 '<div class="yt-ethical"><strong>Source and permissions</strong><p>These videos are created by the original YouTube channels, not by SYLUTION. They play through the official embedded YouTube player with creator attribution. YouTube may display its normal controls and ads. Availability can change.</p></div></section>';
 }
 function course(){
@@ -41,7 +54,7 @@ return '<section class="screen yt-watch"><button class="back-btn" data-action="y
 }
 function startSearch(form,done){
 const data=new FormData(form);const q=String(data.get('query')||'').trim(),kind=String(data.get('kind')||'video');
-return V.search(q,kind).then(done);
+V.state.category='All';V.state.sort='featured';return V.search(q,kind).then(done);
 }
 function open(id,nav,render,toast){
 if(!V.select(id)){toast('Course is unavailable. Please choose another.');return}
@@ -49,12 +62,14 @@ nav('ytcourse',id);
 if(V.state.selected.type==='playlist')V.getLessons().then(()=>{if(location.hash.startsWith('#/ytcourse'))render()});
 }
 function action(name,data,tools){
+if(name==='yt-filter'){V.state.category=String(data.value||'All');tools.render();return true}
+if(name==='yt-sort'){V.state.sort=['featured','az','beginner'].includes(data.value)?data.value:'featured';tools.render();return true}
 if(name==='yt-open'){open(data.id,tools.nav,tools.render,tools.toast);return true}
 if(name==='yt-start'){V.setLesson(0);tools.nav('ytwatch',V.state.selected.id);return true}
 if(name==='yt-lesson'){V.setLesson(Number(data.index));tools.nav('ytwatch',V.state.selected.id);return true}
 if(name==='yt-back'){tools.nav('ytcourse',V.state.selected.id);return true}
 if(name==='yt-complete'){let p=V.finish();tools.render();tools.toast('Lesson added to your study log: '+p+'%');return true}
-if(name==='yt-reset'){V.state.items=V.curated.slice();V.state.status='curated';V.state.query='';V.state.kind='video';V.state.message='Six verified complete courses ready. Server API key required for live YouTube search.';tools.render();return true}
+if(name==='yt-reset'){V.state.items=V.curated.slice();V.state.status='curated';V.state.query='';V.state.category='All';V.state.sort='featured';V.state.kind='video';V.state.message='Browse '+V.curated.length+' curated video courses. Live search requires a configured server API key.';tools.render();return true}
 return false
 }
 window.SYLUTION_VIDEO_UI={library,course,watch,card,action,startSearch,open};
