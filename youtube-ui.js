@@ -8,7 +8,7 @@ const icons={play:'<path d="m7 4 13 8-13 8z"/>',back:'<path d="m15 18-6-6 6-6"/>
 const icon=k=>'<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(icons[k]||icons.book)+'</svg>';
 const source=()=>'<span class="yt-source-tag">'+icon('play')+' YouTube</span>';
 const btn=(title,action,id)=>'<button class="btn btn-primary" data-action="'+esc(action)+'"'+(id?' data-id="'+esc(id)+'"':'')+'>'+title+' '+icon('arrow')+'</button>';
-const card=c=>'<article class="yt-course-card"><button class="yt-card-image" data-action="yt-open" data-id="'+esc(c.id)+'" aria-label="View '+esc(c.title)+'"><img src="'+esc(c.image)+'" alt="" loading="lazy"/><span class="yt-play-round">'+icon('play')+'</span></button><div class="yt-card-body"><span class="yt-card-type">'+icon('play')+' YouTube · '+(c.type==='playlist'?'Playlist':'Full course')+'</span><button class="yt-card-name" data-action="yt-open" data-id="'+esc(c.id)+'">'+esc(c.title)+'</button><p class="yt-author">Original creator: '+esc(c.creator)+'</p><div class="yt-card-bottom"><span class="yt-free-label">Free viewing</span><button class="yt-view" data-action="yt-open" data-id="'+esc(c.id)+'">View course '+icon('arrow')+'</button></div></div></article>';
+const card=c=>'<article class="yt-course-card"><button class="yt-card-image" data-action="yt-open" data-id="'+esc(c.id)+'" aria-label="View '+esc(c.title)+'"><img src="'+esc(c.image)+'" alt="" loading="lazy"/><span class="yt-play-round">'+icon('play')+'</span>'+(c.badge?'<span class="yt-card-badge">'+esc(c.badge)+'</span>':'')+'</button><button class="yt-save '+(V.state.saved.includes(c.id)?'on':'')+'" data-action="yt-save" data-id="'+esc(c.id)+'" aria-label="'+(V.state.saved.includes(c.id)?'Remove saved course':'Save course')+'">'+(V.state.saved.includes(c.id)?'♥':'♡')+'</button><div class="yt-card-body"><span class="yt-card-type">'+icon('play')+' '+esc(c.category||'Course')+' · '+esc(c.level||'Beginner')+'</span><button class="yt-card-name" data-action="yt-open" data-id="'+esc(c.id)+'">'+esc(c.title)+'</button><p class="yt-author">'+esc(c.hours||'Watch lesson')+' · By '+esc(c.creator)+'</p><div class="yt-card-bottom"><span class="yt-free-label">Free viewing</span><button class="yt-view" data-action="yt-open" data-id="'+esc(c.id)+'">View course '+icon('arrow')+'</button></div></div></article>';
 const catalogCategories=()=>['All',...new Set(V.state.items.map(x=>x.category||'YouTube Courses'))];
 const visibleCourses=()=>{
  let list=V.state.items.slice();
@@ -62,6 +62,7 @@ nav('ytcourse',id);
 if(V.state.selected.type==='playlist')V.getLessons().then(()=>{if(location.hash.startsWith('#/ytcourse'))render()});
 }
 function action(name,data,tools){
+if(name==='yt-save'){const yes=V.toggleSaved(data.id);tools.render();tools.toast(yes?'Saved to your learning list.':'Removed from saved.');return true}
 if(name==='yt-filter'){V.state.category=String(data.value||'All');tools.render();return true}
 if(name==='yt-sort'){V.state.sort=['featured','az','beginner'].includes(data.value)?data.value:'featured';tools.render();return true}
 if(name==='yt-open'){open(data.id,tools.nav,tools.render,tools.toast);return true}
