@@ -1,5 +1,31 @@
 # SYLUTION Learn
 
+## Expanded course library — October 2026
+
+The **Free Video Courses** section now contains **31 selected YouTube educational videos** from **12 subject areas**, organized through responsive course cards, a featured shelf, category chips, A–Z / beginner / recommended sorting, a saved-courses filter, chapter navigation, and in-app embedded YouTube playback.
+
+Subject coverage includes Programming, Web Development, Artificial Intelligence, Data & Analytics, Design & Creative, Business & Office, Cybersecurity, Engineering & IoT, Mathematics & Science, Languages, Agriculture, and AI & Data Science.
+
+A sample of **publicly identified original videos**:
+
+| Subject | Video | Original source |
+| --- | --- | --- |
+| Programming | Python full course | [freeCodeCamp](https://www.youtube.com/watch?v=rfscVS0vtbw) |
+| University computing | CS50 2026 full computer science | [Harvard CS50 on freeCodeCamp](https://www.youtube.com/watch?v=gmuTjeQUbTM) |
+| Creative design | Figma UI/UX full course 2026 | [freeCodeCamp](https://www.youtube.com/watch?v=mT_Jjn8RJdo) |
+| Artificial Intelligence | Machine learning with scikit-learn | [freeCodeCamp](https://www.youtube.com/watch?v=hDKCxebp88A) |
+| Analytics | Python for Data Science | [freeCodeCamp](https://www.youtube.com/watch?v=CMEWVn1uZpQ) |
+| Business software | Excel formulas and functions 2026 | [freeCodeCamp](https://www.youtube.com/watch?v=gvhsKtjAmgc) |
+| Engineering | Arduino project course | [freeCodeCamp](https://www.youtube.com/watch?v=DPqiIzK97K0) |
+| Mathematics | College Algebra full course | [freeCodeCamp](https://www.youtube.com/watch?v=i7vOAcUo5iA) |
+| Languages | French beginner foundations | [Learn French With Alexa](https://www.youtube.com/watch?v=RxCR3g6aYJ0) |
+| Agriculture | Greenhouse production introduction | [Virginia Cooperative Extension](https://www.youtube.com/watch?v=DryKoaxh3I8) |
+
+**Quality and rights:** Not all entries are full multi-hour courses: the agriculture and some language entries are single practical learning videos. The catalog distinguishes courses, lessons and demonstrations through duration/description. Third-party videos always retain original creator attribution and are shown only with official YouTube embeds. No provider-owned video has been copied, downloaded, or rebranded as SYLUTION-produced. Embedding may be blocked by individual creators, regions or YouTube policy; **live embeddability of every entry has not been individually device-tested**. No student is charged for watching these free YouTube embeds.
+
+A **Google Cloud server-side YouTube API key is still required** to enable live search beyond the curated library. The curated 31 items do not require that key. User bookmarks and completion are stored in browser localStorage only, not securely synchronized across devices.
+
+
 ## YouTube video courses — live API integration
 
 SYLUTION Learn now includes a free-video learning journey in the existing application:
@@ -12,7 +38,7 @@ SYLUTION Learn now includes a free-video learning journey in the existing applic
 
 ### Available immediately, without credentials
 
-The `youtube.js` starter catalog contains six independently identified, long-form freeCodeCamp.org courses:
+The `youtube.js` starter catalog began with six independently identified, long-form freeCodeCamp.org courses; the current collection is expanded to 31 videos spanning 12 areas:
 
 | Subject | Original YouTube Video |
 | --- | --- |
