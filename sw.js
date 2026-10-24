@@ -1,5 +1,5 @@
 /* SYLUTION Learn PWA: network-first updates, no API response caching. */
-const VERSION='sylution-learn-home-courses-premium-20261023r13';
+const VERSION='sylution-learn-pink-photo-banner-20261024r14';
 const ASSETS=['./','./index.html','./styles.css','./premium.css','./palette.css','./responsive.css','./youtube.css','./home-premium.css','./youtube.js','./youtube-ui.js','./app.js','./icon.svg','./manifest.webmanifest'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(VERSION).then(cache=>cache.addAll(ASSETS)));
