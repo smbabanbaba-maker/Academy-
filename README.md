@@ -1,5 +1,25 @@
 # SYLUTION Learn
 
+## Course knowledge checks and learner completion records — October 24, 2026
+
+**Implemented in the production code:** 11 course-specific assessments (5 questions per curated YouTube course; 55 original questions total), immediate scoring and answer explanations, a passing threshold of **80%**, retakes and saved best results in localStorage. A learner can open their selected video's curriculum, choose **Start knowledge check**, answer questions and review the result. Results are independent SYLUTION-authored study assessments, **not tests or endorsements by the original YouTube educator**.
+
+Video playback now optionally enables the official **YouTube IFrame Player API**. Where YouTube permits API access, the site observes active playback in 10-second buckets and automatically records chapters only after substantial (~85%) locally observed coverage of each timestamp-based chapter. Seeking does not directly earn watched time; repeated observations of the same segment are deduplicated. Embedded videos still play without this optional API; learners can manually mark chapters if unavailable. This is **approximate, client-side study activity**, not independently verified watch time, attendance or identity proof.
+
+When chapter progress is 100% and at least one assessment is passed (80% or higher), learners can open **Profile → Certificates** to view or print a **Learning Completion Record**. This is clearly marked *unverified*, local and not accredited. It is not a diploma, third-party endorsement or centrally verifiable certificate. Record identity uses the editable local display name, so it must not be treated as an official credential.
+
+Technical files:
+- `learning.js`: independent quiz banks and local assessment results
+- `learning-ui.js`: course quiz, feedback, completion record views
+- `learning-player.js`: optional IFrame player activity tracking
+- `learning.css`: responsive quiz and print layouts
+- `youtube.js`: chapter progress and video curation
+- `youtube-ui.js`: course curriculum and lesson entry points
+- `app.js`: route registration, learner display name and profile record list
+
+**Still not implemented:** server-side accounts, cross-device progress synchronization, tamper-proof exam results, proctored assessment, official digital certificate verification, and payment flows. These require a secure database/authentication provider plus issuer-policy decisions and server-side signing. Do not claim these are functioning from client-side localStorage alone.
+
+
 ## Premium home and verified-source course library — October 2026
 
 SYLUTION Learn now uses **Home, Courses, AI Tutor, Progress, and Profile** in the primary mobile navigation. Video learning lives inside **Courses**, not a separate bottom-bar screen.
