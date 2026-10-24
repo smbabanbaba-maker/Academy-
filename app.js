@@ -2,6 +2,8 @@
 'use strict';
 const root=document.getElementById('app');
 const VIDEO=window.SYLUTION_VIDEO,VIDEO_UI=window.SYLUTION_VIDEO_UI;
+const ASSESS=window.SYLUTION_ASSESS,ASSESS_UI=window.SYLUTION_ASSESS_UI;
+window.SYLUTION_PROFILE=()=>state.user;
 const I={
 home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
 book:'<path d="M12 7v14"/><path d="M3 18V5a2 2 0 0 1 2-2h3a4 4 0 0 1 4 4 4 4 0 0 1 4-4h3a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1h-4a4 4 0 0 0-4 2 4 4 0 0 0-4-2H4a1 1 0 0 1-1-1z"/>',
@@ -108,7 +110,7 @@ const course=id=>COURSES.find(c=>c.id===id)||COURSES[0];
 const lang=()=>LANGS.find(x=>x.key===state.lang)||LANGS[0];
 const ct=id=>state.completed[id]||0;
 const countCompleted=()=>Object.values(state.completed).filter(n=>n>=100).length;
-const nav=(page,arg)=>{state.page=page;if(arg){if(['detail','lesson'].includes(page))state.courseId=arg;if(['track','speaking'].includes(page))state.lang=arg;if(['ytcourse','ytwatch'].includes(page)&&VIDEO.state.selected?.id!==arg)VIDEO.select(arg)}state.modal=null;state.lessonPlaying=false;const hash='#/'+page+(arg?'/'+arg:'');if(location.hash!==hash)history.pushState(null,'',hash);render();window.scrollTo({top:0,behavior:'auto'})};
+const nav=(page,arg)=>{state.page=page;if(arg){if(['detail','lesson'].includes(page))state.courseId=arg;if(['track','speaking'].includes(page))state.lang=arg;if(['ytcourse','ytwatch','ytassessment','ytcompletion'].includes(page)&&VIDEO.state.selected?.id!==arg)VIDEO.select(arg)}state.modal=null;state.lessonPlaying=false;const hash='#/'+page+(arg?'/'+arg:'');if(location.hash!==hash)history.pushState(null,'',hash);render();window.scrollTo({top:0,behavior:'auto'})};
 const toast=message=>{document.querySelector('.toast')?.remove();const el=document.createElement('div');el.className='toast';el.setAttribute('role','status');el.textContent=message;document.body.appendChild(el);clearTimeout(state.toastTimer);state.toastTimer=setTimeout(()=>el.remove(),3300)};
 const badge=(text,cl)=>'<span class="badge '+(cl||'')+'">'+esc(text)+'</span>';
 const heading=(title,link,pg)=>'<div class="section-head"><h2>'+title+'</h2>'+(link?'<button class="link" data-go="'+pg+'">'+link+' '+ico('arrow')+'</button>':'')+'</div>';
@@ -258,6 +260,7 @@ function progress(){
  const courses=VIDEO.curated.filter(c=>VIDEO.progress(c)>0);
  const marked=Object.values(VIDEO.state.courseProgress||{}).reduce((n,arr)=>n+(Array.isArray(arr)?arr.length:0),0);
  const finished=courses.filter(c=>VIDEO.progress(c)===100).length;
+ const assessed=courses.filter(c=>ASSESS.record(c.id).passedAt).length;
  const cards=courses.map(c=>'<button class="real-progress-course" data-action="yt-open" data-id="'+esc(c.id)+'"><span class="real-progress-thumb">'+img(c.image,c.title)+'</span><span class="real-progress-copy"><strong>'+esc(c.title)+'</strong><small>Original educator: '+esc(c.creator)+'</small><span class="real-progress-meter"><span style="width:'+VIDEO.progress(c)+'%"></span></span><small>'+VIDEO.progress(c)+'% manually marked</small></span>'+ico('arrow')+'</button>').join('');
  return '<section class="screen real-progress"><div class="real-page-head"><span class="home-block-eyebrow">YOUR LEARNING JOURNEY</span><h1>Your progress.</h1><p>Chapters you marked as studied, saved in this browser. Not verified watch time.</p></div>'+
  '<div class="real-progress-stats"><div><strong>'+courses.length+'</strong><small>Courses started</small></div><div><strong>'+marked+'</strong><small>Chapters studied</small></div><div><strong>'+finished+'</strong><small>Course outlines completed</small></div></div>'+
@@ -282,7 +285,9 @@ function saved(){
 }
 
 function certificates(){
- return '<section class="screen saved-real"><button class="back-btn" data-go="profile">'+ico('back')+' Profile</button><h1>Certificates</h1><div class="real-empty">'+ico('award')+'<h3>Certificates are not available yet.</h3><p>Free YouTube video courses do not automatically provide SYLUTION-issued or accredited certificates.</p><button class="btn btn-primary" data-go="courses">Explore free courses</button></div></section>';
+ const c=VIDEO.curated.filter(x=>ASSESS.eligible(x.id,VIDEO.progress(x)));
+ return '<section class="screen saved-real"><button class="back-btn" data-go="profile">'+ico('back')+' Profile</button><div class="learning-head"><span class="learning-kicker">YOUR LEARNING RECORDS</span><h1>Course completion records.</h1><p>Saved in this browser. These records are personal study acknowledgments, not accredited qualifications.</p></div>'+
+ (c.length?'<div class="learning-record-list">'+c.map(x=>'<div class="learning-record-card"><div><strong>'+esc(x.title)+'</strong><p>Best assessment: '+ASSESS.record(x.id).bestScore+'% · Chapters: 100%</p><small>Source educator: '+esc(x.creator)+'</small></div><button class="btn btn-primary" data-action="qa-record-open" data-id="'+esc(x.id)+'">View record</button></div>').join('')+'</div>':'<div class="real-empty">'+ico('award')+'<h3>No completion records yet</h3><p>Complete every chapter and pass the course knowledge check to create a local learning record.</p><button class="btn btn-primary" data-go="courses">Explore courses</button></div>')+'</section>';
 }
 
 function downloads(){return '<section class="screen"><button class="back-btn" data-go="profile">'+ico('back')+' Profile</button><h1>My Downloads</h1><div class="empty mt-3">'+ico('download')+'<h3>Offline lessons</h3><p class="muted">Offline video and lesson downloads will be available when the secure media library and storage are connected.</p><button class="btn btn-primary" data-go="courses">Browse Courses</button></div></section>';}
@@ -309,9 +314,10 @@ const data={pro:['SYLUTION Learn Pro','Premium membership will unlock more cours
 return '<div class="modal-layer" data-action="close-modal"><div class="modal" role="dialog" aria-modal="true" aria-label="'+data[0]+'"><div class="row-between mb-3"><h2>'+data[0]+'</h2><button class="icon-button" data-action="close-modal" aria-label="Close">'+ico('close')+'</button></div><p class="muted">'+data[1]+'</p><button class="btn btn-primary btn-block" data-action="close-modal">Understood</button></div></div>';
 }
 function render(){
-const pages={ytlibrary:VIDEO_UI.library,ytcourse:VIDEO_UI.course,ytwatch:VIDEO_UI.watch,home,courses,detail,lesson,ai,languages,track,speaking,exam,results,progress,profile,saved,certificates,downloads,account,billing,notifications,live,instructor,welcome,signup};
+const pages={ytassessment:ASSESS_UI.assessment,ytcompletion:ASSESS_UI.certificate,ytlibrary:VIDEO_UI.library,ytcourse:VIDEO_UI.course,ytwatch:VIDEO_UI.watch,home,courses,detail,lesson,ai,languages,track,speaking,exam,results,progress,profile,saved,certificates,downloads,account,billing,notifications,live,instructor,welcome,signup};
 root.innerHTML='<div class="app-shell">'+header()+'<main class="container">'+(pages[state.page]||home)()+'</main>'+footer()+navBar()+overlay()+'</div>';
 if(state.page==='exam')tickClock();
+if(state.page==='ytwatch')window.SYLUTION_PLAYER?.attach?.();
 }
 function speak(text,code){
 if(!('speechSynthesis' in window)){toast('Audio playback is not supported in this browser.');return}
@@ -341,8 +347,10 @@ document.addEventListener('click',e=>{
 const b=e.target.closest('[data-go],[data-action]');if(!b)return;
 const action=b.dataset.action;const go=b.dataset.go;const id=b.dataset.id;const val=b.dataset.value;
 if(action&&action.startsWith('yt-')&&VIDEO_UI.action(action,b.dataset,{nav,render,toast}))return;
+if(action&&action.startsWith('qa-')&&ASSESS_UI.action(action,b.dataset,{nav,render,toast}))return;
 if(go){if(go==='ytcourse'&&id){VIDEO_UI.open(id,nav,render,toast);return}if(go==='speaking'&&id)state.pronounce='';nav(go,id);return}
 if(!action)return;
+if(action==='qa-record-open'){if(VIDEO.select(id))nav('ytcompletion',id);return}
 if(action==='home-video-filter'){VIDEO.state.items=VIDEO.curated.slice();VIDEO.state.status='curated';VIDEO.state.category=val||'All';VIDEO.state.sort='featured';nav('courses');return}
 if(action==='category'){if(val==='Languages'&&state.page==='home'){nav('languages');return}if(val==='Live Classes'){nav('live');return}if(val==='Exams'){nav('exam');return}state.category=val;nav('courses');return}
 if(action==='hero-slide'){state.heroIndex=Number(b.dataset.index)||0;render();return}
@@ -392,13 +400,13 @@ window.addEventListener('hashchange',route);
 setInterval(()=>{if(state.page==='exam')tickClock()},1000);
 function route(){
 const [page,arg]=decodeURI((location.hash||'#/home').slice(2)).split('/');
-const supported=['ytlibrary','ytcourse','ytwatch','home','courses','detail','lesson','ai','languages','track','speaking','exam','results','progress','profile','saved','certificates','downloads','account','billing','notifications','live','instructor','welcome','signup'];
+const supported=['ytassessment','ytcompletion','ytlibrary','ytcourse','ytwatch','home','courses','detail','lesson','ai','languages','track','speaking','exam','results','progress','profile','saved','certificates','downloads','account','billing','notifications','live','instructor','welcome','signup'];
 if(page&&supported.includes(page)){
  state.page=['detail','lesson'].includes(page)?'courses':page;
  if(arg){
   if(['detail','lesson'].includes(page))state.courseId=arg;
   if(['track','speaking'].includes(page))state.lang=arg;
-  if(['ytcourse','ytwatch'].includes(page)&&VIDEO.state.selected?.id!==arg)VIDEO.select(arg);
+  if(['ytcourse','ytwatch','ytassessment','ytcompletion'].includes(page)&&VIDEO.state.selected?.id!==arg)VIDEO.select(arg);
  }
 }else state.page='home';
 render();
