@@ -488,15 +488,18 @@ return lessons()
 }
 function currentLesson(){return lessons()[state.lesson]||lessons()[0]||null}
 function setLesson(n){const l=lessons();state.lesson=Math.max(0,Math.min(l.length-1,Number(n)||0));return currentLesson()}
-function finish(){
+function markChapter(index,source){
 const c=state.selected;if(!c)return 0;
-const key=c.type+':'+c.id,all=lessons();
+const all=lessons(),i=Number(index);
+if(!Number.isInteger(i)||i<0||i>=all.length)return progress(c);
+const key=c.type+':'+c.id;
 const entry=Array.isArray(state.courseProgress[key])?state.courseProgress[key]:[];
-if(!entry.includes(state.lesson))entry.push(state.lesson);
+if(!entry.includes(i))entry.push(i);
 state.courseProgress[key]=entry;
 try{localStorage.setItem('sylution_yt-progress',JSON.stringify(state.courseProgress))}catch(e){}
-return all.length?Math.round(entry.length/all.length*100):0
+return progress(c)
 }
+function finish(){return markChapter(state.lesson,'Manual study log')}
 function progress(c){if(!c)return 0;const key=c.type+':'+c.id;const entry=state.courseProgress[key]||[];const n=c.type==='playlist'?state.playlistLessons.length:(c.chapters||[]).length||1;return n?Math.round(entry.length/n*100):0}
 function toggleSaved(id){
 if(!validVideo(id))return false;
@@ -540,5 +543,5 @@ async function verifyCatalog(){
  })();
  return verificationInFlight;
 }
-window.SYLUTION_VIDEO={curated,state,categories,filtered,toggleSaved,search,select,getLessons,lessons,currentLesson,setLesson,finish,progress,validVideo,photo,verifyCatalog};
+window.SYLUTION_VIDEO={curated,state,categories,filtered,toggleSaved,search,select,getLessons,lessons,currentLesson,setLesson,finish,progress,validVideo,photo,verifyCatalog,markChapter};
 })();
