@@ -27,6 +27,9 @@ function getBounds(chapters,duration,index){
 function attach(){
  const node=document.getElementById('yt-lesson-frame'),c=V.state.selected;
  if(!node||!c||!valid(c.id)||c.type!=='video')return;
+ // The new standard embed does not opt in to the YouTube JS API. Never replace or reinitialize it.
+ // Preserve uninterrupted playback; learners can still mark completed chapters manually.
+ if(!String(node.getAttribute('src')||'').includes('enablejsapi=1'))return;
  unload();const tick=sequence,video=c.id;
  const scriptLoad=()=>new Promise((resolve,reject)=>{
   if(window.YT&&window.YT.Player)return resolve();
