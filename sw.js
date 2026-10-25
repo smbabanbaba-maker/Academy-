@@ -1,5 +1,5 @@
 /* SYLearn Digital Academy PWA: network-first updates, no API response caching. */
-const VERSION='sylution-learn-landscape-fs-20261025d16';
+const VERSION='sylution-learn-landscape-fix-20261025d17';
 const ASSETS=['./','./index.html','./styles.css','./premium.css','./palette.css','./responsive.css','./youtube.css','./home-premium.css','./learning.css','./academy-elite.css','./youtube.js','./learning.js','./learning-ui.js','./learning-player.js','./youtube-ui.js','./app.js','./icon.svg','./manifest.webmanifest'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(VERSION).then(cache=>cache.addAll(ASSETS)));
