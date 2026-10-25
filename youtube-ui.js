@@ -142,15 +142,66 @@ function course(){
   '<div class="syl-v4-mobile-action"><span><small>'+esc(price.label)+'</small><strong>'+(p>0&&p<100?'Pick up where you left off':'Learn at your own pace')+'</strong></span><button type="button" data-action="yt-start" '+(loading?'disabled':'')+'>'+icon('play')+' '+(p>0&&p<100?'Continue':'Start')+'</button></div>'+
  '</section>';
 }
+const timecode=seconds=>{
+ const n=Math.max(0,Math.floor(Number(seconds)||0));
+ return [Math.floor(n/3600),Math.floor(n%3600/60),n%60].map(x=>String(x).padStart(2,'0')).join(':');
+};
+const lessonNoteKey=(id,index)=>'sylution_yt-note-'+String(id||'')+'-'+Math.max(0,Number(index)||0);
+const lessonNote=(id,index)=>{try{return String(localStorage.getItem(lessonNoteKey(id,index))||'').slice(0,6000)}catch(e){return ''}};
 function watch(){
-const c=V.state.selected,l=V.currentLesson();if(!c||!l)return course();
-if(!V.validVideo(l.id))return '<section class="screen"><h1>Video unavailable</h1><button class="btn btn-primary" data-go="ytlibrary">Back to courses</button></section>';
-const ls=V.lessons(),secs=Math.max(0,Number(l.seconds)||0),src='https://www.youtube-nocookie.com/embed/'+l.id+'?start='+secs+'&playsinline=1&rel=0&enablejsapi=1'+(location.origin?'&origin='+encodeURIComponent(location.origin):'');
-return '<section class="screen yt-watch"><button class="back-btn" data-action="yt-back">'+icon('back')+' Back to curriculum</button>'+
-'<div class="yt-watch-layout"><div class="yt-video-column"><div class="yt-video-ratio"><iframe id="yt-lesson-frame" title="'+esc(l.title)+' — YouTube video by '+esc(c.creator)+'" src="'+src+'" loading="eager" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>'+
-'<div class="yt-video-meta"><h1>'+esc(l.title)+'</h1><p class="muted">'+esc(c.title)+'</p><p class="yt-credit">Course by <strong>'+esc(c.creator)+'</strong></p><div class="yt-watch-tools"><button class="btn btn-primary" data-action="yt-complete">'+icon('check')+' Mark chapter studied</button><a class="btn btn-outline" href="https://www.youtube.com/watch?v='+l.id+(secs?'&t='+secs+'s':'')+'" target="_blank" rel="noopener noreferrer">Open original video '+icon('arrow')+'</a></div><p id="yt-study-activity" class="yt-activity" role="status">Mark each chapter as studied when you finish learning.</p><p class="fine-print">Study progress is stored on this device. If the player is unavailable, open the original video.</p></div>'+
-'<div class="yt-under-player"><h3>Learning tools</h3><div class="yt-study-actions"><button data-go="ai">'+icon('brain')+' AI Tutor</button><button data-action="qa-open">'+icon('file')+' Course assessment</button><button data-go="progress">'+icon('book')+' Your progress</button></div></div></div>'+
-'<aside class="yt-watch-sidebar"><div class="yt-sidebar-head"><h3>All chapters</h3><span>'+(V.state.lesson+1)+' / '+ls.length+'</span></div><div class="yt-sidebar-list">'+ls.map((x,i)=>'<button class="yt-sidebar-lesson '+(i===V.state.lesson?'active':'')+'" data-action="yt-lesson" data-index="'+i+'"><span class="yt-side-play">'+icon(i===V.state.lesson?'play':'book')+'</span><span><strong>'+(i+1)+'. '+esc(x.title)+'</strong><small>'+esc(c.creator)+'</small></span></button>').join('')+'</div><div class="yt-sidebar-bottom"><p>Your manually logged study progress</p><div class="progress-track"><div class="progress-fill" style="width:'+V.progress(c)+'%"></div></div><strong>'+V.progress(c)+'%</strong></div></aside></div></section>';
+ const c=V.state.selected,l=V.currentLesson();if(!c||!l)return course();
+ if(!V.validVideo(l.id))return '<section class="screen"><h1>Video unavailable</h1><button class="btn btn-primary" data-action="yt-back">Back to curriculum</button></section>';
+ const ls=V.lessons(),index=Math.max(0,V.state.lesson),secs=Math.max(0,Number(l.seconds)||0);
+ const src='https://www.youtube-nocookie.com/embed/'+l.id+'?start='+secs+'&playsinline=1&rel=0&enablejsapi=1'+(location.origin?'&origin='+encodeURIComponent(location.origin):'');
+ const studied=Array.isArray(V.state.courseProgress[c.type+':'+c.id])?V.state.courseProgress[c.type+':'+c.id]:[];
+ const finished=studied.includes(index),progress=Math.max(0,Math.min(100,V.progress(c)||0));
+ const original='https://www.youtube.com/watch?v='+l.id+(secs?'&t='+secs+'s':'');
+ const notes=lessonNote(c.id,index);
+ const chapterRow=(x,i)=>{
+  const active=i===index,done=studied.includes(i);
+  return '<button type="button" class="syl-classroom-chapter'+(active?' is-current':'')+(done?' is-done':'')+'" data-action="yt-lesson" data-index="'+i+'" '+(active?'aria-current="step"':'')+'>'+
+   '<span class="syl-classroom-chapter-index">'+(done?icon('check'):String(i+1).padStart(2,'0'))+'</span>'+
+   '<span class="syl-classroom-chapter-copy"><strong>'+esc(x.title)+'</strong><small>'+(c.type==='video'?timecode(x.seconds):'Lesson '+(i+1))+(done?' · Studied':'')+'</small></span>'+
+   (active?'<span class="syl-classroom-chapter-active" aria-label="Current chapter">'+icon('play')+'</span>':'')+
+   '</button>';
+ };
+ return '<section class="screen yt-watch syl-classroom-v5">'+
+  '<header class="syl-classroom-topline"><button type="button" data-action="yt-back" class="syl-classroom-return">'+icon('back')+' Course overview</button><span class="syl-classroom-top-divider">/</span><span class="syl-classroom-crumb">'+esc(c.title)+'</span><span class="syl-classroom-class-tag">SYLearn classroom</span></header>'+
+  '<div class="syl-classroom-heading"><div><span class="syl-classroom-overline">YOUR LEARNING SPACE</span><h1>Learn at your own pace.</h1><p>One chapter at a time, with everything you need in one place.</p></div><div class="syl-classroom-heading-progress"><strong>'+progress+'%</strong><span>Study progress</span></div></div>'+
+  '<div class="syl-classroom-layout">'+
+   '<div class="syl-classroom-main">'+
+    '<section class="syl-classroom-player-card" aria-label="Video lesson"><div class="syl-classroom-player-label"><span class="syl-classroom-live-dot"></span><strong>Lesson '+(index+1)+' of '+ls.length+'</strong><span>'+esc(c.category||'Digital Skills')+'</span></div>'+
+     '<div class="syl-classroom-video-ratio"><iframe id="yt-lesson-frame" title="'+esc(l.title)+' — video lesson by '+esc(c.creator)+'" src="'+src+'" loading="eager" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>'+
+     '<div class="syl-classroom-video-caption"><span>'+icon('book')+' Self-paced video lesson</span><a href="'+original+'" target="_blank" rel="noopener noreferrer">Open original video '+icon('arrow')+'</a></div></section>'+
+    '<section class="syl-classroom-lesson-card"><div class="syl-classroom-lesson-kicker"><span>CHAPTER '+String(index+1).padStart(2,'0')+'</span><span class="syl-classroom-course-level">'+esc(c.level||'All levels')+'</span></div>'+
+     '<h2>'+esc(l.title)+'</h2><p class="syl-classroom-belongs">Part of <strong>'+esc(c.title)+'</strong></p>'+
+     '<div class="syl-classroom-lesson-actions">'+
+      '<button type="button" class="syl-classroom-study-button'+(finished?' is-finished':'')+'" '+(finished?'disabled aria-disabled="true"':'data-action="yt-complete"')+'>'+icon('check')+' '+(finished?'Chapter marked studied':'Mark chapter studied')+'</button>'+
+      '<div class="syl-classroom-step-buttons">'+
+       '<button type="button" data-action="yt-lesson" data-index="'+(index-1)+'" '+(index===0?'disabled':'')+'>'+icon('back')+' Previous</button>'+
+       (index<ls.length-1?'<button type="button" class="is-next" data-action="yt-lesson" data-index="'+(index+1)+'">Next '+icon('arrow')+'</button>':'<button type="button" class="is-next" data-action="yt-back">Course overview '+icon('arrow')+'</button>')+
+      '</div></div>'+
+     '<p id="yt-study-activity" class="syl-classroom-study-status" role="status">'+(finished?'Chapter is in your local study log.':'When you finish studying this chapter, mark it as studied.')+'</p>'+
+    '</section>'+
+   '</div>'+
+   '<aside class="syl-classroom-sidebar" aria-label="Course chapters"><div class="syl-classroom-sidebar-head"><span class="syl-classroom-overline">YOUR ROADMAP</span><h2>Course content</h2><p>'+ls.length+' chapters · '+esc(c.hours||'Self-paced')+'</p><div class="syl-classroom-sidebar-progress"><span style="width:'+progress+'%"></span></div><small>'+studied.length+' of '+ls.length+' chapters marked studied</small></div>'+
+    '<div class="syl-classroom-chapter-list">'+ls.map(chapterRow).join('')+'</div>'+
+    '<div class="syl-classroom-sidebar-foot"><span>Original educator</span><strong>'+esc(c.creator||'Course creator')+'</strong></div></aside>'+
+  '</div>'+
+  '<div class="syl-classroom-lower-grid">'+
+   '<section class="syl-classroom-tool-card"><div class="syl-classroom-section-header"><span class="syl-classroom-overline">BUILD YOUR UNDERSTANDING</span><h2>Learning tools</h2><p>Practice, get support and review your learning.</p></div>'+
+    '<div class="syl-classroom-tool-links">'+
+     '<button type="button" data-go="ai"><span class="syl-classroom-tool-icon">'+icon('brain')+'</span><span><strong>AI Tutor preview</strong><small>Practice explanations</small></span>'+icon('arrow')+'</button>'+
+     '<button type="button" data-action="qa-open"><span class="syl-classroom-tool-icon">'+icon('file')+'</span><span><strong>Knowledge check</strong><small>Test what you learned</small></span>'+icon('arrow')+'</button>'+
+     '<button type="button" data-go="progress"><span class="syl-classroom-tool-icon">'+icon('book')+'</span><span><strong>My learning</strong><small>Review your study log</small></span>'+icon('arrow')+'</button>'+
+    '</div></section>'+
+   '<section class="syl-classroom-notes-card"><div class="syl-classroom-section-header"><span class="syl-classroom-overline">PERSONAL WORKSPACE</span><h2>My lesson notes</h2><p>Write down important points as you study.</p></div>'+
+     '<label for="syl-lesson-note">Notes for chapter '+(index+1)+'</label>'+
+     '<textarea id="syl-lesson-note" maxlength="6000" rows="6" placeholder="Write your key takeaways, questions and ideas here...">'+esc(notes)+'</textarea>'+
+     '<div class="syl-classroom-notes-bottom"><small>Saved only on this device</small><button type="button" data-action="yt-note-save">'+icon('check')+' Save notes</button></div></section>'+
+  '</div>'+
+  '<p class="syl-classroom-disclaimer">The video belongs to its original educator and is embedded from YouTube. Study progress may come from chapters you mark or locally observed playback; it is not independently verified viewing. Notes are stored on this device.</p>'+
+ '</section>';
 }
 function startSearch(form,done){
  const data=new FormData(form),q=String(data.get('query')||'').trim().slice(0,80),needle=q.toLowerCase();
@@ -181,6 +232,13 @@ if(name==='yt-share'){
 }
 if(name==='yt-lesson'){V.setLesson(Number(data.index));tools.nav('ytwatch',V.state.selected.id);return true}
 if(name==='yt-back'){tools.nav('ytcourse',V.state.selected.id);return true}
+if(name==='yt-note-save'){
+ const c=V.state.selected;if(!c)return true;
+ const field=document.getElementById('syl-lesson-note');if(!field)return true;
+ try{localStorage.setItem(lessonNoteKey(c.id,V.state.lesson),String(field.value||'').slice(0,6000));tools.toast('Lesson notes saved on this device.');}
+ catch(e){tools.toast('Could not save notes on this device.');}
+ return true
+}
 if(name==='yt-complete'){let p=V.finish();tools.render();tools.toast('Lesson added to your study log: '+p+'%');return true}
 if(name==='yt-reset'){V.state.items=V.curated.slice();V.state.status='curated';V.state.query='';V.state.category='All';V.state.sort='featured';V.state.kind='video';V.state.message='Explore available courses.';tools.render();return true}
 return false
