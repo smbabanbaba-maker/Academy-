@@ -322,6 +322,7 @@ function render(){
 const pages={ytassessment:ASSESS_UI.assessment,ytcompletion:ASSESS_UI.certificate,ytlibrary:VIDEO_UI.library,ytcourse:VIDEO_UI.course,ytwatch:VIDEO_UI.watch,home,courses,detail,lesson,ai,exam,results,progress,profile,saved,certificates,downloads,account,billing,notifications,live,instructor,welcome,signup};
 const watching=state.page==='ytwatch';
 document.body.classList.toggle('syl-video-immersive-active',watching);
+const theme=document.querySelector('meta[name="theme-color"]');if(theme)theme.setAttribute('content',watching?'#05070d':'#ffffff');
 root.innerHTML=watching
  ?'<div class="syl-immersive-app">'+(pages[state.page]||home)()+'</div>'
  :'<div class="app-shell">'+header()+'<main class="container">'+(pages[state.page]||home)()+'</main>'+footer()+navBar()+overlay()+'</div>';
