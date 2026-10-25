@@ -113,8 +113,8 @@ function course(){
  return '<section class="screen yt-detail syl-course-detail-v4">'+
   '<div class="syl-v4-breadcrumb"><button type="button" data-go="courses">'+icon('back')+' All courses</button><span>/</span><span>'+esc(c.category||'Digital Skills')+'</span></div>'+
   '<div class="syl-v4-hero">'+
-    '<div class="syl-v4-hero-media"><img src="'+esc(c.image)+'" alt="'+esc(c.title)+' course thumbnail" loading="eager"/>'+
-      '<span class="syl-v4-media-mark">SYLearn · Course preview</span><span class="syl-v4-media-symbol">'+icon('play')+'</span></div>'+
+    '<button type="button" class="syl-v4-hero-media" data-action="yt-start" aria-label="Play '+esc(c.title)+'" '+(loading?'disabled':'')+'><img src="'+esc(c.image)+'" alt="" loading="eager"/>'+
+      '<span class="syl-v4-media-mark">SYLearn · Course video</span><span class="syl-v4-media-symbol" aria-hidden="true">'+icon('play')+'</span></button>'+
     '<div class="syl-v4-hero-copy"><div class="syl-v4-tags"><span class="syl-v4-access '+(price.paid?'is-paid':'is-free')+'">'+esc(price.label)+'</span><span class="syl-v4-level">'+esc(c.level||'All levels')+'</span></div>'+
       '<span class="syl-v4-overline">'+esc(c.category||'Digital Skills')+'</span>'+
       '<h1>'+esc(c.title)+'</h1><p class="syl-v4-description">'+esc(c.description||'Build practical skills with this course.')+'</p>'+
