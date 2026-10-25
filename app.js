@@ -155,15 +155,25 @@ function home(){
    (available?"<span class='elite-skill-arrow'>"+ico('arrow',15)+"</span>":"<span class='elite-skill-soon'>Soon</span>")+
    "</button>";
  };
- const courseTile=c=>"<article class='elite-course-card elite-featured-card'>"+
-  "<button type='button' class='elite-course-open' data-action='yt-open' data-id='"+esc(c.id)+"' aria-label='Open course "+esc(c.title)+"'>"+
-  "<span class='elite-course-thumb syl-home-video-thumb'>"+img(c.image,c.title)+
-  "<span class='elite-card-play' aria-hidden='true'>"+ico('play',16)+"</span></span>"+
-  "<span class='elite-course-body'><span class='elite-course-category'>"+esc(c.category)+" <b>·</b> "+esc(c.level||'Beginner')+"</span>"+
-  "<strong class='elite-featured-name'>"+esc(c.title)+"</strong>"+
-  "<span class='elite-course-description'>"+esc(c.description||'Explore practical learning with this course.')+"</span>"+
-  "<span class='elite-card-details'><span>"+ico('clock',13)+" "+esc(c.hours||'Self-paced')+"</span></span>"+
-  "<span class='elite-course-foot'><span>Start learning</span><em>"+ico('arrow',16)+"</em></span></span></button></article>";
+ const courseTile=c=>{
+  const amount=Number(c.price), paid=Number.isFinite(amount)&&amount>0;
+  const isFree=!paid&&(c.access==='free'||c.price===0||c.source==='YouTube'||c.type==='video'||c.type==='playlist');
+  const access=paid?'₦'+Math.round(amount).toLocaleString('en-NG'):isFree?'FREE':'See price';
+  const rating=Number(c.rating),reviews=Number(c.reviewCount||0);
+  const hasReviews=Number.isFinite(rating)&&rating>0&&rating<=5&&Number.isFinite(reviews)&&reviews>0;
+  const chapters=Array.isArray(c.chapters)?c.chapters.length:0;
+  return "<article class='elite-course-card elite-featured-card syl-course-v2'>"+
+   "<button type='button' class='elite-course-open' data-action='yt-open' data-id='"+esc(c.id)+"' aria-label='View details for "+esc(c.title)+"'>"+
+   "<span class='elite-course-thumb syl-home-video-thumb'>"+img(c.image,c.title)+
+   "<span class='elite-card-play' aria-hidden='true'>"+ico('play',16)+"</span>"+
+   "<span class='syl-card-price "+(paid?'syl-is-paid':'syl-is-free')+"'>"+esc(access)+"</span></span>"+
+   "<span class='elite-course-body'><span class='elite-course-category'>"+esc(c.category)+" <b>·</b> "+esc(c.level||'All levels')+"</span>"+
+   "<strong class='elite-featured-name'>"+esc(c.title)+"</strong>"+
+   "<span class='elite-course-description'>"+esc(c.description||'Learn practical digital skills, step by step.')+"</span>"+
+   "<span class='syl-card-facts'><span>"+ico('clock',13)+" "+esc(c.hours||'Self-paced')+"</span>"+(chapters?"<span>"+ico('book',13)+" "+chapters+" chapters</span>":'')+"</span>"+
+   "<span class='syl-card-rating'>"+ico('star',12)+" "+(hasReviews?esc(rating.toFixed(1))+" <small>("+reviews+" reviews)</small>":"<small>No ratings yet</small>")+"</span>"+
+   "<span class='elite-course-foot'><span>View details</span><em>"+ico('arrow',16)+"</em></span></span></button></article>";
+ };
  return "<section class='screen elite-home'>"+
   "<form id='home-search-form' class='elite-course-search elite-search-top' role='search'>"+ico('search',21)+"<input id='home-search' name='search' type='search' autocomplete='off' placeholder='Search Python, AI, design, robotics...' aria-label='Search digital skills courses' value='"+esc(VIDEO.state.query||'')+"'/><button type='submit'>Search "+ico('arrow',17)+"</button></form>"+
   "<section class='elite-promo-banner' aria-label='Discover your potential'><div class='elite-promo-media'>"+img(PHOTOS.hero,'Students working together around a laptop')+"</div><div class='elite-promo-wash' aria-hidden='true'></div><div class='elite-promo-copy'><span class='elite-promo-eyebrow'><span class='elite-promo-spark'>✦</span> DISCOVER YOUR POTENTIAL</span><h1>A brighter you<br><em>through better learning.</em></h1><p>Practical digital skills and real learning opportunities — all in one place.</p><button type='button' class='elite-promo-button' data-go='courses'>Explore courses "+ico('arrow',18)+"</button></div></section>"+
