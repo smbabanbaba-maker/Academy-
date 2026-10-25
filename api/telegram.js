@@ -69,7 +69,7 @@ function welcome() {
     '<b>Ready to begin?</b>',
     '',
     '📚 <b>Learn. Build. Grow.</b>',
-    'Powered by SYLUTION LTD.'
+    'Powered by SYLUTION.'
   ].join('\n');
 }
 
