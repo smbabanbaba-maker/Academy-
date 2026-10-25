@@ -198,12 +198,36 @@ function watch(){
   '</div></section>';
 }
 
+let telegramFullscreenOwned=false;
+function telegramLessonFullscreen(){
+ try{
+  const tg=window.Telegram?.WebApp;
+  if(tg&&typeof tg.requestFullscreen==='function'&&!telegramFullscreenOwned){
+   tg.requestFullscreen();telegramFullscreenOwned=true;
+  }
+ }catch(e){}
+}
+function exitTelegramLessonFullscreen(){
+ if(!telegramFullscreenOwned)return;
+ telegramFullscreenOwned=false;
+ try{window.Telegram?.WebApp?.exitFullscreen?.()}catch(e){}
+}
+function closeImmersivePanel(){
+ const view=document.getElementById('syl-immersive-view');
+ if(!view)return;
+ view.classList.remove('syl-panel-open');
+ const drawer=document.getElementById('syl-immersive-drawer');
+ if(drawer)drawer.setAttribute('aria-hidden','true');
+ const shade=document.getElementById('syl-immersive-backdrop');
+ if(shade)shade.hidden=true;
+ view.querySelectorAll('[aria-controls="syl-immersive-drawer"]').forEach(b=>b.setAttribute('aria-expanded','false'));
+}
 function action(name,data,tools){
 if(name==='yt-save'){const yes=V.toggleSaved(data.id);tools.render();tools.toast(yes?'Saved to your learning list.':'Removed from saved.');return true}
 if(name==='yt-filter'){V.state.category=String(data.value||'All');tools.render();return true}
 if(name==='yt-sort'){V.state.sort=['featured','az','beginner','saved'].includes(data.value)?data.value:'featured';tools.render();return true}
 if(name==='yt-open'){open(data.id,tools.nav,tools.render,tools.toast);return true}
-if(name==='yt-start'){const c=V.state.selected;if(!c)return true;const ls=V.lessons();const rows=V.state.courseProgress[c.type+':'+c.id]||[];const next=ls.findIndex((_,i)=>!rows.includes(i));V.setLesson(next<0?0:next);tools.nav('ytwatch',c.id);return true}
+if(name==='yt-start'){const c=V.state.selected;if(!c)return true;telegramLessonFullscreen();const ls=V.lessons();const rows=V.state.courseProgress[c.type+':'+c.id]||[];const next=ls.findIndex((_,i)=>!rows.includes(i));V.setLesson(next<0?0:next);tools.nav('ytwatch',c.id);return true}
 if(name==='yt-share'){
  const c=V.state.selected;if(!c)return true;
  const url=location.href,title='SYLearn: '+c.title;
@@ -212,8 +236,8 @@ if(name==='yt-share'){
  else tools.toast('Use the browser share menu to share this course.');
  return true
 }
-if(name==='yt-lesson'){V.setLesson(Number(data.index));tools.nav('ytwatch',V.state.selected.id);return true}
-if(name==='yt-back'){tools.nav('ytcourse',V.state.selected.id);return true}
+if(name==='yt-lesson'){telegramLessonFullscreen();V.setLesson(Number(data.index));tools.nav('ytwatch',V.state.selected.id);return true}
+if(name==='yt-back'){exitTelegramLessonFullscreen();tools.nav('ytcourse',V.state.selected.id);return true}
 if(name==='yt-note-save'){
  const c=V.state.selected;if(!c)return true;
  const field=document.getElementById('syl-lesson-note');if(!field)return true;
@@ -233,78 +257,57 @@ if(name==='yt-retry-player'){
  tools.toast('Reloading video. If playback is blocked here, use Watch original.');
  return true
 }
-if(name==='yt-landscape'){
- const shell=document.getElementById('syl-video-fullscreen');if(!shell)return true;
- const portrait=()=>window.matchMedia?.('(orientation: portrait)')?.matches ?? true;
- if(!shell.classList.contains('syl-fs-theater')&&document.fullscreenElement!==shell&&document.webkitFullscreenElement!==shell){
-   shell.classList.add('syl-fs-theater');
-   document.body.style.overflow='hidden';
-   if(portrait())shell.classList.add('syl-fs-rotate');
-   tools.toast('Landscape view enabled. Tap Exit fullscreen to return.');
-   return true;
- }
- if(!portrait()){
-   shell.classList.remove('syl-fs-rotate');
-   tools.toast('Your phone is already in landscape.');
-   return true;
- }
- const forceRotate=!shell.classList.contains('syl-fs-rotate');
- shell.classList.toggle('syl-fs-rotate',forceRotate);
- tools.toast(forceRotate?'Landscape video enabled.':'Portrait video view enabled.');
+if(name==='yt-panel'){
+ const view=document.getElementById('syl-immersive-view');
+ const drawer=document.getElementById('syl-immersive-drawer');
+ if(!view||!drawer)return true;
+ const requested=['chapters','notes','options'].includes(data.panel)?data.panel:'chapters';
+ const active=view.classList.contains('syl-panel-open')&&view.dataset.activePanel===requested;
+ if(active){closeImmersivePanel();return true;}
+ view.dataset.activePanel=requested;
+ view.querySelectorAll('.syl-immersive-panel').forEach(el=>{el.hidden=el.dataset.content!==requested});
+ const h=document.getElementById('syl-immersive-drawer-title');
+ if(h)h.textContent=({chapters:'Course chapters',notes:'Study notes',options:'Player options'})[requested];
+ drawer.setAttribute('aria-hidden','false');
+ const shade=document.getElementById('syl-immersive-backdrop');
+ if(shade)shade.hidden=false;
+ view.querySelectorAll('[aria-controls="syl-immersive-drawer"]').forEach(b=>b.setAttribute('aria-expanded',String(b.dataset.panel===requested)));
+ view.classList.add('syl-panel-open');
  return true
 }
-if(name==='yt-fullscreen'){
- const shell=document.getElementById('syl-video-fullscreen');if(!shell)return true;
- const isFullscreen=document.fullscreenElement===shell||document.webkitFullscreenElement===shell;
- const isTheater=shell.classList.contains('syl-fs-theater');
- if(isFullscreen||isTheater){
-   if(isFullscreen){
-     try{const quit=document.exitFullscreen||document.webkitExitFullscreen;if(quit){const task=quit.call(document);task?.catch?.(()=>{});}}catch(e){}
-   }
-   shell.classList.remove('syl-fs-theater','syl-fs-rotate');
-   document.body.style.overflow='';
-   try{screen.orientation?.unlock?.()}catch(e){}
-   return true;
- }
- const portrait=()=>!!window.matchMedia?.('(orientation: portrait)').matches;
- const fallback=()=>{
-   shell.classList.add('syl-fs-theater');
-   document.body.style.overflow='hidden';
-   if(portrait())shell.classList.add('syl-fs-rotate');
-   tools.toast('Fullscreen view: rotate your phone for comfortable viewing.');
- };
- const landscape=()=>{
-   const lock=screen.orientation?.lock;
-   if(typeof lock!=='function'){if(portrait())shell.classList.add('syl-fs-rotate');return}
-   try{
-     const p=lock.call(screen.orientation,'landscape');
-     p?.then?.(()=>shell.classList.remove('syl-fs-rotate'))
-       ?.catch?.(()=>{if(portrait())shell.classList.add('syl-fs-rotate')});
-   }catch(e){if(portrait())shell.classList.add('syl-fs-rotate')}
- };
+if(name==='yt-panel-close'){closeImmersivePanel();return true}
+if(name==='yt-prev'||name==='yt-next'){
+ const n=V.lessons().length;
+ const next=V.state.lesson+(name==='yt-prev'?-1:1);
+ if(n&&next>=0&&next<n){V.setLesson(next);tools.nav('ytwatch',V.state.selected.id)}
+ return true
+}
+if(name==='yt-fit-view'){
+ document.getElementById('syl-immersive-view')?.classList.toggle('syl-immersive-fit');
+ closeImmersivePanel();
+ return true
+}
+if(name==='yt-native-fullscreen'){
+ const shell=document.getElementById('syl-immersive-view');
+ if(!shell)return true;
  const enter=shell.requestFullscreen||shell.webkitRequestFullscreen;
- if(typeof enter!=='function'){fallback();return true}
- try{
-   const task=enter.call(shell);
-   if(task?.then)task.then(landscape).catch(fallback);
-   else landscape();
- }catch(e){fallback()}
+ if(typeof enter==='function'){
+  try{
+   const promise=enter.call(shell);
+   Promise.resolve(promise).then(()=>{
+    if(screen.orientation?.lock) return screen.orientation.lock('landscape').catch(()=>{});
+   }).catch(()=>tools.toast('Device fullscreen is restricted here; immersive video mode is still available.'));
+  }catch(e){tools.toast('Your browser blocked native fullscreen; immersive mode is already active.')}
+ }else tools.toast('Immersive view already fills this app. Native fullscreen is restricted on this device.');
+ closeImmersivePanel();
  return true
 }
 if(name==='yt-complete'){let p=V.finish();tools.render();tools.toast('Lesson added to your study log: '+p+'%');return true}
 if(name==='yt-reset'){V.state.items=V.curated.slice();V.state.status='curated';V.state.query='';V.state.category='All';V.state.sort='featured';V.state.kind='video';V.state.message='Explore available courses.';tools.render();return true}
 return false
 }
-// Restore normal scrolling if fullscreen/theater ends or navigation changes.
-const closeClassroomTheater=()=>{
- const box=document.getElementById('syl-video-fullscreen');
- if(box&&!document.fullscreenElement&&!document.webkitFullscreenElement){
-   box.classList.remove('syl-fs-rotate');
-   if(!box.classList.contains('syl-fs-theater'))document.body.style.overflow='';
- }
-};
-document.addEventListener('fullscreenchange',closeClassroomTheater);
-document.addEventListener('webkitfullscreenchange',closeClassroomTheater);
-window.addEventListener('hashchange',()=>{document.body.style.overflow='';});
+// Escape closes the drawer; exiting native fullscreen does not discard the lesson.
+document.addEventListener('keydown',event=>{if(event.key==='Escape')closeImmersivePanel()});
+window.addEventListener('hashchange',()=>{if(!location.hash.startsWith('#/ytwatch'))exitTelegramLessonFullscreen()});
 window.SYLUTION_VIDEO_UI={library,course,watch,card,action,startSearch,open};
 })();
