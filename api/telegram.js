@@ -140,7 +140,7 @@ module.exports = async function handler(req, res) {
         telegramApi(creds.token, 'setMyName', { name: 'SYLearn' }),
         telegramApi(creds.token, 'setMyDescription', { description }),
         telegramApi(creds.token, 'setMyShortDescription', {
-          short_description: 'SYLearn — Learn. Build. Grow. Digital skills, courses and quizzes. Powered by SYLUTION.'
+          short_description: 'SYLearn — Learn. Build. Grow. 🎓 Courses & digital skills. 👥 /community · 📢 /channel. By SYLUTION.'
         }),
         telegramApi(creds.token, 'setChatMenuButton', {
           menu_button: { type: 'web_app', text: '📚 Learn', web_app: { url: APP_URL } }
@@ -148,7 +148,11 @@ module.exports = async function handler(req, res) {
         telegramApi(creds.token, 'setMyCommands', {
           commands: [
             { command: 'start', description: 'Start learning with SYLearn' },
-            { command: 'help', description: 'Help and learning options' }
+            { command: 'help', description: 'Help and learning options' },
+            { command: 'courses', description: 'Explore courses in the Mini App' },
+            { command: 'community', description: 'Join our learning community' },
+            { command: 'channel', description: 'Join the official SYLearn channel' },
+            { command: 'about', description: 'About SYLearn and SYLUTION' }
           ]
         })
       ]);
@@ -175,18 +179,45 @@ module.exports = async function handler(req, res) {
   }
 
   const cmd = msg.text.trim();
-  const isStart = /^\/start(?:@[A-Za-z][A-Za-z0-9_]{4,31})?(?:\s|$)/i.test(cmd);
-  const isHelp = /^\/help(?:@[A-Za-z][A-Za-z0-9_]{4,31})?(?:\s|$)/i.test(cmd);
-  if (!isStart && !isHelp) {
+  const command = cmd.split(/\s+/)[0].split('@')[0].toLowerCase();
+  const known = ['/start', '/help', '/courses', '/community', '/channel', '/about'];
+  if (!known.includes(command)) {
     return res.status(200).json({ ok: true });
+  }
+
+  let text, replyMarkup;
+  if (command === '/community') {
+    const link = telegramLink(process.env.SYLEARN_COMMUNITY_URL);
+    text = link
+      ? '👥 <b>SYLearn Community</b>\n\nConnect with other learners, share your projects and learn together. Tap below to join!'
+      : '👥 The SYLearn Community link is not configured yet. Please check back soon.';
+    replyMarkup = link ? { inline_keyboard: [[{ text: '👥 Join Community', url: link }], [{ text: '🚀 Launch SYLearn', web_app: { url: APP_URL } }]] } : keyboard();
+  } else if (command === '/channel') {
+    const link = telegramLink(process.env.SYLEARN_CHANNEL_URL);
+    text = link
+      ? '📢 <b>SYLearn Channel</b>\n\nFollow our official channel for learning news, tutorials and course announcements. Tap below to join!'
+      : '📢 The SYLearn Channel link is not configured yet. Please check back soon.';
+    replyMarkup = link ? { inline_keyboard: [[{ text: '📢 Join Channel', url: link }], [{ text: '🚀 Launch SYLearn', web_app: { url: APP_URL } }]] } : keyboard();
+  } else if (command === '/courses') {
+    text = '📚 <b>Explore SYLearn Courses</b>\n\nOpen our Mini App to browse lessons, take quizzes and build practical digital skills.';
+    replyMarkup = keyboard();
+  } else if (command === '/about') {
+    text = '🎓 <b>SYLearn by SYLUTION</b>\n\nPractical digital learning, step by step. Explore courses, watch lessons and test your knowledge with quizzes.\n\n<b>Learn. Build. Grow.</b>';
+    replyMarkup = keyboard();
+  } else if (command === '/help') {
+    text = '👋 <b>How can we help?</b>\n\n/start — Welcome & quick links\n/courses — Browse courses\n/community — Join our learners\n/channel — Official updates\n/about — About SYLearn\n\nOr use 📚 Learn to launch the app.';
+    replyMarkup = keyboard();
+  } else {
+    text = welcome();
+    replyMarkup = keyboard();
   }
 
   try {
     await telegramApi(creds.token, 'sendMessage', {
       chat_id: msg.chat.id,
-      text: isStart ? welcome() : '📚 SYLearn — Learn. Build. Grow.\nTap the button below to start learning.',
+      text,
       parse_mode: 'HTML',
-      reply_markup: keyboard(),
+      reply_markup: replyMarkup,
       link_preview_options: { is_disabled: true }
     });
     return res.status(200).json({ ok: true });
