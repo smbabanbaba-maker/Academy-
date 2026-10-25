@@ -155,7 +155,7 @@ function watch(){
  const c=V.state.selected,l=V.currentLesson();if(!c||!l)return course();
  if(!V.validVideo(l.id))return '<section class="screen"><h1>Video unavailable</h1><button class="btn btn-primary" data-action="yt-back">Back to curriculum</button></section>';
  const ls=V.lessons(),index=Math.max(0,V.state.lesson),secs=Math.max(0,Number(l.seconds)||0);
- const src='https://www.youtube.com/embed/'+l.id+'?start='+secs+'&playsinline=1&rel=0&controls=1&fs=1';
+ const src='https://www.youtube.com/embed/'+l.id+'?start='+secs+'&playsinline=1&rel=0&controls=1&fs=0';
  const studied=Array.isArray(V.state.courseProgress[c.type+':'+c.id])?V.state.courseProgress[c.type+':'+c.id]:[];
  const finished=studied.includes(index),progress=Math.max(0,Math.min(100,V.progress(c)||0));
  const original='https://www.youtube.com/watch?v='+l.id+(secs?'&t='+secs+'s':'');
@@ -175,7 +175,7 @@ function watch(){
    '<div class="syl-classroom-main">'+
     '<section class="syl-classroom-player-card" aria-label="Video lesson"><div class="syl-classroom-player-label"><span class="syl-classroom-live-dot"></span><strong>Lesson '+(index+1)+' of '+ls.length+'</strong><span>'+esc(c.category||'Digital Skills')+'</span></div>'+
      '<div class="syl-video-fullscreen" id="syl-video-fullscreen"><div class="syl-fs-toolbar"><span>SYLearn · Lesson '+(index+1)+'</span><button type="button" data-action="yt-fullscreen" aria-label="Exit fullscreen">'+icon('back')+' Exit fullscreen</button></div><div class="syl-classroom-video-ratio"><iframe id="yt-lesson-frame" title="'+esc(l.title)+' — video lesson by '+esc(c.creator)+'" src="'+src+'" loading="eager" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></div>'+
-     '<div class="syl-classroom-video-caption"><span>'+icon('book')+' Self-paced lesson</span><div class="syl-fs-inline-actions"><button type="button" class="syl-fs-open" data-action="yt-fullscreen" aria-label="Open full screen landscape video">'+icon('play')+' Full screen</button><button type="button" class="syl-fs-retry" data-action="yt-retry-player" aria-label="Retry video player">'+icon('arrow')+' Retry player</button><a href="'+original+'" target="_blank" rel="noopener noreferrer">Watch original '+icon('arrow')+'</a></div></div></section>'+
+     '<div class="syl-classroom-video-caption"><span>'+icon('book')+' Self-paced lesson</span><div class="syl-fs-inline-actions"><button type="button" class="syl-fs-open" data-action="yt-fullscreen" aria-label="Open full screen landscape video">'+icon('play')+' Full screen</button><button type="button" class="syl-fs-landscape" data-action="yt-landscape" aria-label="Rotate video to landscape mode">'+icon('arrow')+' Landscape</button><button type="button" class="syl-fs-retry" data-action="yt-retry-player" aria-label="Retry video player">'+icon('arrow')+' Retry player</button><a href="'+original+'" target="_blank" rel="noopener noreferrer">Watch original '+icon('arrow')+'</a></div></div></section>'+
     '<section class="syl-classroom-lesson-card"><div class="syl-classroom-lesson-kicker"><span>CHAPTER '+String(index+1).padStart(2,'0')+'</span><span class="syl-classroom-course-level">'+esc(c.level||'All levels')+'</span></div>'+
      '<h2>'+esc(l.title)+'</h2><p class="syl-classroom-belongs">Part of <strong>'+esc(c.title)+'</strong></p>'+
      '<div class="syl-classroom-lesson-actions">'+
@@ -249,9 +249,29 @@ if(name==='yt-retry-player'){
  const current=String(frame.getAttribute('src')||'');
  // Alternate between the two official YouTube embed domains when an embedded player is blocked.
  const host=current.includes('youtube-nocookie.com')?'www.youtube.com':'www.youtube-nocookie.com';
- const newUrl='https://'+host+'/embed/'+lesson.id+'?start='+secs+'&playsinline=1&rel=0&controls=1&fs=1';
+ const newUrl='https://'+host+'/embed/'+lesson.id+'?start='+secs+'&playsinline=1&rel=0&controls=1&fs=0';
  frame.setAttribute('src',newUrl);
  tools.toast('Reloading video. If playback is blocked here, use Watch original.');
+ return true
+}
+if(name==='yt-landscape'){
+ const shell=document.getElementById('syl-video-fullscreen');if(!shell)return true;
+ const portrait=()=>window.matchMedia?.('(orientation: portrait)')?.matches ?? true;
+ if(!shell.classList.contains('syl-fs-theater')&&document.fullscreenElement!==shell&&document.webkitFullscreenElement!==shell){
+   shell.classList.add('syl-fs-theater');
+   document.body.style.overflow='hidden';
+   if(portrait())shell.classList.add('syl-fs-rotate');
+   tools.toast('Landscape view enabled. Tap Exit fullscreen to return.');
+   return true;
+ }
+ if(!portrait()){
+   shell.classList.remove('syl-fs-rotate');
+   tools.toast('Your phone is already in landscape.');
+   return true;
+ }
+ const forceRotate=!shell.classList.contains('syl-fs-rotate');
+ shell.classList.toggle('syl-fs-rotate',forceRotate);
+ tools.toast(forceRotate?'Landscape video enabled.':'Portrait video view enabled.');
  return true
 }
 if(name==='yt-fullscreen'){
