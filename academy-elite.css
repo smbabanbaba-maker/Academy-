@@ -252,3 +252,73 @@ html,body{background:#f8f9fb}
 @media(prefers-reduced-motion:reduce){
  .elite-course-card,.elite-course-thumb img,.elite-category-item,.elite-feature-card{transition:none!important}
 }
+
+
+/* Cohesive premium design for Courses, Learning, AI and Profile */
+.elite-catalog,.real-progress,.ai-screen,.profile-screen{color:#1b1d25}
+.elite-catalog-intro{padding:18px 0 15px}
+.elite-catalog-intro h1{font-family:'Plus Jakarta Sans',sans-serif!important;font-size:clamp(29px,4vw,44px)!important;line-height:1.2!important;letter-spacing:-1.8px!important;color:#191b23!important;margin:9px 0!important;font-weight:850!important}
+.elite-catalog-intro h1 span{color:#d8294b!important}
+.elite-catalog-intro p{color:#747985;font-size:13px;line-height:1.65;margin:0}
+.elite-catalog-strip{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 19px;border-radius:14px;background:#1a1c25;color:#fff}
+.elite-catalog-strip>div{display:flex;flex-direction:column;gap:5px}
+.elite-catalog-strip strong{font-size:15px;color:#fff;font-weight:850}
+.elite-catalog-strip>div>span{font-size:11px;color:#cfd1db}
+.elite-catalog-strip>span{background:#e3294b;border-radius:11px;display:grid;place-items:center;width:41px;height:41px;flex:none}
+.elite-catalog-search{background:#fff!important;border:1px solid #e8eaf0!important;border-radius:14px!important;padding:12px!important;box-shadow:none!important;margin:18px 0!important}
+.elite-catalog-search .searchbar{background:#f8f9fb!important;min-height:50px!important;border-radius:10px!important}
+.elite-catalog-search .searchbar input{font-size:13px}
+.elite-catalog-filters{margin-top:21px}
+.elite-catalog-filterhead{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:12px}
+.elite-catalog-filterhead h2{color:#20232b;font-family:'Plus Jakarta Sans',sans-serif;font-size:19px!important;letter-spacing:-.65px!important;margin:0;font-weight:800}
+.elite-catalog-filterhead span{font-size:11px;color:#858996}
+.elite-catalog .yt-filter{border-radius:999px!important;font-size:11px!important;padding:10px 14px!important}
+.elite-catalog .yt-filter.active{background:#e22549!important;color:#fff!important;border-color:#e22549!important}
+.elite-catalog .yt-source-note{border-left:0!important;background:#f1f3f7!important;border-radius:11px!important;color:#737987!important;margin:16px 0!important;padding:12px 14px!important;font-size:11px!important}
+.elite-catalog-sort{display:flex;justify-content:space-between;gap:16px;align-items:center;margin:20px 0 12px}
+.elite-catalog-sort>strong{font-size:15px;font-weight:850;color:#222530}
+.elite-catalog-grid-head{margin:12px 0!important}
+.elite-catalog-grid-head h2{font-size:18px!important;color:#262833!important}
+.elite-catalog .yt-course-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.elite-catalog .yt-course-card{border-radius:13px!important;box-shadow:0 5px 14px rgba(16,24,40,.03)!important}
+.elite-catalog .yt-card-body{padding:14px!important}
+.elite-catalog .yt-card-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px!important;color:#1d2029!important;line-height:1.5!important;letter-spacing:-.25px;font-weight:800}
+.elite-catalog .yt-ethical{margin-top:23px}
+.real-progress .real-page-head,.profile-screen .page-intro,.ai-screen .page-intro{padding:20px 0 14px}
+.real-progress .real-page-head h1,.profile-screen .page-intro h1,.ai-screen .page-intro h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(30px,3.8vw,43px)!important;line-height:1.15!important;letter-spacing:-1.6px!important;color:#1b1d27!important;margin:8px 0!important;font-weight:850!important}
+.real-progress .real-page-head p,.profile-screen .page-intro p,.ai-screen .page-intro p{color:#7a7e8a!important;font-size:12px!important;line-height:1.65!important}
+.real-progress .real-progress-stats{background:#fff!important;border:1px solid #e9eaf0!important;border-radius:15px!important}
+.real-progress .real-progress-course{border-radius:14px!important;background:#fff!important;border:1px solid #e9eaf0!important}
+.real-progress .real-progress-course:hover{border-color:#f0adbc!important}
+.ai-screen .ai-cover{border-radius:17px!important;background:#1a1c25!important;overflow:hidden}
+.ai-screen .ai-conversation-head{border-radius:13px 13px 0 0!important}
+.ai-screen .chat-log{background:#fff!important}
+.ai-screen .chat-form{background:#fff!important;border:1px solid #e8e9ee!important;border-radius:12px!important}
+.profile-screen .profile-cover{border-radius:18px!important;background:#191b24!important;overflow:hidden}
+.profile-screen .profile-cover-inner{position:relative;z-index:1}
+.profile-screen .profile-kpis .stat-card{border-radius:13px!important;border:1px solid #e9eaf0!important;background:#fff!important}
+.profile-screen .profile-link{border:1px solid #e9eaf0!important;background:#fff!important;border-radius:13px!important}
+.profile-screen .settings-row{min-height:57px}
+@media(max-width:900px){
+ .elite-catalog .yt-course-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:640px){
+ .elite-catalog-intro{padding:8px 0 13px}
+ .elite-catalog-intro h1{font-size:29px!important;letter-spacing:-1.2px!important}
+ .elite-catalog-intro p{font-size:11px}
+ .elite-catalog-strip{padding:14px}
+ .elite-catalog-strip strong{font-size:13px}
+ .elite-catalog-strip>div>span{font-size:10px}
+ .elite-catalog .yt-course-grid{gap:10px}
+ .elite-catalog .yt-card-name{font-size:11px!important}
+ .elite-catalog .yt-card-body{padding:11px!important}
+ .elite-catalog-filterhead span{display:none}
+ .elite-catalog-sort{flex-wrap:wrap;align-items:flex-start}
+ .elite-catalog-sort>strong{font-size:13px}
+ .real-progress .real-page-head h1,.profile-screen .page-intro h1,.ai-screen .page-intro h1{font-size:30px!important}
+ .ai-screen .ai-cover{min-height:170px}
+}
+@media(max-width:365px){
+ .elite-catalog .yt-course-grid{grid-template-columns:1fr}
+ .elite-catalog .yt-card-name{font-size:13px!important}
+}
