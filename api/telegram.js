@@ -126,7 +126,39 @@ module.exports = async function handler(req, res) {
         allowed_updates: ['message'],
         drop_pending_updates: false
       });
-      return res.status(200).json({ message: '✅ Connected! Open @SylutionLearnBot in Telegram and send /start.' });
+      const identity = await telegramApi(creds.token, 'getMe', {});
+      const description = [
+        'Learn practical digital skills with SYLearn. 🚀',
+        '',
+        'Explore courses, watch lessons, take quizzes, and track your progress — all in one learning app.',
+        '',
+        'Learn. Build. Grow. 🎓',
+        '',
+        'Powered by SYLUTION.'
+      ].join('\\n');
+      const setupResults = await Promise.allSettled([
+        telegramApi(creds.token, 'setMyName', { name: 'SYLearn' }),
+        telegramApi(creds.token, 'setMyDescription', { description }),
+        telegramApi(creds.token, 'setMyShortDescription', {
+          short_description: 'SYLearn — Learn. Build. Grow. Digital skills, courses and quizzes. Powered by SYLUTION.'
+        }),
+        telegramApi(creds.token, 'setChatMenuButton', {
+          menu_button: { type: 'web_app', text: '📚 Learn', web_app: { url: APP_URL } }
+        }),
+        telegramApi(creds.token, 'setMyCommands', {
+          commands: [
+            { command: 'start', description: 'Start learning with SYLearn' },
+            { command: 'help', description: 'Help and learning options' }
+          ]
+        })
+      ]);
+      const failed = setupResults.filter(result => result.status === 'rejected').length;
+      const botName = identity.result?.username ? '@' + identity.result.username : 'your bot';
+      return res.status(200).json({
+        message: '✅ Connected to ' + botName + '! Send /start in Telegram. ' +
+          (failed ? failed + ' optional profile/menu settings could not be applied; check them in BotFather.' :
+          'Name, description, About, menu and commands were configured automatically. Add the profile logo and animated description picture in BotFather.')
+      });
     } catch (_) {
       return res.status(502).json({ message: 'Telegram setup failed. Confirm the bot token, public HTTPS app access and deployment settings.' });
     }
@@ -143,8 +175,8 @@ module.exports = async function handler(req, res) {
   }
 
   const cmd = msg.text.trim();
-  const isStart = /^\/start(?:@SylutionLearnBot)?(?:\s|$)/i.test(cmd);
-  const isHelp = /^\/help(?:@SylutionLearnBot)?(?:\s|$)/i.test(cmd);
+  const isStart = /^\/start(?:@[A-Za-z][A-Za-z0-9_]{4,31})?(?:\s|$)/i.test(cmd);
+  const isHelp = /^\/help(?:@[A-Za-z][A-Za-z0-9_]{4,31})?(?:\s|$)/i.test(cmd);
   if (!isStart && !isHelp) {
     return res.status(200).json({ ok: true });
   }
