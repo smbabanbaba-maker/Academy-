@@ -1076,3 +1076,164 @@ html,body{background:#f8f9fb}
     transition:none!important;
   }
 }
+
+/* SYLearn Course Card V2 — Home Featured and Courses catalog only */
+.elite-home .syl-course-v2 .syl-card-price,
+.syl-clean-catalog .syl-catalog-card-v2 .syl-card-price{
+  position:absolute;z-index:4;top:10px;left:10px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:auto;max-width:calc(100% - 62px);
+  padding:6px 10px;min-height:26px;
+  border-radius:8px;
+  font:800 10px/1.1 'Plus Jakarta Sans',sans-serif;
+  letter-spacing:.035em;
+  background:#effcf4;color:#146746;
+  border:1px solid rgba(38,133,86,.16);
+  box-shadow:0 3px 12px rgba(0,0,0,.1);
+}
+.elite-home .syl-course-v2 .syl-card-price.syl-is-paid,
+.syl-clean-catalog .syl-catalog-card-v2 .syl-card-price.syl-is-paid{
+  background:#fff9ec;color:#8c560a;border-color:#f1d69e;
+}
+.elite-home .syl-course-v2 .syl-card-facts,
+.elite-home .syl-course-v2 .syl-card-rating{
+  display:flex;align-items:center;gap:7px;min-width:0;flex-wrap:wrap;
+  color:#667384;font-size:10px;line-height:1.45;font-weight:650;
+}
+.elite-home .syl-course-v2 .syl-card-facts{margin-top:3px;gap:5px 10px}
+.elite-home .syl-course-v2 .syl-card-facts span{
+  display:inline-flex;align-items:center;gap:4px;white-space:nowrap;
+}
+.elite-home .syl-course-v2 .syl-card-facts svg{width:13px;height:13px;color:#be3155;flex:none}
+.elite-home .syl-course-v2 .syl-card-rating svg{width:12px;height:12px;color:#a1a8b2;flex:none}
+.elite-home .syl-course-v2 .syl-card-rating small{
+  font-size:inherit;font-weight:600;color:#89919f;
+}
+.elite-home .syl-course-v2 .elite-course-foot{
+  border-top:1px solid #ebedf1;color:#c72d51;
+  padding-top:11px;margin-top:auto;min-height:38px;
+}
+.elite-home .syl-course-v2 .elite-course-body{gap:7px}
+.elite-home .syl-course-v2 .elite-course-description{margin-bottom:2px}
+.elite-home .syl-course-v2 .elite-card-play{background:rgba(24,27,39,.76)}
+.elite-home .syl-course-v2 .elite-course-open:focus-visible{
+  outline:3px solid #e33e66;outline-offset:-3px;
+}
+.syl-clean-catalog .yt-course-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+}
+.syl-clean-catalog .syl-catalog-card-v2{
+  border-radius:18px!important;display:flex;flex-direction:column;min-width:0;
+  border:1px solid #e7ebf0!important;
+  background:#fff;overflow:hidden;position:relative;
+  box-shadow:0 5px 18px rgba(20,32,55,.05)!important;
+}
+.syl-clean-catalog .syl-catalog-card-v2:hover{
+  border-color:#ebafbd!important;
+  box-shadow:0 16px 30px rgba(17,25,40,.10)!important;
+}
+.syl-clean-catalog .syl-catalog-media{
+  position:relative;overflow:hidden;isolation:isolate;
+  background:#edf0f5;
+}
+.syl-clean-catalog .syl-catalog-media .yt-card-image{
+  aspect-ratio:16/9;border:0;width:100%;border-radius:0;
+}
+.syl-clean-catalog .syl-catalog-media .yt-card-image img{
+  object-fit:cover;transition:transform .3s ease;
+}
+.syl-clean-catalog .syl-catalog-card-v2:hover .yt-card-image img{transform:scale(1.04)}
+.syl-clean-catalog .syl-catalog-media .yt-save{
+  top:9px;right:9px;z-index:5;position:absolute;
+  background:rgba(255,255,255,.96);border:1px solid rgba(218,224,232,.9);
+  border-radius:10px;box-shadow:0 4px 11px rgba(0,0,0,.1);
+}
+.syl-clean-catalog .syl-catalog-media .yt-save.on{background:#cf2a50;color:#fff}
+.syl-clean-catalog .syl-catalog-media .yt-play-round{
+  position:absolute;top:auto;left:auto;right:10px;bottom:10px;
+  transform:none;border-radius:10px;
+  width:34px;height:34px;
+  background:rgba(24,27,39,.75);
+  border:1px solid rgba(255,255,255,.26);
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+  box-shadow:0 3px 10px rgba(0,0,0,.18);
+}
+.syl-clean-catalog .syl-catalog-media .yt-play-round svg{
+  width:17px;height:17px;fill:none;stroke-width:2;
+}
+.syl-clean-catalog .syl-catalog-card-v2 .yt-card-body{
+  display:flex;flex-direction:column;gap:8px;flex:1;padding:16px!important;
+}
+.syl-clean-catalog .syl-catalog-card-v2 .yt-card-type{
+  font-size:10px;color:#ba3250;line-height:1.4;font-weight:800;min-height:0;
+}
+.syl-clean-catalog .syl-catalog-card-v2 .yt-card-name{
+  color:#1e2530!important;font-size:15px!important;
+  line-height:1.4!important;letter-spacing:-.3px;margin:0!important;
+  padding:0;min-height:0;text-align:left;
+}
+.syl-clean-catalog .syl-catalog-card-v2 .syl-catalog-blurb{
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;
+  line-clamp:2;overflow:hidden;color:#6e7786;
+  font-size:11px;line-height:1.6;margin:0;min-height:35px;
+}
+.syl-clean-catalog .syl-catalog-facts{
+  display:flex;align-items:center;flex-wrap:wrap;
+  gap:6px 13px;margin:2px 0 0;
+  font-size:10px;color:#647182;font-weight:700;
+}
+.syl-clean-catalog .syl-catalog-facts span{
+  display:inline-flex;align-items:center;gap:5px;white-space:nowrap;
+}
+.syl-clean-catalog .syl-catalog-facts svg{
+  width:14px;height:14px;color:#c73352;flex:none;
+}
+.syl-clean-catalog .syl-catalog-rating{
+  display:flex;align-items:center;gap:5px;
+  color:#626d7d;font-size:11px;font-weight:750;
+  padding-bottom:7px;
+}
+.syl-clean-catalog .syl-catalog-rating svg{width:14px;height:14px;color:#a3abb6}
+.syl-clean-catalog .syl-catalog-rating small{font-size:10px;color:#8a93a1;font-weight:600}
+.syl-clean-catalog .syl-catalog-card-v2 .yt-card-bottom{
+  margin-top:auto;border-top:1px solid #edf0f3;
+  padding-top:11px;justify-content:flex-start;
+}
+.syl-clean-catalog .syl-catalog-card-v2 .yt-view{
+  font-size:11px;color:#c12d4c;font-weight:800;min-height:35px;
+  display:inline-flex;align-items:center;gap:7px;
+}
+.syl-clean-catalog .syl-catalog-card-v2 .yt-view svg{width:16px;height:16px}
+.syl-clean-catalog .syl-catalog-card-v2 button:focus-visible{
+  outline:3px solid #d7365b;outline-offset:2px;
+}
+@media(max-width:900px){
+  .syl-clean-catalog .yt-course-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:640px){
+  .elite-home .syl-course-v2 .syl-card-price{
+    top:7px;left:7px;padding:5px 7px;font-size:9px;min-height:23px;border-radius:7px;
+  }
+  .elite-home .syl-course-v2 .elite-course-body{gap:6px}
+  .elite-home .syl-course-v2 .syl-card-facts,
+  .elite-home .syl-course-v2 .syl-card-rating{font-size:9px}
+  .elite-home .syl-course-v2 .syl-card-facts{gap:4px 8px}
+  .elite-home .syl-course-v2 .elite-course-description{font-size:9px}
+  .elite-home .syl-course-v2 .elite-course-foot{font-size:10px}
+  .syl-clean-catalog .yt-course-grid{
+    grid-template-columns:1fr!important;
+    gap:14px;
+  }
+  .syl-clean-catalog .syl-catalog-card-v2 .yt-card-body{
+    padding:16px!important;gap:8px;
+  }
+  .syl-clean-catalog .syl-catalog-card-v2 .yt-card-name{font-size:16px!important}
+  .syl-clean-catalog .syl-catalog-card-v2 .yt-card-type{font-size:10px}
+  .syl-clean-catalog .syl-catalog-card-v2 .syl-catalog-blurb{font-size:12px}
+  .syl-clean-catalog .syl-catalog-card-v2 .syl-catalog-facts{font-size:11px}
+  .syl-clean-catalog .syl-catalog-card-v2 .yt-view{font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){
+  .syl-clean-catalog .syl-catalog-card-v2 .yt-card-image img{transition:none!important}
+}
