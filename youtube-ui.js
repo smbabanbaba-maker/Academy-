@@ -8,6 +8,25 @@ const icons={play:'<path d="m7 4 13 8-13 8z"/>',back:'<path d="m15 18-6-6 6-6"/>
 const icon=k=>'<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(icons[k]||icons.book)+'</svg>';
 const btn=(title,action,id)=>'<button class="btn btn-primary" data-action="'+esc(action)+'"'+(id?' data-id="'+esc(id)+'"':'')+'>'+title+' '+icon('arrow')+'</button>';
 const card=c=>'<article class="yt-course-card"><button class="yt-card-image" data-action="yt-open" data-id="'+esc(c.id)+'" aria-label="Explore '+esc(c.title)+'"><img src="'+esc(c.image)+'" alt="" loading="lazy"/><span class="yt-play-round">'+icon('play')+'</span>'+(c.badge?'<span class="yt-card-badge">'+esc(c.badge)+'</span>':'')+'</button><button class="yt-save '+(V.state.saved.includes(c.id)?'on':'')+'" data-action="yt-save" data-id="'+esc(c.id)+'" aria-label="'+(V.state.saved.includes(c.id)?'Remove saved course':'Save course')+'">'+(V.state.saved.includes(c.id)?'♥':'♡')+'</button><div class="yt-card-body"><span class="yt-card-type">'+esc(c.category||'Digital Skills')+' · '+esc(c.level||'Beginner')+'</span><button class="yt-card-name" data-action="yt-open" data-id="'+esc(c.id)+'">'+esc(c.title)+'</button><p class="yt-author">'+esc(c.hours||'Self-paced')+' · '+esc(c.creator)+'</p><div class="yt-card-bottom"><button class="yt-view" data-action="yt-open" data-id="'+esc(c.id)+'">Explore course '+icon('arrow')+'</button></div></div></article>';
+const catalogCard=c=>{
+ const amount=Number(c.price),paid=Number.isFinite(amount)&&amount>0;
+ const free=!paid&&(c.access==='free'||c.price===0||c.source==='YouTube'||c.type==='video'||c.type==='playlist');
+ const access=paid?'₦'+Math.round(amount).toLocaleString('en-NG'):free?'FREE':'See price';
+ const rating=Number(c.rating),reviews=Number(c.reviewCount||0);
+ const reviewed=Number.isFinite(rating)&&rating>0&&rating<=5&&Number.isFinite(reviews)&&reviews>0;
+ const chapterCount=Array.isArray(c.chapters)?c.chapters.length:0;
+ return '<article class="yt-course-card syl-catalog-card-v2">'+
+  '<div class="syl-catalog-media"><button class="yt-card-image" data-action="yt-open" data-id="'+esc(c.id)+'" aria-label="View '+esc(c.title)+' details"><img src="'+esc(c.image)+'" alt="" loading="lazy"/><span class="yt-play-round">'+icon('play')+'</span></button>'+
+  '<span class="syl-card-price '+(paid?'syl-is-paid':'syl-is-free')+'">'+esc(access)+'</span>'+
+  '<button class="yt-save '+(V.state.saved.includes(c.id)?'on':'')+'" data-action="yt-save" data-id="'+esc(c.id)+'" aria-label="'+(V.state.saved.includes(c.id)?'Remove saved course':'Save course')+'">'+(V.state.saved.includes(c.id)?'♥':'♡')+'</button></div>'+
+  '<div class="yt-card-body">'+
+  '<span class="yt-card-type">'+esc(c.category||'Digital Skills')+' · '+esc(c.level||'All levels')+'</span>'+
+  '<button class="yt-card-name" data-action="yt-open" data-id="'+esc(c.id)+'">'+esc(c.title)+'</button>'+
+  '<p class="syl-catalog-blurb">'+esc(c.description||'Practical skills for real-world learning.')+'</p>'+
+  '<div class="syl-catalog-facts"><span>'+icon('clock')+' '+esc(c.hours||'Self-paced')+'</span>'+(chapterCount?'<span>'+icon('book')+' '+chapterCount+' chapters</span>':'')+'</div>'+
+  '<div class="syl-catalog-rating">'+icon('star')+' '+(reviewed?esc(rating.toFixed(1))+' <small>('+reviews+' reviews)</small>':'<small>No ratings yet</small>')+'</div>'+
+  '<div class="yt-card-bottom"><button class="yt-view" data-action="yt-open" data-id="'+esc(c.id)+'">View course details '+icon('arrow')+'</button></div></div></article>';
+};
 const catalogCategories=()=>['All',...new Set(V.curated.map(x=>x.category||'Digital Skills'))];
 const visibleCourses=()=>{
  let list=V.state.items.slice();
@@ -26,7 +45,7 @@ function library(){
  '<div class="elite-catalog-filters"><div class="elite-catalog-filterhead"><h2>Explore categories</h2></div><div class="yt-category-filters" role="group" aria-label="Filter courses">'+groups.map(group=>'<button class="yt-filter '+(s.category===group?'active':'')+'" data-action="yt-filter" data-value="'+esc(group)+'" aria-pressed="'+(s.category===group?'true':'false')+'">'+esc(group)+'</button>').join('')+'</div></div>'+
  '<div class="yt-sort-bar elite-catalog-sort"><div class="syl-catalog-results"><strong>'+(s.query?'Search results':s.category&&s.category!=='All'?esc(s.category):'All courses')+'</strong><span>'+displayed.length+' '+(displayed.length===1?'course':'courses')+'</span></div><div class="yt-sort-buttons"><button class="'+(s.sort==='featured'?'active':'')+'" data-action="yt-sort" data-value="featured">Recommended</button><button class="'+(s.sort==='az'?'active':'')+'" data-action="yt-sort" data-value="az">A–Z</button><button class="'+(s.sort==='beginner'?'active':'')+'" data-action="yt-sort" data-value="beginner">Beginner</button><button class="'+(s.sort==='saved'?'active':'')+'" data-action="yt-sort" data-value="saved">Saved ('+s.saved.length+')</button></div></div>'+
  (s.query?'<button class="syl-clear-search" data-action="yt-reset" type="button">Clear search</button>':'')+
- (displayed.length?'<div class="yt-course-grid">'+displayed.map(card).join('')+'</div>':'<div class="empty">'+icon('search')+'<h3>No matching courses</h3><p>Try another skill or explore all courses.</p><button class="btn btn-primary" data-action="yt-reset">See all courses</button></div>')+
+ (displayed.length?'<div class="yt-course-grid">'+displayed.map(catalogCard).join('')+'</div>':'<div class="empty">'+icon('search')+'<h3>No matching courses</h3><p>Try another skill or explore all courses.</p><button class="btn btn-primary" data-action="yt-reset">See all courses</button></div>')+
  '</section>';
 }
 function course(){
