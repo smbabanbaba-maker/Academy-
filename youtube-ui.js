@@ -155,7 +155,7 @@ function watch(){
  const c=V.state.selected,l=V.currentLesson();if(!c||!l)return course();
  if(!V.validVideo(l.id))return '<section class="screen"><h1>Video unavailable</h1><button class="btn btn-primary" data-action="yt-back">Back to curriculum</button></section>';
  const ls=V.lessons(),index=Math.max(0,V.state.lesson),secs=Math.max(0,Number(l.seconds)||0);
- const src='https://www.youtube-nocookie.com/embed/'+l.id+'?start='+secs+'&playsinline=1&rel=0&enablejsapi=1'+(location.origin?'&origin='+encodeURIComponent(location.origin):'');
+ const src='https://www.youtube-nocookie.com/embed/'+l.id+'?start='+secs+'&playsinline=1&rel=0&fs=0&enablejsapi=1'+(location.origin?'&origin='+encodeURIComponent(location.origin):'');
  const studied=Array.isArray(V.state.courseProgress[c.type+':'+c.id])?V.state.courseProgress[c.type+':'+c.id]:[];
  const finished=studied.includes(index),progress=Math.max(0,Math.min(100,V.progress(c)||0));
  const original='https://www.youtube.com/watch?v='+l.id+(secs?'&t='+secs+'s':'');
