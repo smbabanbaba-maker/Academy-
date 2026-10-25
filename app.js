@@ -128,12 +128,13 @@ const navBar=()=>{
  .map(([pg,icon,label])=>"<button type='button' class='nav-item elite-nav-item "+(selected===pg?'active':'')+"' aria-label='"+label+"' aria-current='"+(selected===pg?'page':'false')+"' data-go='"+pg+"'><span class='elite-nav-icon'>"+ico(icon,22)+"</span><span class='elite-nav-label'>"+label+"</span></button>").join('')+
  "</nav></div>";
 };
-const footer=()=>"<footer class='footer syl-footer elite-footer'><strong>SYLearn</strong><p>Learn. Build. Grow. <span>·</span> Powered by SYLUTION.</p><small>Free courses are credited to their original educators. AI Tutor is a preview; study progress is saved only on this device.</small></footer>";
+const footer=()=>"<footer class='footer syl-footer elite-footer elite-footer-minimal'><strong>SYLearn</strong><p>Learn. Build. Grow. <span>·</span> Powered by SYLUTION</p></footer>";
 
 function home(){
  const curated=VIDEO.curated||[];
- const featured=curated.filter(c=>c.featured);
- const picks=(featured.length>=4?featured:curated).slice(0,4);
+ const featuredIds=['rfscVS0vtbw','DPqiIzK97K0','hDKCxebp88A','c9Wg6Cb_YlU'];
+ const picks=featuredIds.map(id=>curated.find(course=>course.id===id)).filter(Boolean);
+ if(picks.length<4) curated.forEach(course=>{if(picks.length<4&&!picks.some(item=>item.id===course.id))picks.push(course)});
  const categories=[
   {name:'Programming',label:'Coding',icon:'laptop',tone:'red'},
   {name:'Data & Analytics',label:'Data Analytics',icon:'chart',tone:'blue'},
@@ -154,9 +155,15 @@ function home(){
    (available?"<span class='elite-skill-arrow'>"+ico('arrow',15)+"</span>":"<span class='elite-skill-soon'>Soon</span>")+
    "</button>";
  };
- const courseTile=c=>"<article class='elite-course-card'><button type='button' class='elite-course-open' data-action='yt-open' data-id='"+esc(c.id)+"' aria-label='View "+esc(c.title)+"'>"+
-  "<span class='elite-course-thumb'>"+img(c.image,c.title)+"<span class='elite-course-play'>"+ico('play',20)+"</span></span>"+
-  "<span class='elite-course-body'><span class='elite-course-category'>"+esc(c.category)+" <b>·</b> "+esc(c.level)+"</span><strong>"+esc(c.title)+"</strong><span class='elite-course-creator'>By "+esc(c.creator)+"</span><span class='elite-course-foot'><span>Free course</span><em>Explore "+ico('arrow',16)+"</em></span></span></button></article>";
+ const courseTile=c=>"<article class='elite-course-card elite-featured-card'>"+
+ "<button type='button' class='elite-course-open' data-action='yt-open' data-id='"+esc(c.id)+"' aria-label='Open course "+esc(c.title)+"'>"+
+ "<span class='elite-course-thumb'>"+img(c.image,c.title)+"<span class='elite-card-play'>"+ico('play',17)+"</span><span class='elite-thumb-badge'>FREE COURSE</span></span>"+
+ "<span class='elite-course-body'><span class='elite-course-category'>"+esc(c.category)+" <b>·</b> "+esc(c.level||'Beginner')+"</span>"+
+ "<strong class='elite-featured-name'>"+esc(c.title)+"</strong>"+
+ "<span class='elite-course-description'>"+esc(c.description||'Explore practical learning with this course.')+"</span>"+
+ "<span class='elite-card-details'><span>"+ico('clock',13)+" "+esc(c.hours||'Self-paced')+"</span><span>"+ico('play',13)+" Video lessons</span></span>"+
+ "<span class='elite-course-creator'>By "+esc(c.creator)+"</span>"+
+ "<span class='elite-course-foot'><span>Start learning</span><em>"+ico('arrow',16)+"</em></span></span></button></article>";
  return "<section class='screen elite-home'>"+
   "<form id='home-search-form' class='elite-course-search elite-search-top' role='search'>"+ico('search',21)+"<input id='home-search' name='search' type='search' autocomplete='off' placeholder='Search Python, AI, design, robotics...' aria-label='Search digital skills courses' value='"+esc(VIDEO.state.query||'')+"'/><button type='submit'>Search "+ico('arrow',17)+"</button></form>"+
   "<section class='elite-promo-banner' aria-label='Discover your potential'><div class='elite-promo-media'>"+img(PHOTOS.hero,'Students working together around a laptop')+"</div><div class='elite-promo-wash' aria-hidden='true'></div><div class='elite-promo-copy'><span class='elite-promo-eyebrow'><span class='elite-promo-spark'>✦</span> DISCOVER YOUR POTENTIAL</span><h1>A brighter you<br><em>through better learning.</em></h1><p>Practical digital skills and real learning opportunities — all in one place.</p><button type='button' class='elite-promo-button' data-go='courses'>Explore courses "+ico('arrow',18)+"</button></div></section>"+
@@ -167,9 +174,7 @@ function home(){
   categories.map(c=>skillChip(c,true)).join('')+
   "</div></div></div></section>"+
   "<section class='elite-section elite-featured'><div class='elite-section-header'><div><span class='elite-section-eyebrow'>START LEARNING TODAY</span><h2>Featured courses</h2><p>Free learning videos from credited educators.</p></div><button class='elite-section-link' data-go='courses'>View all "+ico('arrow',16)+"</button></div><div class='elite-course-grid'>"+picks.map(courseTile).join('')+"</div></section>"+
-  "<section class='elite-originals'><div class='elite-originals-head'><span class='elite-originals-badge'>SYLearn ORIGINALS</span><span class='elite-originals-pending'>IN DEVELOPMENT</span></div><div class='elite-originals-content'><div class='elite-originals-symbol'>"+ico('cap',28)+"</div><div><h2>Learn directly from SYLearn instructors.</h2><p>Our original lessons, hands-on projects and guided learning tracks are being prepared. More ways to learn are coming.</p></div></div></section>"+
-  "<section class='elite-section elite-tools'><div class='elite-section-header'><div><span class='elite-section-eyebrow'>YOUR TOOLS</span><h2>Everything you need to grow</h2></div></div><div class='elite-tool-grid'><button data-go='progress'><span class='elite-tool-icon elite-tone-blue'>"+ico('chart',24)+"</span><span><strong>Learning progress</strong><small>Resume your saved studies</small></span>"+ico('arrow',17)+"</button><button data-go='ai'><span class='elite-tool-icon elite-tone-violet'>"+ico('brain',24)+"</span><span><strong>AI Tutor preview</strong><small>Explore sample explanations</small></span>"+ico('arrow',17)+"</button></div></section>"+
-  "<section class='elite-telegram'><div class='elite-telegram-icon'>"+ico('users',24)+"</div><div><strong>Grow with our learning community</strong><p>Updates and learner discussions on Telegram.</p></div><a href='https://t.me/SYLearn_Bot' target='_blank' rel='noopener noreferrer' class='elite-telegram-link'>Open bot "+ico('arrow',16)+"</a></section>"+
+  "<div class='elite-community-strip'><span class='elite-community-mark'>"+ico('users',19)+"</span><span class='elite-community-copy'><strong>Join the SYLearn community</strong><small>Meet learners, exchange ideas and keep growing.</small></span><a href='https://t.me/SYLearn_Bot' target='_blank' rel='noopener noreferrer' class='elite-community-action' aria-label='Open SYLearn bot for community link'>Open bot "+ico('arrow',15)+"</a></div>"+
   "</section>";
 }
 function courses(){return VIDEO_UI.library()}
