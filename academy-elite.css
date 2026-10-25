@@ -1596,6 +1596,8 @@ html,body{background:#f8f9fb}
 }
 .syl-course-detail-v4 .syl-v4-hero-media{
   position:relative;min-width:0;min-height:360px;
+  width:100%;padding:0;border:0;appearance:none;
+  text-align:left;display:block;cursor:pointer;
   background:linear-gradient(145deg,#101f32,#2a3048);
   overflow:hidden;
 }
