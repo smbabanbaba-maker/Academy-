@@ -1,7 +1,7 @@
 /* SYLearn Telegram bot webhook for Vercel.
  * Secrets belong ONLY in Vercel environment variables, never in GitHub.
  * Required: TELEGRAM_BOT_TOKEN and TELEGRAM_WEBHOOK_SECRET.
- * Optional: SYLEARN_COMMUNITY_URL (a real https://t.me/... link).
+ * Optional: SYLEARN_COMMUNITY_URL and SYLEARN_CHANNEL_URL (real https://t.me/... links).
  */
 'use strict';
 const crypto = require('node:crypto');
@@ -42,12 +42,19 @@ async function telegramApi(token, method, payload) {
   return result;
 }
 
+function telegramLink(value) {
+  const link = String(value || '').trim();
+  // Telegram public usernames and private invitation URLs only.
+  return /^https:\/\/t\.me\/(?:[A-Za-z][A-Za-z0-9_]{4,31}|\+[A-Za-z0-9_-]{8,}|joinchat\/[A-Za-z0-9_-]{8,})\/?$/i.test(link)
+    ? link : null;
+}
+
 function keyboard() {
   const rows = [[{ text: '🚀 Launch SYLearn', web_app: { url: APP_URL } }]];
-  const community = String(process.env.SYLEARN_COMMUNITY_URL || '').trim();
-  if (/^https:\/\/t\.me\/[A-Za-z0-9_+/.-]+$/i.test(community)) {
-    rows.push([{ text: '👥 Join Community', url: community }]);
-  }
+  const community = telegramLink(process.env.SYLEARN_COMMUNITY_URL);
+  const channel = telegramLink(process.env.SYLEARN_CHANNEL_URL);
+  if (community) rows.push([{ text: '👥 Join Community', url: community }]);
+  if (channel) rows.push([{ text: '📢 Join Channel', url: channel }]);
   return { inline_keyboard: rows };
 }
 
