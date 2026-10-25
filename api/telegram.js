@@ -135,7 +135,7 @@ module.exports = async function handler(req, res) {
         'Learn. Build. Grow. 🎓',
         '',
         'Powered by SYLUTION.'
-      ].join('\\n');
+      ].join('\n');
       const setupResults = await Promise.allSettled([
         telegramApi(creds.token, 'setMyName', { name: 'SYLearn' }),
         telegramApi(creds.token, 'setMyDescription', { description }),
