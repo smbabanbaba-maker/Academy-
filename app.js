@@ -155,26 +155,15 @@ function home(){
    (available?"<span class='elite-skill-arrow'>"+ico('arrow',15)+"</span>":"<span class='elite-skill-soon'>Soon</span>")+
    "</button>";
  };
- const homeCourseCover={
-  'rfscVS0vtbw':{tone:'code',icon:'laptop',name:'PYTHON',subtitle:'PROGRAMMING'},
-  'DPqiIzK97K0':{tone:'iot',icon:'settings',name:'ELECTRONICS',subtitle:'ENGINEERING & IoT'},
-  'hDKCxebp88A':{tone:'ai',icon:'brain',name:'MACHINE LEARNING',subtitle:'ARTIFICIAL INTELLIGENCE'},
-  'c9Wg6Cb_YlU':{tone:'design',icon:'spark',name:'UI / UX',subtitle:'DESIGN & CREATIVE'}
- };
- const courseTile=c=>{
-  const art=homeCourseCover[c.id]||{tone:'code',icon:'book',name:c.category||'DIGITAL SKILLS',subtitle:'LEARN NEW SKILLS'};
-  return "<article class='elite-course-card elite-featured-card'>"+
+ const courseTile=c=>"<article class='elite-course-card elite-featured-card'>"+
   "<button type='button' class='elite-course-open' data-action='yt-open' data-id='"+esc(c.id)+"' aria-label='Open course "+esc(c.title)+"'>"+
-  "<span class='elite-course-thumb syl-home-cover syl-home-cover-"+esc(art.tone)+"' aria-hidden='true'>"+
-  "<span class='syl-home-cover-brand'>SYLearn<span class='syl-home-cover-brand-mark'>✦</span></span>"+
-  "<span class='syl-home-cover-orbit'></span><span class='syl-home-cover-art'>"+ico(art.icon,54)+"</span>"+
-  "<span class='syl-home-cover-bottom'><span class='syl-home-cover-subtitle'>"+esc(art.subtitle)+"</span><strong>"+esc(art.name)+"</strong></span></span>"+
+  "<span class='elite-course-thumb syl-home-video-thumb'>"+img(c.image,c.title)+
+  "<span class='elite-card-play' aria-hidden='true'>"+ico('play',16)+"</span></span>"+
   "<span class='elite-course-body'><span class='elite-course-category'>"+esc(c.category)+" <b>·</b> "+esc(c.level||'Beginner')+"</span>"+
   "<strong class='elite-featured-name'>"+esc(c.title)+"</strong>"+
   "<span class='elite-course-description'>"+esc(c.description||'Explore practical learning with this course.')+"</span>"+
   "<span class='elite-card-details'><span>"+ico('clock',13)+" "+esc(c.hours||'Self-paced')+"</span></span>"+
   "<span class='elite-course-foot'><span>Start learning</span><em>"+ico('arrow',16)+"</em></span></span></button></article>";
- };
  return "<section class='screen elite-home'>"+
   "<form id='home-search-form' class='elite-course-search elite-search-top' role='search'>"+ico('search',21)+"<input id='home-search' name='search' type='search' autocomplete='off' placeholder='Search Python, AI, design, robotics...' aria-label='Search digital skills courses' value='"+esc(VIDEO.state.query||'')+"'/><button type='submit'>Search "+ico('arrow',17)+"</button></form>"+
   "<section class='elite-promo-banner' aria-label='Discover your potential'><div class='elite-promo-media'>"+img(PHOTOS.hero,'Students working together around a laptop')+"</div><div class='elite-promo-wash' aria-hidden='true'></div><div class='elite-promo-copy'><span class='elite-promo-eyebrow'><span class='elite-promo-spark'>✦</span> DISCOVER YOUR POTENTIAL</span><h1>A brighter you<br><em>through better learning.</em></h1><p>Practical digital skills and real learning opportunities — all in one place.</p><button type='button' class='elite-promo-button' data-go='courses'>Explore courses "+ico('arrow',18)+"</button></div></section>"+
