@@ -140,7 +140,7 @@ module.exports = async function handler(req, res) {
         telegramApi(creds.token, 'setMyName', { name: 'SYLearn' }),
         telegramApi(creds.token, 'setMyDescription', { description }),
         telegramApi(creds.token, 'setMyShortDescription', {
-          short_description: 'SYLearn — Learn. Build. Grow. 🎓 Courses & digital skills. 👥 /community · 📢 /channel. By SYLUTION.'
+          short_description: '🎓 SYLearn — Learn. Build. Grow.\nGain practical digital skills through engaging lessons and quizzes. 🚀 By SYLUTION.'
         }),
         telegramApi(creds.token, 'setChatMenuButton', {
           menu_button: { type: 'web_app', text: '📚 Learn', web_app: { url: APP_URL } }
