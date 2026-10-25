@@ -284,5 +284,16 @@ if(name==='yt-complete'){let p=V.finish();tools.render();tools.toast('Lesson add
 if(name==='yt-reset'){V.state.items=V.curated.slice();V.state.status='curated';V.state.query='';V.state.category='All';V.state.sort='featured';V.state.kind='video';V.state.message='Explore available courses.';tools.render();return true}
 return false
 }
+// Restore normal scrolling if fullscreen/theater ends or navigation changes.
+const closeClassroomTheater=()=>{
+ const box=document.getElementById('syl-video-fullscreen');
+ if(box&&!document.fullscreenElement&&!document.webkitFullscreenElement){
+   box.classList.remove('syl-fs-rotate');
+   if(!box.classList.contains('syl-fs-theater'))document.body.style.overflow='';
+ }
+};
+document.addEventListener('fullscreenchange',closeClassroomTheater);
+document.addEventListener('webkitfullscreenchange',closeClassroomTheater);
+window.addEventListener('hashchange',()=>{document.body.style.overflow='';});
 window.SYLUTION_VIDEO_UI={library,course,watch,card,action,startSearch,open};
 })();
