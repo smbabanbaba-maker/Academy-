@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "SYLUTION Learn",
-  "short_name": "SYLUTION",
-  "description": "Learn languages, academics, technology and professional skills.",
+  "name": "SYLearn — Digital Skills Academy",
+  "short_name": "SYLearn",
+  "description": "Learn practical digital skills through courses and knowledge checks. Learn. Build. Grow. Powered by SYLUTION.",
   "start_url": "./index.html#/home",
   "scope": "./",
   "display": "standalone",
