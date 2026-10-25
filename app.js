@@ -136,13 +136,25 @@ function home(){
  const featured=curated.filter(c=>c.featured);
  const picks=(featured.length>=4?featured:curated).slice(0,4);
  const categories=[
-  {name:'Programming',label:'Coding',icon:'laptop',symbol:'</>',tone:'red'},
-  {name:'Data & Analytics',label:'Data',icon:'chart',symbol:'',tone:'blue'},
-  {name:'Engineering & IoT',label:'Robotics & IoT',icon:'settings',symbol:'',tone:'violet'},
-  {name:'Business & Office',label:'Business',icon:'file',symbol:'',tone:'amber'},
-  {name:'Design & Creative',label:'Design',icon:'spark',symbol:'',tone:'pink'},
-  {name:'AI & Automation',label:'AI & Automation',icon:'brain',symbol:'',tone:'gray'}
+  {name:'Programming',label:'Coding',icon:'laptop',tone:'red'},
+  {name:'Data & Analytics',label:'Data Analytics',icon:'chart',tone:'blue'},
+  {name:'Engineering & IoT',label:'Robotics & IoT',icon:'settings',tone:'violet'},
+  {name:'Business & Office',label:'Digital Business',icon:'file',tone:'amber'},
+  {name:'Design & Creative',label:'Design',icon:'spark',tone:'pink'},
+  {name:'Artificial Intelligence',label:'AI & Automation',icon:'brain',tone:'gray'}
  ];
+ const skillChip=(c,duplicate)=>{
+  const available=curated.some(x=>x.category===c.name);
+  const attrs=available
+   ?"data-action='home-video-filter' data-value='"+esc(c.name)+"'"
+   :"disabled aria-disabled='true'";
+  return "<button type='button' class='elite-skill-chip elite-tone-"+c.tone+"' "+attrs+
+   (duplicate?" tabindex='-1'":"")+" aria-label='"+esc(c.label)+(available?" courses":"' (coming soon)")+"'>"+
+   "<span class='elite-skill-icon'>"+ico(c.icon,21)+"</span>"+
+   "<span class='elite-skill-name'>"+esc(c.label)+"</span>"+
+   (available?"<span class='elite-skill-arrow'>"+ico('arrow',15)+"</span>":"<span class='elite-skill-soon'>Soon</span>")+
+   "</button>";
+ };
  const courseTile=c=>"<article class='elite-course-card'><button type='button' class='elite-course-open' data-action='yt-open' data-id='"+esc(c.id)+"' aria-label='View "+esc(c.title)+"'>"+
   "<span class='elite-course-thumb'>"+img(c.image,c.title)+"<span class='elite-course-play'>"+ico('play',20)+"</span></span>"+
   "<span class='elite-course-body'><span class='elite-course-category'>"+esc(c.category)+" <b>·</b> "+esc(c.level)+"</span><strong>"+esc(c.title)+"</strong><span class='elite-course-creator'>By "+esc(c.creator)+"</span><span class='elite-course-foot'><span>Free course</span><em>Explore "+ico('arrow',16)+"</em></span></span></button></article>";
@@ -151,10 +163,12 @@ function home(){
  return "<section class='screen elite-home'>"+
   "<form id='home-search-form' class='elite-course-search elite-search-top' role='search'>"+ico('search',21)+"<input id='home-search' name='search' type='search' autocomplete='off' placeholder='Search Python, AI, design, robotics...' aria-label='Search digital skills courses' value='"+esc(VIDEO.state.query||'')+"'/><button type='submit'>Search "+ico('arrow',17)+"</button></form>"+
   "<section class='elite-promo-banner' aria-label='Discover your potential'><div class='elite-promo-media'>"+img(PHOTOS.hero,'Students working together around a laptop')+"</div><div class='elite-promo-wash' aria-hidden='true'></div><div class='elite-promo-copy'><span class='elite-promo-eyebrow'><span class='elite-promo-spark'>✦</span> DISCOVER YOUR POTENTIAL</span><h1>A brighter you<br><em>through better learning.</em></h1><p>Practical digital skills and real learning opportunities — all in one place.</p><button type='button' class='elite-promo-button' data-go='courses'>Explore courses "+ico('arrow',18)+"</button></div></section>"+
-  "<section class='elite-section elite-categories'><div class='elite-section-header'><div><span class='elite-section-eyebrow'>FIND YOUR PATH</span><h2>Explore by category</h2></div><button data-go='courses' class='elite-section-link'>All courses "+ico('arrow',16)+"</button></div><div class='elite-category-grid'>"+categories.map(c=>{
-    const active=curated.some(x=>x.category===c.name);
-    return "<button type='button' class='elite-category-item elite-tone-"+c.tone+"' "+(active?"data-action='home-video-filter' data-value='"+esc(c.name)+"'":"disabled aria-disabled='true'")+" ><span class='elite-category-symbol'>"+ico(c.icon,23)+"</span><span class='elite-category-label'>"+esc(c.label)+"</span>"+(active?"<span class='elite-cat-chevron'>"+ico('arrow',14)+"</span>":"<small>Coming soon</small>")+"</button>";
-   }).join('')+"</div></section>"+
+  "<section class='elite-section elite-skills-section' aria-label='Explore Skills'><div class='elite-skills-heading'><div><span class='elite-section-eyebrow'>CHOOSE YOUR NEXT SKILL</span><h2>Explore Skills</h2></div><button type='button' data-go='courses' class='elite-skills-viewall'>View all "+ico('arrow',16)+"</button></div>"+
+  "<div class='elite-skill-carousel' aria-label='Browse skills in one moving row'><div class='elite-skill-track'><div class='elite-skill-set'>"+
+  categories.map(c=>skillChip(c,false)).join('')+
+  "</div><div class='elite-skill-set' aria-hidden='true'>"+
+  categories.map(c=>skillChip(c,true)).join('')+
+  "</div></div></div></section>"+
   resume+
   "<section class='elite-section elite-featured'><div class='elite-section-header'><div><span class='elite-section-eyebrow'>START LEARNING TODAY</span><h2>Featured courses</h2><p>Free learning videos from credited educators.</p></div><button class='elite-section-link' data-go='courses'>View all "+ico('arrow',16)+"</button></div><div class='elite-course-grid'>"+picks.map(courseTile).join('')+"</div></section>"+
   "<section class='elite-originals'><div class='elite-originals-head'><span class='elite-originals-badge'>SYLearn ORIGINALS</span><span class='elite-originals-pending'>IN DEVELOPMENT</span></div><div class='elite-originals-content'><div class='elite-originals-symbol'>"+ico('cap',28)+"</div><div><h2>Learn directly from SYLearn instructors.</h2><p>Our original lessons, hands-on projects and guided learning tracks are being prepared. More ways to learn are coming.</p></div></div></section>"+
