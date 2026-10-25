@@ -1,4 +1,4 @@
-/* SYLUTION Learn: YouTube course discovery, curriculum, and lessons UI.
+/* SYLearn: YouTube course discovery, curriculum, and lessons UI.
    Never obscures YouTube player or original creator attribution. */
 (function(){
 'use strict';
@@ -21,7 +21,7 @@ const visibleCourses=()=>{
 };
 function library(){
 const s=V.state,displayed=visibleCourses(),groups=catalogCategories(),featured=V.curated.filter(c=>c.featured).slice(0,4);
-return '<section class="screen yt-library"><div class="yt-title-row"><div><div class="page-eyebrow">FREE EDUCATIONAL VIDEO COURSES</div><h1>Learn with complete <span class="red">video courses.</span></h1><p class="muted">Discover original educators through SYLUTION Learn.</p></div>'+source()+'</div>'+
+return '<section class="screen yt-library"><div class="yt-title-row"><div><div class="page-eyebrow">FREE EDUCATIONAL VIDEO COURSES</div><h1>Learn with complete <span class="red">video courses.</span></h1><p class="muted">Discover original educators through SYLearn.</p></div>'+source()+'</div>'+
 '<div class="yt-feature yt-feature-premium"><div><span class="yt-feature-kicker">FREE · SELF-PACED · FLEXIBLE</span><h2>Discover skills that matter.</h2><p>Selected courses in programming, design, electronics and analytics, from their original YouTube educators.</p></div><div class="yt-feature-art">'+icon('play')+'</div></div>'+
 '<div class="yt-premium-headline"><span class="yt-eyebrow">DISCOVER GREAT COURSES</span><h2>Start learning. Keep growing.</h2><p>A carefully reduced selection of identified educational videos, with original source credit.</p><div class="yt-premium-metrics"><span>'+V.curated.length+' handpicked courses</span><span>'+new Set(V.curated.map(c=>c.category)).size+' subject areas</span><span>100% free video viewing</span></div></div>'+
 (s.category==='All'&&s.status==='curated'?'<div class="yt-featured-shelf">'+featured.map(c=>'<button class="yt-shelf-card" data-action="yt-open" data-id="'+esc(c.id)+'"><span class="yt-shelf-picture"><img src="'+esc(c.image)+'" alt="" loading="lazy"/></span><span class="yt-shelf-copy"><small>'+esc(c.category)+'</small><strong>'+esc(c.title)+'</strong><em>Start learning →</em></span></button>').join('')+'</div>':'')+
@@ -46,7 +46,7 @@ return '<section class="screen yt-detail"><button class="back-btn" data-go="cour
 '<div class="yt-curriculum-head"><div><h2>Course Curriculum</h2><p class="muted small">'+(c.type==='video'?'Chapters are timestamp positions in the same original video.':'Each lesson comes from the original creator’s playlist.')+'</p></div><span class="badge muted-badge">'+V.progress(c)+'% in study log</span></div>'+
 (ls.length?'<div class="yt-lessons">'+ls.map((l,i)=>'<button class="yt-lesson-row" data-action="yt-lesson" data-index="'+i+'"><span class="yt-lesson-number">'+(i+1)+'</span><span class="yt-lesson-copy"><strong>'+esc(l.title)+'</strong><small>'+esc(c.creator)+' · '+(c.type==='video'?'From '+Math.floor(l.seconds/60)+'m '+String(l.seconds%60).padStart(2,'0')+'s':'YouTube video')+'</small></span>'+icon('play')+'</button>').join('')+'</div>':'<div class="yt-loading">'+icon('clock')+' '+esc(V.state.message||'Loading playlist lessons…')+'</div>')+
 '<div class="course-check-panel"><div><span class="learning-kicker">KNOWLEDGE CHECK</span><h2>Test what you learned.</h2><p>Take a short course-specific assessment. Pass with 80% and complete the study chapters to create a personal learning record.</p><small>'+ (check.latest?'Your previous result: '+check.latest.score+'% · ':'')+'Chapter progress: '+p+'% · Saved on this device</small></div><button class="btn btn-primary" data-action="qa-open" '+(!ready?'disabled':'')+'>'+ (ready?'Start knowledge check':'Assessment coming soon')+' →</button></div>'+
-'<div class="yt-ethical"><strong>Original content</strong><p>SYLUTION Learn curates and organizes the learning journey. The video belongs to its named YouTube creator. There is no fee to view the embedded YouTube video. Independent quizzes and local study records are created by SYLUTION, not the original creator.</p></div></section>';
+'<div class="yt-ethical"><strong>Original content</strong><p>SYLearn curates and organizes the learning journey. The video belongs to its named YouTube creator. There is no fee to view the embedded YouTube video. Independent quizzes and local study records are created by SYLUTION, not the original creator.</p></div></section>';
 }
 function watch(){
 const c=V.state.selected,l=V.currentLesson();if(!c||!l)return course();
