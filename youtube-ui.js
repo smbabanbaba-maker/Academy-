@@ -4,7 +4,7 @@
 'use strict';
 const V=window.SYLUTION_VIDEO;
 const esc=x=>String(x==null?'':x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const icons={star:'<path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8l-6.2 3.3L7 14.2 2 9.3l6.9-1z"/>',play:'<path d="m7 4 13 8-13 8z"/>',back:'<path d="m15 18-6-6 6-6"/>',search:'<circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/>',arrow:'<path d="M4 12h16m-6-6 6 6-6 6"/>',check:'<path d="m4 12 5 5L20 6"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8v1"/>',book:'<path d="M12 7v14M3 18V5a2 2 0 0 1 2-2h3a4 4 0 0 1 4 4 4 4 0 0 1 4-4h3a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1h-4a4 4 0 0 0-4 2 4 4 0 0 0-4-2H4a1 1 0 0 1-1-1z"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/>',brain:'<rect x="3" y="7" width="18" height="14" rx="5"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/><path d="M12 3v4"/>',file:'<path d="M6 2h8l4 4v16H6zM14 2v5h5"/>',globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>'};
+const icons={bookmark:'<path d="M6 3h12v18l-6-4-6 4V3z"/>',star:'<path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8l-6.2 3.3L7 14.2 2 9.3l6.9-1z"/>',play:'<path d="m7 4 13 8-13 8z"/>',back:'<path d="m15 18-6-6 6-6"/>',search:'<circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/>',arrow:'<path d="M4 12h16m-6-6 6 6-6 6"/>',check:'<path d="m4 12 5 5L20 6"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8v1"/>',book:'<path d="M12 7v14M3 18V5a2 2 0 0 1 2-2h3a4 4 0 0 1 4 4 4 4 0 0 1 4-4h3a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1h-4a4 4 0 0 0-4 2 4 4 0 0 0-4-2H4a1 1 0 0 1-1-1z"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/>',brain:'<rect x="3" y="7" width="18" height="14" rx="5"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/><path d="M12 3v4"/>',file:'<path d="M6 2h8l4 4v16H6zM14 2v5h5"/>',globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>'};
 const icon=k=>'<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(icons[k]||icons.book)+'</svg>';
 const btn=(title,action,id)=>'<button class="btn btn-primary" data-action="'+esc(action)+'"'+(id?' data-id="'+esc(id)+'"':'')+'>'+title+' '+icon('arrow')+'</button>';
 const card=c=>'<article class="yt-course-card"><button class="yt-card-image" data-action="yt-open" data-id="'+esc(c.id)+'" aria-label="Explore '+esc(c.title)+'"><img src="'+esc(c.image)+'" alt="" loading="lazy"/><span class="yt-play-round">'+icon('play')+'</span>'+(c.badge?'<span class="yt-card-badge">'+esc(c.badge)+'</span>':'')+'</button><button class="yt-save '+(V.state.saved.includes(c.id)?'on':'')+'" data-action="yt-save" data-id="'+esc(c.id)+'" aria-label="'+(V.state.saved.includes(c.id)?'Remove saved course':'Save course')+'">'+(V.state.saved.includes(c.id)?'♥':'♡')+'</button><div class="yt-card-body"><span class="yt-card-type">'+esc(c.category||'Digital Skills')+' · '+esc(c.level||'Beginner')+'</span><button class="yt-card-name" data-action="yt-open" data-id="'+esc(c.id)+'">'+esc(c.title)+'</button><p class="yt-author">'+esc(c.hours||'Self-paced')+' · '+esc(c.creator)+'</p><div class="yt-card-bottom"><button class="yt-view" data-action="yt-open" data-id="'+esc(c.id)+'">Explore course '+icon('arrow')+'</button></div></div></article>';
@@ -14,26 +14,22 @@ const catalogCard=c=>{
  const access=paid?'₦'+Math.round(amount).toLocaleString('en-NG'):free?'FREE':'View price';
  const rating=Number(c.rating),reviews=Number(c.reviewCount||0);
  const reviewed=Number.isFinite(rating)&&rating>0&&rating<=5&&Number.isInteger(reviews)&&reviews>0;
- const chapterCount=Array.isArray(c.chapters)?c.chapters.length:0;
+ const chapters=Array.isArray(c.chapters)?c.chapters.length:0;
  const progress=Math.min(100,Math.max(0,V.progress(c)||0));
- const selectedTopics=(Array.isArray(c.chapters)?c.chapters:[])
-   .map(row=>Array.isArray(row)?String(row[0]||'').trim():'')
-   .filter(title=>title&&!/^(introduction|welcome|getting started|setup|installation|bootcamp introduction|complete .* workshop|what is)/i.test(title))
-   .slice(0,2);
  const saved=V.state.saved.includes(c.id);
- return '<article class="yt-course-card syl-catalog-card-v2 syl-catalog-card-v3">'+
-  '<div class="syl-catalog-media"><button class="yt-card-image" data-action="yt-open" data-id="'+esc(c.id)+'" aria-label="View '+esc(c.title)+' details"><img src="'+esc(c.image)+'" alt="" loading="lazy"/><span class="yt-play-round">'+icon('play')+'</span></button>'+
-  '<span class="syl-card-price '+(paid?'syl-is-paid':'syl-is-free')+'">'+esc(access)+'</span>'+
-  '<button class="yt-save '+(saved?'on':'')+'" data-action="yt-save" data-id="'+esc(c.id)+'" aria-label="'+(saved?'Remove saved course':'Save course')+'" aria-pressed="'+(saved?'true':'false')+'">'+(saved?'♥':'♡')+'</button></div>'+
-  '<div class="yt-card-body">'+
-  '<span class="yt-card-type">'+esc(c.category||'Digital Skills')+' · '+esc(c.level||'All levels')+'</span>'+
-  '<button class="yt-card-name" data-action="yt-open" data-id="'+esc(c.id)+'">'+esc(c.title)+'</button>'+
-  '<p class="syl-catalog-blurb">'+esc(c.description||'Practical skills for real-world learning.')+'</p>'+
-  (selectedTopics.length?'<div class="syl-v3-topics" aria-label="Topics covered">'+selectedTopics.map(t=>'<span>'+esc(t)+'</span>').join('')+'</div>':'')+
-  '<div class="syl-catalog-facts"><span>'+icon('clock')+' '+esc(c.hours||'Self-paced')+'</span>'+(chapterCount?'<span>'+icon('book')+' '+chapterCount+' chapters</span>':'')+'</div>'+
-  (reviewed?'<div class="syl-catalog-rating">'+icon('star')+' '+esc(rating.toFixed(1))+' <small>('+reviews+' reviews)</small></div>':'')+
-  (progress>0?'<div class="syl-v3-progress"><span><strong>Study progress</strong><em>'+progress+'%</em></span><span class="syl-v3-meter"><span style="width:'+progress+'%"></span></span></div>':'')+
-  '<div class="yt-card-bottom"><button class="yt-view" data-action="yt-open" data-id="'+esc(c.id)+'">View course '+icon('arrow')+'</button></div></div></article>';
+ return '<article class="elite-course-card elite-featured-card syl-course-v2 syl-course-v3 syl-catalog-card-v2 syl-catalog-card-v3 syl-catalog-home-card">'+
+   '<button type="button" class="elite-course-open" data-action="yt-open" data-id="'+esc(c.id)+'" aria-label="View details for '+esc(c.title)+'">'+
+   '<span class="elite-course-thumb syl-home-video-thumb"><img src="'+esc(c.image)+'" alt="'+esc(c.title)+'" loading="lazy"/>'+
+   '<span class="elite-card-play" aria-hidden="true">'+icon('play')+'</span>'+
+   '<span class="syl-card-price '+(paid?'syl-is-paid':'syl-is-free')+'">'+esc(access)+'</span></span>'+
+   '<span class="elite-course-body"><span class="elite-course-category">'+esc(c.category||'Digital Skills')+' <b>·</b> '+esc(c.level||'All levels')+'</span>'+
+   '<strong class="elite-featured-name">'+esc(c.title)+'</strong>'+
+   '<span class="elite-course-description">'+esc(c.description||'Learn practical digital skills, step by step.')+'</span>'+
+   '<span class="syl-card-facts"><span>'+icon('clock')+' '+esc(c.hours||'Self-paced')+'</span>'+(chapters?'<span>'+icon('book')+' '+chapters+' chapters</span>':'')+'</span>'+
+   (reviewed?'<span class="syl-card-rating">'+icon('star')+' '+esc(rating.toFixed(1))+' <small>('+reviews+' reviews)</small></span>':'')+
+   (progress>0?'<span class="syl-v3-progress"><span><strong>Study progress</strong><em>'+progress+'%</em></span><span class="syl-v3-meter"><span style="width:'+progress+'%"></span></span></span>':'')+
+   '<span class="elite-course-foot"><span>View course</span><em>'+icon('arrow')+'</em></span></span></button>'+
+   '<button type="button" class="syl-v3-home-save '+(saved?'is-saved':'')+'" data-action="yt-save" data-id="'+esc(c.id)+'" aria-label="'+(saved?'Remove saved course':'Save course')+'" aria-pressed="'+(saved?'true':'false')+'">'+icon('bookmark')+'</button></article>';
 };
 const catalogCategories=()=>['All',...new Set(V.curated.map(x=>x.category||'Digital Skills'))];
 const visibleCourses=()=>{
