@@ -132,7 +132,6 @@ const footer=()=>"<footer class='footer syl-footer elite-footer'><strong>SYLearn
 
 function home(){
  const curated=VIDEO.curated||[];
- const selected=curated.filter(c=>VIDEO.progress(c)>0).sort((a,b)=>VIDEO.progress(b)-VIDEO.progress(a))[0];
  const featured=curated.filter(c=>c.featured);
  const picks=(featured.length>=4?featured:curated).slice(0,4);
  const categories=[
@@ -158,8 +157,6 @@ function home(){
  const courseTile=c=>"<article class='elite-course-card'><button type='button' class='elite-course-open' data-action='yt-open' data-id='"+esc(c.id)+"' aria-label='View "+esc(c.title)+"'>"+
   "<span class='elite-course-thumb'>"+img(c.image,c.title)+"<span class='elite-course-play'>"+ico('play',20)+"</span></span>"+
   "<span class='elite-course-body'><span class='elite-course-category'>"+esc(c.category)+" <b>·</b> "+esc(c.level)+"</span><strong>"+esc(c.title)+"</strong><span class='elite-course-creator'>By "+esc(c.creator)+"</span><span class='elite-course-foot'><span>Free course</span><em>Explore "+ico('arrow',16)+"</em></span></span></button></article>";
- const resume=selected?"<section class='elite-resume'><div class='elite-resume-icon'>"+ico('book',22)+"</div><div class='elite-resume-body'><small>CONTINUE LEARNING</small><h3>"+esc(selected.title)+"</h3><div class='elite-resume-meter'><span style='width:"+VIDEO.progress(selected)+"%'></span></div><p>"+VIDEO.progress(selected)+"% of chapters marked studied on this device</p></div><button class='elite-resume-button' data-action='yt-open' data-id='"+esc(selected.id)+"'>Resume "+ico('arrow',17)+"</button></section>"
- :"<section class='elite-resume elite-resume-empty'><div class='elite-resume-icon'>"+ico('book',22)+"</div><div class='elite-resume-body'><small>MY LEARNING</small><h3>Your learning journey starts here</h3><p>Choose your first course and begin building practical skills.</p></div><button class='elite-resume-button' data-go='courses'>Explore "+ico('arrow',17)+"</button></section>";
  return "<section class='screen elite-home'>"+
   "<form id='home-search-form' class='elite-course-search elite-search-top' role='search'>"+ico('search',21)+"<input id='home-search' name='search' type='search' autocomplete='off' placeholder='Search Python, AI, design, robotics...' aria-label='Search digital skills courses' value='"+esc(VIDEO.state.query||'')+"'/><button type='submit'>Search "+ico('arrow',17)+"</button></form>"+
   "<section class='elite-promo-banner' aria-label='Discover your potential'><div class='elite-promo-media'>"+img(PHOTOS.hero,'Students working together around a laptop')+"</div><div class='elite-promo-wash' aria-hidden='true'></div><div class='elite-promo-copy'><span class='elite-promo-eyebrow'><span class='elite-promo-spark'>✦</span> DISCOVER YOUR POTENTIAL</span><h1>A brighter you<br><em>through better learning.</em></h1><p>Practical digital skills and real learning opportunities — all in one place.</p><button type='button' class='elite-promo-button' data-go='courses'>Explore courses "+ico('arrow',18)+"</button></div></section>"+
@@ -169,7 +166,6 @@ function home(){
   "</div><div class='elite-skill-set' aria-hidden='true'>"+
   categories.map(c=>skillChip(c,true)).join('')+
   "</div></div></div></section>"+
-  resume+
   "<section class='elite-section elite-featured'><div class='elite-section-header'><div><span class='elite-section-eyebrow'>START LEARNING TODAY</span><h2>Featured courses</h2><p>Free learning videos from credited educators.</p></div><button class='elite-section-link' data-go='courses'>View all "+ico('arrow',16)+"</button></div><div class='elite-course-grid'>"+picks.map(courseTile).join('')+"</div></section>"+
   "<section class='elite-originals'><div class='elite-originals-head'><span class='elite-originals-badge'>SYLearn ORIGINALS</span><span class='elite-originals-pending'>IN DEVELOPMENT</span></div><div class='elite-originals-content'><div class='elite-originals-symbol'>"+ico('cap',28)+"</div><div><h2>Learn directly from SYLearn instructors.</h2><p>Our original lessons, hands-on projects and guided learning tracks are being prepared. More ways to learn are coming.</p></div></div></section>"+
   "<section class='elite-section elite-tools'><div class='elite-section-header'><div><span class='elite-section-eyebrow'>YOUR TOOLS</span><h2>Everything you need to grow</h2></div></div><div class='elite-tool-grid'><button data-go='progress'><span class='elite-tool-icon elite-tone-blue'>"+ico('chart',24)+"</span><span><strong>Learning progress</strong><small>Resume your saved studies</small></span>"+ico('arrow',17)+"</button><button data-go='ai'><span class='elite-tool-icon elite-tone-violet'>"+ico('brain',24)+"</span><span><strong>AI Tutor preview</strong><small>Explore sample explanations</small></span>"+ico('arrow',17)+"</button></div></section>"+
