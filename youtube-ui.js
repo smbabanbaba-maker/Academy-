@@ -11,21 +11,29 @@ const card=c=>'<article class="yt-course-card"><button class="yt-card-image" dat
 const catalogCard=c=>{
  const amount=Number(c.price),paid=Number.isFinite(amount)&&amount>0;
  const free=!paid&&(c.access==='free'||c.price===0||c.source==='YouTube'||c.type==='video'||c.type==='playlist');
- const access=paid?'₦'+Math.round(amount).toLocaleString('en-NG'):free?'FREE':'See price';
+ const access=paid?'₦'+Math.round(amount).toLocaleString('en-NG'):free?'FREE':'View price';
  const rating=Number(c.rating),reviews=Number(c.reviewCount||0);
- const reviewed=Number.isFinite(rating)&&rating>0&&rating<=5&&Number.isFinite(reviews)&&reviews>0;
+ const reviewed=Number.isFinite(rating)&&rating>0&&rating<=5&&Number.isInteger(reviews)&&reviews>0;
  const chapterCount=Array.isArray(c.chapters)?c.chapters.length:0;
- return '<article class="yt-course-card syl-catalog-card-v2">'+
+ const progress=Math.min(100,Math.max(0,V.progress(c)||0));
+ const selectedTopics=(Array.isArray(c.chapters)?c.chapters:[])
+   .map(row=>Array.isArray(row)?String(row[0]||'').trim():'')
+   .filter(title=>title&&!/^(introduction|welcome|getting started|setup|installation|bootcamp introduction|complete .* workshop|what is)/i.test(title))
+   .slice(0,2);
+ const saved=V.state.saved.includes(c.id);
+ return '<article class="yt-course-card syl-catalog-card-v2 syl-catalog-card-v3">'+
   '<div class="syl-catalog-media"><button class="yt-card-image" data-action="yt-open" data-id="'+esc(c.id)+'" aria-label="View '+esc(c.title)+' details"><img src="'+esc(c.image)+'" alt="" loading="lazy"/><span class="yt-play-round">'+icon('play')+'</span></button>'+
   '<span class="syl-card-price '+(paid?'syl-is-paid':'syl-is-free')+'">'+esc(access)+'</span>'+
-  '<button class="yt-save '+(V.state.saved.includes(c.id)?'on':'')+'" data-action="yt-save" data-id="'+esc(c.id)+'" aria-label="'+(V.state.saved.includes(c.id)?'Remove saved course':'Save course')+'">'+(V.state.saved.includes(c.id)?'♥':'♡')+'</button></div>'+
+  '<button class="yt-save '+(saved?'on':'')+'" data-action="yt-save" data-id="'+esc(c.id)+'" aria-label="'+(saved?'Remove saved course':'Save course')+'" aria-pressed="'+(saved?'true':'false')+'">'+(saved?'♥':'♡')+'</button></div>'+
   '<div class="yt-card-body">'+
   '<span class="yt-card-type">'+esc(c.category||'Digital Skills')+' · '+esc(c.level||'All levels')+'</span>'+
   '<button class="yt-card-name" data-action="yt-open" data-id="'+esc(c.id)+'">'+esc(c.title)+'</button>'+
   '<p class="syl-catalog-blurb">'+esc(c.description||'Practical skills for real-world learning.')+'</p>'+
+  (selectedTopics.length?'<div class="syl-v3-topics" aria-label="Topics covered">'+selectedTopics.map(t=>'<span>'+esc(t)+'</span>').join('')+'</div>':'')+
   '<div class="syl-catalog-facts"><span>'+icon('clock')+' '+esc(c.hours||'Self-paced')+'</span>'+(chapterCount?'<span>'+icon('book')+' '+chapterCount+' chapters</span>':'')+'</div>'+
-  '<div class="syl-catalog-rating">'+icon('star')+' '+(reviewed?esc(rating.toFixed(1))+' <small>('+reviews+' reviews)</small>':'<small>No ratings yet</small>')+'</div>'+
-  '<div class="yt-card-bottom"><button class="yt-view" data-action="yt-open" data-id="'+esc(c.id)+'">View course details '+icon('arrow')+'</button></div></div></article>';
+  (reviewed?'<div class="syl-catalog-rating">'+icon('star')+' '+esc(rating.toFixed(1))+' <small>('+reviews+' reviews)</small></div>':'')+
+  (progress>0?'<div class="syl-v3-progress"><span><strong>Study progress</strong><em>'+progress+'%</em></span><span class="syl-v3-meter"><span style="width:'+progress+'%"></span></span></div>':'')+
+  '<div class="yt-card-bottom"><button class="yt-view" data-action="yt-open" data-id="'+esc(c.id)+'">View course '+icon('arrow')+'</button></div></div></article>';
 };
 const catalogCategories=()=>['All',...new Set(V.curated.map(x=>x.category||'Digital Skills'))];
 const visibleCourses=()=>{
