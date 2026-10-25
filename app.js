@@ -156,13 +156,15 @@ function home(){
    "</button>";
  };
  const courseTile=c=>{
-  const amount=Number(c.price), paid=Number.isFinite(amount)&&amount>0;
+  const amount=Number(c.price),paid=Number.isFinite(amount)&&amount>0;
   const isFree=!paid&&(c.access==='free'||c.price===0||c.source==='YouTube'||c.type==='video'||c.type==='playlist');
-  const access=paid?'₦'+Math.round(amount).toLocaleString('en-NG'):isFree?'FREE':'See price';
+  const access=paid?'₦'+Math.round(amount).toLocaleString('en-NG'):isFree?'FREE':'View price';
   const rating=Number(c.rating),reviews=Number(c.reviewCount||0);
-  const hasReviews=Number.isFinite(rating)&&rating>0&&rating<=5&&Number.isFinite(reviews)&&reviews>0;
+  const hasReviews=Number.isFinite(rating)&&rating>0&&rating<=5&&Number.isInteger(reviews)&&reviews>0;
   const chapters=Array.isArray(c.chapters)?c.chapters.length:0;
-  return "<article class='elite-course-card elite-featured-card syl-course-v2'>"+
+  const progress=Math.min(100,Math.max(0,VIDEO.progress(c)||0));
+  const saved=VIDEO.state.saved.includes(c.id);
+  return "<article class='elite-course-card elite-featured-card syl-course-v2 syl-course-v3'>"+
    "<button type='button' class='elite-course-open' data-action='yt-open' data-id='"+esc(c.id)+"' aria-label='View details for "+esc(c.title)+"'>"+
    "<span class='elite-course-thumb syl-home-video-thumb'>"+img(c.image,c.title)+
    "<span class='elite-card-play' aria-hidden='true'>"+ico('play',16)+"</span>"+
@@ -171,8 +173,10 @@ function home(){
    "<strong class='elite-featured-name'>"+esc(c.title)+"</strong>"+
    "<span class='elite-course-description'>"+esc(c.description||'Learn practical digital skills, step by step.')+"</span>"+
    "<span class='syl-card-facts'><span>"+ico('clock',13)+" "+esc(c.hours||'Self-paced')+"</span>"+(chapters?"<span>"+ico('book',13)+" "+chapters+" chapters</span>":'')+"</span>"+
-   "<span class='syl-card-rating'>"+ico('star',12)+" "+(hasReviews?esc(rating.toFixed(1))+" <small>("+reviews+" reviews)</small>":"<small>No ratings yet</small>")+"</span>"+
-   "<span class='elite-course-foot'><span>View details</span><em>"+ico('arrow',16)+"</em></span></span></button></article>";
+   (hasReviews?"<span class='syl-card-rating'>"+ico('star',12)+" "+esc(rating.toFixed(1))+" <small>("+reviews+" reviews)</small></span>":'')+
+   (progress>0?"<span class='syl-v3-progress'><span><strong>Study progress</strong><em>"+progress+"%</em></span><span class='syl-v3-meter'><span style='width:"+progress+"%'></span></span></span>":'')+
+   "<span class='elite-course-foot'><span>View course</span><em>"+ico('arrow',16)+"</em></span></span></button>"+
+   "<button type='button' class='syl-v3-home-save "+(saved?'is-saved':'')+"' data-action='yt-save' data-id='"+esc(c.id)+"' aria-label='"+(saved?'Remove saved course':'Save course')+"' aria-pressed='"+(saved?'true':'false')+"'>"+ico('bookmark',17)+"</button></article>";
  };
  return "<section class='screen elite-home'>"+
   "<form id='home-search-form' class='elite-course-search elite-search-top' role='search'>"+ico('search',21)+"<input id='home-search' name='search' type='search' autocomplete='off' placeholder='Search Python, AI, design, robotics...' aria-label='Search digital skills courses' value='"+esc(VIDEO.state.query||'')+"'/><button type='submit'>Search "+ico('arrow',17)+"</button></form>"+
