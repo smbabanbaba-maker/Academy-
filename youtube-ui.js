@@ -237,7 +237,7 @@ if(name==='yt-share'){
  return true
 }
 if(name==='yt-lesson'){telegramLessonFullscreen();V.setLesson(Number(data.index));tools.nav('ytwatch',V.state.selected.id);return true}
-if(name==='yt-back'){exitTelegramLessonFullscreen();tools.nav('ytcourse',V.state.selected.id);return true}
+if(name==='yt-back'){try{if(document.fullscreenElement)document.exitFullscreen?.().catch?.(()=>{})}catch(e){}exitTelegramLessonFullscreen();tools.nav('ytcourse',V.state.selected.id);return true}
 if(name==='yt-note-save'){
  const c=V.state.selected;if(!c)return true;
  const field=document.getElementById('syl-lesson-note');if(!field)return true;
@@ -252,7 +252,7 @@ if(name==='yt-retry-player'){
  const current=String(frame.getAttribute('src')||'');
  // Alternate between the two official YouTube embed domains when an embedded player is blocked.
  const host=current.includes('youtube-nocookie.com')?'www.youtube.com':'www.youtube-nocookie.com';
- const newUrl='https://'+host+'/embed/'+lesson.id+'?start='+secs+'&playsinline=1&rel=0&controls=1&fs=0';
+ const newUrl='https://'+host+'/embed/'+lesson.id+'?start='+secs+'&playsinline=1&rel=0&controls=1&fs=1';
  frame.setAttribute('src',newUrl);
  tools.toast('Reloading video. If playback is blocked here, use Watch original.');
  return true
@@ -295,14 +295,30 @@ if(name==='yt-native-fullscreen'){
   try{
    const promise=enter.call(shell);
    Promise.resolve(promise).then(()=>{
-    if(screen.orientation?.lock) return screen.orientation.lock('landscape').catch(()=>{});
+    if(screen.orientation?.lock) return Promise.resolve(screen.orientation.lock('landscape')).catch(()=>{});
    }).catch(()=>tools.toast('Device fullscreen is restricted here; immersive video mode is still available.'));
   }catch(e){tools.toast('Your browser blocked native fullscreen; immersive mode is already active.')}
  }else tools.toast('Immersive view already fills this app. Native fullscreen is restricted on this device.');
  closeImmersivePanel();
  return true
 }
-if(name==='yt-complete'){let p=V.finish();tools.render();tools.toast('Lesson added to your study log: '+p+'%');return true}
+if(name==='yt-complete'){
+ const progress=V.finish();
+ // Never rerender a playing iframe just because the learner marked a chapter studied.
+ const button=document.querySelector('.syl-immersive-complete');
+ if(button){button.disabled=true;button.classList.add('is-done');button.setAttribute('aria-label','Chapter marked studied');button.innerHTML=icon('check')+'<span>Studied</span>';}
+ const current=document.querySelector('.syl-immersive-chapter.is-active');
+ if(current){
+  const index=current.querySelector('.syl-immersive-chapter-number');
+  if(index)index.innerHTML=icon('check');
+  current.querySelector('.syl-immersive-chapter-info small')?.append(' · Studied');
+ }
+ const bar=document.querySelector('.syl-immersive-progress span');
+ if(bar)bar.style.width=progress+'%';
+ const hint=document.querySelector('.syl-panel-chapters .syl-immersive-hint');
+ if(hint)hint.textContent=V.lessons().length+' chapters · '+progress+'% marked studied';
+ return true
+}
 if(name==='yt-reset'){V.state.items=V.curated.slice();V.state.status='curated';V.state.query='';V.state.category='All';V.state.sort='featured';V.state.kind='video';V.state.message='Explore available courses.';tools.render();return true}
 return false
 }
