@@ -320,9 +320,13 @@ return '<div class="modal-layer" data-action="close-modal"><div class="modal" ro
 }
 function render(){
 const pages={ytassessment:ASSESS_UI.assessment,ytcompletion:ASSESS_UI.certificate,ytlibrary:VIDEO_UI.library,ytcourse:VIDEO_UI.course,ytwatch:VIDEO_UI.watch,home,courses,detail,lesson,ai,exam,results,progress,profile,saved,certificates,downloads,account,billing,notifications,live,instructor,welcome,signup};
-root.innerHTML='<div class="app-shell">'+header()+'<main class="container">'+(pages[state.page]||home)()+'</main>'+footer()+navBar()+overlay()+'</div>';
+const watching=state.page==='ytwatch';
+document.body.classList.toggle('syl-video-immersive-active',watching);
+root.innerHTML=watching
+ ?'<div class="syl-immersive-app">'+(pages[state.page]||home)()+'</div>'
+ :'<div class="app-shell">'+header()+'<main class="container">'+(pages[state.page]||home)()+'</main>'+footer()+navBar()+overlay()+'</div>';
 if(state.page==='exam')tickClock();
-if(state.page==='ytwatch')window.SYLUTION_PLAYER?.attach?.();
+if(watching)window.SYLUTION_PLAYER?.attach?.();
 }
 function speak(text,code){
 if(!('speechSynthesis' in window)){toast('Audio playback is not supported in this browser.');return}
