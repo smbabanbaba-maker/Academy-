@@ -1363,3 +1363,204 @@ html,body{background:#f8f9fb}
 @media(prefers-reduced-motion:reduce) {
   .elite-home .syl-course-v3 .syl-v3-home-save {transition:none!important}
 }
+
+
+/* SYLearn Courses = Home card parity (Courses page only; Home unchanged) */
+.syl-clean-catalog .yt-course-grid {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:13px;
+  align-items:stretch;
+}
+.syl-clean-catalog .syl-catalog-home-card {
+  position:relative;display:flex;flex-direction:column;
+  width:100%;min-width:0;height:100%;
+  background:#fff!important;
+  border-radius:15px!important;
+  border:1px solid #e7e9ee!important;
+  overflow:hidden;
+  box-shadow:0 6px 23px rgba(20,34,50,.045)!important;
+  transition:transform .24s cubic-bezier(.2,.7,.2,1),box-shadow .24s ease,border-color .24s ease;
+}
+.syl-clean-catalog .syl-catalog-home-card:hover {
+  transform:translateY(-4px);
+  border-color:#edb5c2!important;
+  box-shadow:0 16px 32px rgba(21,33,49,.095)!important;
+}
+.syl-clean-catalog .syl-catalog-home-card .elite-course-open {
+  display:flex;flex-direction:column;
+  width:100%;min-width:0;height:100%;
+  padding:0!important;border:0!important;
+  background:#fff!important;text-align:left;
+  color:#1a1c25!important;
+}
+.syl-clean-catalog .syl-catalog-home-card .syl-home-video-thumb {
+  display:block;position:relative;isolation:isolate;
+  width:100%;aspect-ratio:16/9;
+  overflow:hidden;background:#e9edf3;
+}
+.syl-clean-catalog .syl-catalog-home-card .syl-home-video-thumb img {
+  display:block;width:100%;height:100%;
+  object-fit:cover;object-position:center;
+  filter:saturate(.96) contrast(1.025);
+  transition:transform .35s cubic-bezier(.18,.66,.24,1),filter .35s ease;
+}
+.syl-clean-catalog .syl-catalog-home-card:hover .syl-home-video-thumb img {
+  transform:scale(1.04);filter:saturate(1.02) contrast(1.035);
+}
+.syl-clean-catalog .syl-catalog-home-card .syl-home-video-thumb:after {
+  content:"";pointer-events:none;position:absolute;z-index:1;inset:0;
+  background:linear-gradient(180deg,rgba(12,17,26,.025) 42%,rgba(12,17,26,.22) 100%);
+}
+.syl-clean-catalog .syl-catalog-home-card .elite-card-play {
+  position:absolute;z-index:2;bottom:10px;right:10px;
+  display:grid;place-items:center;
+  width:32px;height:32px;border-radius:10px;
+  color:#fff;background:rgba(24,27,39,.76);
+  border:1px solid rgba(255,255,255,.36);
+  box-shadow:0 3px 12px rgba(0,0,0,.19);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  transition:transform .2s ease,background .2s ease;
+}
+.syl-clean-catalog .syl-catalog-home-card:hover .elite-card-play {
+  background:rgba(194,36,69,.94);transform:translateY(-2px);
+}
+.syl-clean-catalog .syl-catalog-home-card .elite-card-play svg {
+  width:16px;height:16px;stroke-width:2;
+  margin-left:2px;fill:none;
+}
+.syl-clean-catalog .syl-catalog-home-card .syl-card-price {
+  top:10px;left:10px;min-height:26px;
+  padding:6px 10px;font-size:10px;
+}
+.syl-clean-catalog .syl-catalog-home-card .elite-course-body {
+  display:flex;flex-direction:column;flex:1;
+  gap:7px;min-width:0;width:100%;
+  padding:14px 14px 12px;
+}
+.syl-clean-catalog .syl-catalog-home-card .elite-course-category {
+  color:#b82c4a;font-size:9px;font-weight:850;line-height:1.35;
+}
+.syl-clean-catalog .syl-catalog-home-card .elite-featured-name {
+  display:-webkit-box;-webkit-box-orient:vertical;
+  -webkit-line-clamp:2;line-clamp:2;overflow:hidden;
+  font:800 13px/1.46 'Plus Jakarta Sans',sans-serif;
+  letter-spacing:-.3px;color:#20242e;min-height:37px;
+}
+.syl-clean-catalog .syl-catalog-home-card .elite-course-description {
+  display:-webkit-box;-webkit-box-orient:vertical;
+  -webkit-line-clamp:2;line-clamp:2;overflow:hidden;
+  color:#697586;font-size:10px;line-height:1.55;min-height:30px;
+  margin-bottom:2px;
+}
+.syl-clean-catalog .syl-catalog-home-card .syl-card-facts,
+.syl-clean-catalog .syl-catalog-home-card .syl-card-rating {
+  display:flex;align-items:center;gap:7px;min-width:0;flex-wrap:wrap;
+  color:#667384;font-size:10px;line-height:1.45;font-weight:650;
+}
+.syl-clean-catalog .syl-catalog-home-card .syl-card-facts {
+  margin-top:3px;gap:5px 10px;
+}
+.syl-clean-catalog .syl-catalog-home-card .syl-card-facts span {
+  display:inline-flex;align-items:center;gap:4px;white-space:nowrap;
+}
+.syl-clean-catalog .syl-catalog-home-card .syl-card-facts svg {
+  width:13px;height:13px;flex:none;color:#be3155;
+}
+.syl-clean-catalog .syl-catalog-home-card .syl-card-rating {
+  color:#80531a;font-weight:800;
+}
+.syl-clean-catalog .syl-catalog-home-card .syl-card-rating svg {
+  width:12px;height:12px;color:#edae39;fill:#edae39;stroke-width:1.6;
+}
+.syl-clean-catalog .syl-catalog-home-card .syl-card-rating small {
+  color:#8590a0;font-weight:650;font-size:inherit;
+}
+.syl-clean-catalog .syl-catalog-home-card .syl-v3-progress strong {
+  font-size:10px;line-height:1.3;min-height:0;
+}
+.syl-clean-catalog .syl-catalog-home-card .elite-course-foot {
+  margin-top:auto;display:flex;align-items:center;justify-content:space-between;
+  gap:10px;min-height:38px;
+  padding-top:11px;border-top:1px solid #ebedf1;
+  color:#c72d51;font-size:10px;font-weight:850;
+}
+.syl-clean-catalog .syl-catalog-home-card .elite-course-foot em {
+  display:grid;place-items:center;flex:none;
+  width:25px;height:25px;border-radius:8px;
+  color:#c82545;background:#fff2f5;font-style:normal;
+}
+.syl-clean-catalog .syl-catalog-home-card .elite-course-foot svg {
+  width:16px;height:16px;
+}
+.syl-clean-catalog .syl-catalog-home-card .syl-v3-home-save {
+  position:absolute;z-index:7;top:9px;right:9px;
+  display:grid;place-items:center;width:33px;height:33px;padding:0;
+  background:rgba(255,255,255,.96);color:#2c3441;
+  border:1px solid rgba(222,228,237,.86);border-radius:10px;
+  box-shadow:0 4px 12px rgba(12,20,35,.16);
+  cursor:pointer;transition:transform .16s ease,background .16s ease,color .16s ease;
+}
+.syl-clean-catalog .syl-catalog-home-card .syl-v3-home-save:hover {
+  background:#fff;transform:translateY(-2px);
+}
+.syl-clean-catalog .syl-catalog-home-card .syl-v3-home-save.is-saved {
+  color:#c02a50;background:#fff0f4;border-color:#f2bdcb;
+}
+.syl-clean-catalog .syl-catalog-home-card .syl-v3-home-save svg {
+  width:17px;height:17px;stroke-width:2;
+}
+.syl-clean-catalog .syl-catalog-home-card button:focus-visible {
+  outline:3px solid #d83259;outline-offset:2px;
+}
+@media(min-width:641px) and (max-width:1023px) {
+  .syl-clean-catalog .yt-course-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+@media(max-width:640px) {
+  .syl-clean-catalog .yt-course-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px;
+  }
+  .syl-clean-catalog .syl-catalog-home-card {border-radius:12px!important}
+  .syl-clean-catalog .syl-catalog-home-card .elite-course-body {
+    padding:10px 10px 11px;gap:6px;
+  }
+  .syl-clean-catalog .syl-catalog-home-card .elite-featured-name {
+    font-size:11px;line-height:1.42;min-height:32px;
+  }
+  .syl-clean-catalog .syl-catalog-home-card .elite-course-description {
+    font-size:9px;min-height:28px;
+  }
+  .syl-clean-catalog .syl-catalog-home-card .elite-course-category {font-size:8px}
+  .syl-clean-catalog .syl-catalog-home-card .syl-card-price {
+    top:7px;left:7px;padding:5px 7px;font-size:9px;min-height:23px;border-radius:7px;
+  }
+  .syl-clean-catalog .syl-catalog-home-card .syl-v3-home-save {
+    width:27px;height:27px;top:7px;right:7px;border-radius:8px;
+  }
+  .syl-clean-catalog .syl-catalog-home-card .syl-v3-home-save svg {width:14px;height:14px}
+  .syl-clean-catalog .syl-catalog-home-card .elite-card-play {
+    width:27px;height:27px;right:7px;bottom:7px;border-radius:8px;
+  }
+  .syl-clean-catalog .syl-catalog-home-card .elite-card-play svg {width:13px;height:13px}
+  .syl-clean-catalog .syl-catalog-home-card .syl-card-facts {
+    gap:4px 8px;font-size:9px;
+  }
+  .syl-clean-catalog .syl-catalog-home-card .syl-card-rating {font-size:9px}
+  .syl-clean-catalog .syl-catalog-home-card .syl-v3-progress>span:first-child {
+    font-size:9px;
+  }
+  .syl-clean-catalog .syl-catalog-home-card .elite-course-foot {
+    font-size:10px;min-height:35px;padding-top:8px;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  .syl-clean-catalog .syl-catalog-home-card,
+  .syl-clean-catalog .syl-catalog-home-card img,
+  .syl-clean-catalog .syl-catalog-home-card .elite-card-play,
+  .syl-clean-catalog .syl-catalog-home-card .syl-v3-home-save {
+    transition:none!important;
+  }
+}
