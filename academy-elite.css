@@ -971,110 +971,108 @@ html,body{background:#f8f9fb}
 }
 
 
-/* SYLearn featured course art — scoped exclusively to Home video cards */
-.elite-home .elite-featured-card .syl-home-cover{
-  --syl-cover-a:#17254a;
-  --syl-cover-b:#3445a4;
-  --syl-cover-glow:rgba(112,174,255,.5);
+/* SYLearn real thumbnails — scoped exclusively to Home Featured Courses */
+.elite-home .elite-featured-card {
+  border-radius:16px!important;
+  border:1px solid #e7eaf0!important;
+  box-shadow:0 6px 22px rgba(17,24,39,.045)!important;
+}
+.elite-home .elite-featured-card:hover {
+  border-color:#eeb5c0!important;
+  box-shadow:0 14px 34px rgba(24,31,45,.105)!important;
+}
+.elite-home .elite-featured-card .syl-home-video-thumb {
   display:block;
   position:relative;
+  width:100%;
+  aspect-ratio:16/9;
   isolation:isolate;
   overflow:hidden;
-  aspect-ratio:16/9;
+  background:#e9edf3;
+}
+.elite-home .elite-featured-card .syl-home-video-thumb img {
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  filter:saturate(.96) contrast(1.025);
+  transition:transform .35s cubic-bezier(.18,.66,.24,1),filter .35s ease;
+}
+.elite-home .elite-featured-card:hover .syl-home-video-thumb img {
+  transform:scale(1.04);
+  filter:saturate(1.02) contrast(1.035);
+}
+.elite-home .elite-featured-card .syl-home-video-thumb:after {
+  content:"";
+  position:absolute;
+  z-index:1;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(12,17,26,.025) 42%,rgba(12,17,26,.22) 100%);
+}
+.elite-home .elite-featured-card .syl-home-video-thumb .elite-card-play {
+  position:absolute;
+  z-index:2;
+  bottom:10px;
+  right:10px;
+  width:32px;
+  height:32px;
+  border-radius:10px;
+  display:grid;
+  place-items:center;
   color:#fff;
-  background:
-    radial-gradient(circle at 79% 39%,var(--syl-cover-glow),transparent 46%),
-    linear-gradient(130deg,var(--syl-cover-a),var(--syl-cover-b));
+  background:rgba(24,27,39,.74);
+  border:1px solid rgba(255,255,255,.36);
+  box-shadow:0 3px 12px rgba(0,0,0,.19);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  transition:transform .2s ease,background .2s ease;
 }
-.elite-home .elite-featured-card .syl-home-cover-code{
-  --syl-cover-a:#121f3a;--syl-cover-b:#303978;--syl-cover-glow:rgba(91,180,255,.45);
+.elite-home .elite-featured-card:hover .syl-home-video-thumb .elite-card-play {
+  background:rgba(194,36,69,.94);
+  transform:translateY(-2px);
 }
-.elite-home .elite-featured-card .syl-home-cover-iot{
-  --syl-cover-a:#07363d;--syl-cover-b:#197680;--syl-cover-glow:rgba(115,231,208,.40);
+.elite-home .elite-featured-card .syl-home-video-thumb .elite-card-play svg {
+  width:16px;
+  height:16px;
+  margin-left:2px;
+  fill:none;
+  stroke-width:2;
 }
-.elite-home .elite-featured-card .syl-home-cover-ai{
-  --syl-cover-a:#22143e;--syl-cover-b:#5a388c;--syl-cover-glow:rgba(200,152,255,.40);
+.elite-home .elite-featured-card .elite-course-body {
+  gap:7px;
 }
-.elite-home .elite-featured-card .syl-home-cover-design{
-  --syl-cover-a:#401b41;--syl-cover-b:#9c3b75;--syl-cover-glow:rgba(255,172,221,.34);
+.elite-home .elite-featured-card .elite-card-details {
+  margin:3px 0 5px;
+  min-height:17px;
 }
-.elite-home .elite-featured-card .syl-home-cover:before{
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(rgba(255,255,255,.1) 1px,transparent 1px),
-             linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px);
-  background-size:23px 23px;
-  opacity:.16;
-  -webkit-mask-image:linear-gradient(90deg,transparent,black);
-  mask-image:linear-gradient(90deg,transparent,black);
+.elite-home .elite-featured-card .elite-card-details span {
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
 }
-.elite-home .elite-featured-card .syl-home-cover:after{
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(90deg,rgba(0,0,0,.2),transparent 75%);
+.elite-home .elite-featured-card .elite-course-foot {
+  margin-top:auto;
 }
-.elite-home .elite-featured-card .syl-home-cover-brand{
-  position:absolute;z-index:3;top:11px;left:13px;
-  display:inline-flex;align-items:center;gap:5px;
-  font-size:10px;font-weight:850;letter-spacing:-.02em;
-  color:rgba(255,255,255,.93);
+@media(max-width:640px) {
+  .elite-home .elite-featured-card .syl-home-video-thumb .elite-card-play {
+    width:27px;
+    height:27px;
+    right:7px;
+    bottom:7px;
+    border-radius:8px;
+  }
+  .elite-home .elite-featured-card .syl-home-video-thumb .elite-card-play svg {
+    width:13px;
+    height:13px;
+  }
+  .elite-home .elite-featured-card .elite-course-body { gap:6px; }
+  .elite-home .elite-featured-card .elite-card-details span { font-size:9px; }
 }
-.elite-home .elite-featured-card .syl-home-cover-brand-mark{
-  color:#ffb4c6;font-size:10px;line-height:1;
-}
-.elite-home .elite-featured-card .syl-home-cover-orbit{
-  position:absolute;z-index:1;right:-5%;top:0;
-  width:69%;aspect-ratio:1;border:1px solid rgba(255,255,255,.2);
-  border-radius:50%;transform:rotate(-22deg);
-  box-shadow:0 0 0 15px rgba(255,255,255,.025),0 0 0 37px rgba(255,255,255,.017);
-}
-.elite-home .elite-featured-card .syl-home-cover-orbit:after{
-  content:"";position:absolute;left:15%;top:13%;right:15%;bottom:13%;
-  border:1px dashed rgba(255,255,255,.21);border-radius:50%;
-}
-.elite-home .elite-featured-card .syl-home-cover-art{
-  position:absolute;z-index:2;right:13%;top:24%;
-  display:grid;place-items:center;
-  width:24%;aspect-ratio:1;color:rgba(255,255,255,.93);
-  filter:drop-shadow(0 10px 16px rgba(0,0,0,.13));
-  transition:transform .28s ease;
-}
-.elite-home .elite-featured-card .syl-home-cover-art svg{
-  width:100%;height:100%;max-width:65px;max-height:65px;
-  stroke-width:1.25;
-}
-.elite-home .elite-featured-card:hover .syl-home-cover-art{
-  transform:translateY(-3px) rotate(-4deg);
-}
-.elite-home .elite-featured-card .syl-home-cover-bottom{
-  position:absolute;z-index:3;left:13px;bottom:12px;
-  max-width:79%;display:flex;flex-direction:column;gap:2px;
-  text-shadow:0 2px 12px rgba(0,0,0,.16);
-}
-.elite-home .elite-featured-card .syl-home-cover-subtitle{
-  color:rgba(255,255,255,.7);
-  font-size:8px;line-height:1.2;font-weight:800;letter-spacing:.16em;
-}
-.elite-home .elite-featured-card .syl-home-cover-bottom strong{
-  color:#fff;font-size:clamp(17px,2.2vw,25px);
-  line-height:1.04;font-weight:850;
-  letter-spacing:-.045em;
-  min-height:0;overflow-wrap:normal;
-}
-.elite-home .elite-featured-card .elite-card-details{
-  margin:2px 0 5px;min-height:18px;
-}
-.elite-home .elite-featured-card .elite-card-details span{font-size:10px}
-.elite-home .elite-featured-card .elite-course-foot{margin-top:auto}
-@media(max-width:640px){
-  .elite-home .elite-featured-card .syl-home-cover-brand{top:8px;left:9px;font-size:8px}
-  .elite-home .elite-featured-card .syl-home-cover-art{right:11%;top:26%;width:30%}
-  .elite-home .elite-featured-card .syl-home-cover-bottom{left:9px;bottom:9px;gap:3px;max-width:84%}
-  .elite-home .elite-featured-card .syl-home-cover-subtitle{font-size:6px;letter-spacing:.11em}
-  .elite-home .elite-featured-card .syl-home-cover-bottom strong{font-size:clamp(13px,3.45vw,18px);letter-spacing:-.04em}
-  .elite-home .elite-featured-card .elite-card-details span{font-size:9px}
-}
-@media(max-width:365px){
-  .elite-home .elite-featured-card .syl-home-cover-bottom strong{font-size:17px}
-}
-@media(prefers-reduced-motion:reduce){
-  .elite-home .elite-featured-card .syl-home-cover-art{transition:none!important}
+@media(prefers-reduced-motion:reduce) {
+  .elite-home .elite-featured-card .syl-home-video-thumb img,
+  .elite-home .elite-featured-card .syl-home-video-thumb .elite-card-play {
+    transition:none!important;
+  }
 }
