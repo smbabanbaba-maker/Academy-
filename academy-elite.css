@@ -899,7 +899,7 @@ html,body{background:#f8f9fb}
  .elite-community-copy strong{font-size:10px}
  .elite-community-copy small{font-size:9px}
  .elite-community-action{font-size:9px;padding:7px;min-height:32px}
- .elite-footer-minimal{margin-top:20px!important;padding:16px 10px 90px!important}
+ .elite-footer-minimal{margin-top:20px!important;padding:16px 10px 22px!important}
 }
 @media(max-width:380px){
  .elite-featured-card .elite-card-details{gap:5px}
