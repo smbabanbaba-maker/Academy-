@@ -1,0 +1,38 @@
+name: Announce new SYLearn courses
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - youtube.js
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sylearn-course-announcements
+  cancel-in-progress: false
+
+jobs:
+  announce:
+    name: Notify Telegram channel about new courses
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout catalog history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate announcement script
+        run: node --check scripts/announce-courses.js
+      - name: Announce new curated courses
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.sha }}
+          SYLEARN_TELEGRAM_BOT_TOKEN: ${{ secrets.SYLEARN_TELEGRAM_BOT_TOKEN }}
+          SYLEARN_CHANNEL_CHAT_ID: ${{ secrets.SYLEARN_CHANNEL_CHAT_ID }}
+        run: node scripts/announce-courses.js
