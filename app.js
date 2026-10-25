@@ -90,7 +90,7 @@ const QUESTIONS=[
 ];
 const read=(k,d)=>{try{const x=localStorage.getItem('sylution_'+k);return x?JSON.parse(x):d}catch(e){return d}};
 const save=(k,v)=>{try{localStorage.setItem('sylution_'+k,JSON.stringify(v))}catch(e){}};
-const state={page:'home',category:'All',search:'',sort:'popular',courseId:'english',heroIndex:0,detailTab:'overview',lessonTab:'notes',saved:read('saved',[]),enrolled:read('enrolled',[]),completed:read('completed',{}),user:read('user',{name:'Learner',preferred:'Hausa'}),chat:read('chat',[{from:'ai',text:'Hi there! 👋 I’m your SYLearn AI Tutor preview. Ask about Python, design, robotics or digital skills. You can ask me to explain in Hausa!'}]),quizIndex:0,answers:{},quizEnds:0,quizSubmitted:false,quizResult:0,modal:null,lessonPlaying:false,drafts:read('drafts',[]),toastTimer:null};
+const state={page:'home',category:'All',search:'',sort:'popular',courseId:'python',heroIndex:0,detailTab:'overview',lessonTab:'notes',saved:read('saved',[]),enrolled:read('enrolled',[]),completed:read('completed',{}),user:read('user',{name:'Learner',preferred:'Hausa'}),chat:read('chat',[{from:'ai',text:'Hi there! 👋 I’m your SYLearn AI Tutor preview. Ask about Python, design, robotics or digital skills. You can ask me to explain in Hausa!'}]),quizIndex:0,answers:{},quizEnds:0,quizSubmitted:false,quizResult:0,modal:null,lessonPlaying:false,drafts:read('drafts',[]),toastTimer:null};
 const money=n=>n?'₦'+n.toLocaleString('en-NG'):'Free';
 const course=id=>COURSES.find(c=>c.id===id)||COURSES[0];
 const ct=id=>state.completed[id]||0;
@@ -111,49 +111,60 @@ const categories=(active,go)=>'<div class="category-strip">'+(state.page==='cour
 const hero=(headline,emph,subtitle,action,photo)=>'<div class="hero elegant-hero"><div class="hero-content"><span class="hero-eyebrow">SYLUTION LEARN</span><h1>'+headline+'<br><span class="red">'+emph+'</span></h1><p>'+subtitle+'</p><button class="btn btn-primary" data-go="'+(action==='Languages'?'languages':'courses')+'">Explore '+action+' '+ico('arrow')+'</button></div>'+img(photo||PHOTOS.hero,'Learning at SYLUTION').replace('<img','<img class="hero-photo"')+'</div>';
 
 
-const header=()=>"<header class='topbar syl-topbar'><div class='container topbar-inner'><button class='brand new-brand syl-brand' data-go='home' aria-label='SYLearn home'><span class='syl-brand-symbol'>S</span><span class='syl-brand-copy'><strong>SYLearn</strong><small>Digital Academy <i>·</i> by SYLUTION</small></span></button><nav class='desktop-navigation' aria-label='Main sections'><button class='"+(state.page==='home'?'is-current':'')+"' data-go='home'>Home</button><button class='"+(['courses','ytlibrary','ytcourse','ytwatch','ytassessment'].includes(state.page)?'is-current':'')+"' data-go='courses'>Courses</button><button class='"+(state.page==='progress'?'is-current':'')+"' data-go='progress'>My Learning</button><button class='"+(state.page==='ai'?'is-current':'')+"' data-go='ai'>AI Tutor</button></nav><div class='top-actions'><button class='icon-button' data-go='saved' aria-label='Saved courses'>"+ico('bookmark')+"</button><button data-go='profile' class='profile-avatar-button' aria-label='Profile'><span class='profile-nav-monogram'>"+esc((state.user.name||'L').charAt(0).toUpperCase())+"</span></button></div></div></header>";
-const navBar=()=>"<div class='nav-wrapper syl-bottom-nav'><nav class='bottom-nav' aria-label='Main navigation'>"+[['home','home','Home'],['courses','book','Courses'],['progress','chart','My Learning'],['ai','brain','AI Tutor'],['profile','user','Profile']].map(([pg,icon,label])=>"<button class='nav-item "+(state.page===pg||(pg==='courses'&&['ytlibrary','ytcourse','ytwatch','ytassessment','ytcompletion','saved'].includes(state.page))?'active':'')+"' data-go='"+pg+"' aria-label='"+label+"'>"+ico(icon)+"<span>"+label+"</span></button>").join('')+"</nav></div>";
-const footer=()=>"<footer class='footer syl-footer'><strong>SYLearn</strong><p>Learn. Build. Grow. <span>·</span> Powered by SYLUTION.</p><small>Free video courses are credited to their original educators. Local study tracking and demo AI are not verified student records.</small></footer>";
-
+const header=()=>{
+ const page=state.page;
+ const isCourse=['courses','ytlibrary','ytcourse','ytwatch','ytassessment','ytcompletion','saved'].includes(page);
+ return "<header class='topbar syl-topbar elite-topbar'><div class='container topbar-inner elite-topbar-row'>"+
+  "<button type='button' class='elite-brand' data-go='home' aria-label='SYLearn home'><img class='elite-brand-icon' src='./icon.svg' alt='' /><span class='elite-brand-copy'><strong><span>SY</span>Learn</strong><small>Digital Skills Academy</small></span></button>"+
+  "<nav class='elite-desktop-nav' aria-label='Main navigation'>"+
+  [['home','Home'],['courses','Courses'],['progress','Learning'],['ai','AI'],['profile','Profile']].map(([pg,label])=>"<button type='button' class='"+(page===pg||(pg==='courses'&&isCourse)?'is-active':'')+"' data-go='"+pg+"'>"+label+"</button>").join('')+"</nav>"+
+  "<div class='elite-header-actions'><button type='button' class='elite-header-icon' data-action='elite-search' aria-label='Search courses'>"+ico('search',20)+"</button><button type='button' class='elite-header-avatar' data-go='profile' aria-label='Open profile'>"+esc((state.user.name||'L').charAt(0).toUpperCase())+"</button></div>"+
+  "</div></header>";
+};
+const navBar=()=>{
+ const selected=['courses','ytlibrary','ytcourse','ytwatch','ytassessment','ytcompletion','saved'].includes(state.page)?'courses':state.page;
+ return "<div class='nav-wrapper syl-bottom-nav elite-nav-wrap'><nav class='bottom-nav elite-bottom-nav' aria-label='Learning navigation'>"+
+ [['home','home','Home'],['courses','book','Courses'],['progress','chart','Learning'],['ai','brain','AI'],['profile','user','Profile']]
+ .map(([pg,icon,label])=>"<button type='button' class='nav-item elite-nav-item "+(selected===pg?'active':'')+"' aria-label='"+label+"' aria-current='"+(selected===pg?'page':'false')+"' data-go='"+pg+"'><span class='elite-nav-icon'>"+ico(icon,22)+"</span><span class='elite-nav-label'>"+label+"</span></button>").join('')+
+ "</nav></div>";
+};
+const footer=()=>"<footer class='footer syl-footer elite-footer'><strong>SYLearn</strong><p>Learn. Build. Grow. <span>·</span> Powered by SYLUTION.</p><small>Free courses are credited to their original educators. AI Tutor is a preview; study progress is saved only on this device.</small></footer>";
 
 function home(){
  const curated=VIDEO.curated||[];
- const picks=(curated.filter(c=>c.featured).length>=3?curated.filter(c=>c.featured):curated).slice(0,4);
- const more=curated.filter(c=>!picks.some(p=>p.id===c.id)).slice(0,6);
- const started=curated.filter(c=>VIDEO.progress(c)>0).sort((a,b)=>VIDEO.progress(b)-VIDEO.progress(a))[0];
- const topics=[
-  ['Programming','laptop','Programming'],
-  ['Data & Analytics','chart','Data & Analytics'],
-  ['Engineering & IoT','settings','Engineering & IoT'],
-  ['Business & Office','file','Business & Office'],
-  ['Design & Creative','spark','Design & Creative']
- ].filter(t=>curated.some(c=>c.category===t[0]));
- const videoCard=c=>"<button type='button' class='syl-video-card' data-action='yt-open' data-id='"+esc(c.id)+"' aria-label='Explore "+esc(c.title)+"'>"+
-  "<span class='syl-video-art'>"+img(c.image,c.title)+"<span class='syl-play-mark'>"+ico('play',19)+"</span></span>"+
-  "<span class='syl-video-meta'>"+esc(c.category)+" <span>·</span> "+esc(c.level)+"</span>"+
-  "<strong>"+esc(c.title)+"</strong>"+
-  "<span class='syl-video-source'>"+ico('play',14)+" Free YouTube course · "+esc(c.creator)+"</span>"+
-  "<span class='syl-video-action'>Explore lessons "+ico('arrow',16)+"</span></button>";
- const startedBlock=started
-  ? "<div class='syl-resume'><div class='syl-resume-main'><span class='syl-kicker'>YOUR LEARNING</span><h3>Pick up where you left off</h3><strong>"+esc(started.title)+"</strong><span class='syl-muted'>"+VIDEO.progress(started)+"% of chapters marked studied on this device</span><span class='syl-progress-bar'><span style='width:"+VIDEO.progress(started)+"%'></span></span></div><button class='syl-mini-cta' data-action='yt-open' data-id='"+esc(started.id)+"'>Continue "+ico('arrow',16)+"</button></div>"
-  : "<div class='syl-getting-started'><span class='syl-start-icon'>"+ico('book',23)+"</span><div><strong>Your learning starts here</strong><p>Choose a course, study at your pace and keep track of completed chapters.</p></div><button data-go='courses'>Find a course "+ico('arrow',16)+"</button></div>";
- return "<section class='screen syl-home'>"+
-  "<div class='syl-welcome-bar'><div><span class='syl-eyebrow'>SYLearn DIGITAL ACADEMY</span><h1>Learn a skill. <em>Build a future.</em></h1><p>Practical learning in technology, creativity and business — built for curious minds.</p></div><span class='syl-home-stamp'>"+ico('spark',24)+"</span></div>"+
-  "<form id='home-search-form' class='syl-search-form'>"+ico('search',21)+"<input id='home-search' type='search' name='search' aria-label='Search courses' placeholder='Search Python, Excel, design, robotics...' value='"+esc(VIDEO.state.query||"")+"'/><button type='submit'>Search "+ico('arrow',16)+"</button></form>"+
-  "<div class='syl-hero'><div class='syl-hero-copy'><span class='syl-hero-eyebrow'><span class='syl-live-dot'></span> WELCOME TO THE NEXT GENERATION OF LEARNING</span><h2>Real skills.<br><span>Real possibilities.</span></h2><p>Start with free video lessons. Practise with quizzes. Grow into career-ready digital skills.</p><div class='syl-hero-buttons'><button class='syl-hero-primary' data-go='courses'>Browse courses "+ico('arrow',18)+"</button><button class='syl-hero-secondary' data-go='progress'>My learning "+ico('arrow',16)+"</button></div><div class='syl-hero-features'><span>"+ico('check',15)+" Structured study</span><span>"+ico('check',15)+" Course quizzes</span><span>"+ico('check',15)+" Learn at your pace</span></div></div>"+
-  "<div class='syl-hero-visual' aria-hidden='true'><div class='syl-visual-grid'></div><div class='syl-glow-orb'></div><div class='syl-floating-card syl-card-one'><span class='syl-card-icon'>"+ico('laptop',21)+"</span><span><small>DEVELOP YOUR SKILLS</small><strong>Code. Create.<br>Innovate.</strong></span></div><div class='syl-floating-card syl-card-two'><span class='syl-tiny-check'>"+ico('check',18)+"</span><span><small>YOUR NEXT CHAPTER</small><strong>Keep learning.</strong></span></div><div class='syl-large-letter'>S</div></div></div>"+
-  "<div class='syl-section syl-track-head'><div class='syl-section-title'><div><span class='syl-kicker'>YOUR LEARNING PATH</span><h2>Explore by skill</h2><p>Choose the field you want to master.</p></div><button class='syl-text-link' data-go='courses'>View all courses "+ico('arrow',16)+"</button></div><div class='syl-topics'>"+
-  topics.map((t,i)=>"<button class='syl-topic' data-action='home-video-filter' data-value='"+esc(t[0])+"'><span class='syl-topic-icon syl-topic-color-"+(i%5)+"'>"+ico(t[1],24)+"</span><strong>"+esc(t[2])+"</strong><span class='syl-topic-arrow'>"+ico('arrow',16)+"</span></button>").join("")+
-  "</div></div>"+
-  "<div class='syl-originals'><div class='syl-originals-icon'>"+ico('cap',28)+"</div><div class='syl-originals-copy'><span class='syl-kicker'>SYLearn ORIGINALS</span><h2>Instructor-led courses are on the way.</h2><p>Our own guided digital-skills courses, practical projects and workshops are being prepared. For now, explore free courses by credited educators below.</p></div><span class='syl-soon-tag'>IN DEVELOPMENT</span></div>"+
-  startedBlock+
-  "<section class='syl-section syl-free-courses'><div class='syl-section-title'><div><span class='syl-kicker'>FREE LEARNING LIBRARY</span><h2>Featured video courses</h2><p>Handpicked learning resources from their original YouTube educators.</p></div><button class='syl-text-link' data-go='courses'>Explore all "+ico('arrow',16)+"</button></div><div class='syl-video-grid'>"+picks.map(videoCard).join("")+"</div></section>"+
-  (more.length?"<section class='syl-section syl-more'><div class='syl-section-title'><div><span class='syl-kicker'>KEEP EXPLORING</span><h2>More skills to discover</h2></div><button class='syl-text-link' data-go='courses'>All courses "+ico('arrow',16)+"</button></div><div class='syl-video-grid syl-video-grid-more'>"+more.map(videoCard).join("")+"</div></section>":"")+
-  "<section class='syl-learning-tools'><div class='syl-learning-tools-head'><span class='syl-kicker'>LEARNING BEYOND WATCHING</span><h2>Build knowledge, one step at a time.</h2><p>Use lessons, course knowledge checks and your own study history to make each session count.</p></div><div class='syl-tool-cards'><button data-go='courses'><span>"+ico('book',25)+"</span><strong>Learn with lessons</strong><small>Watch and review structured chapters</small>"+ico('arrow',18)+"</button><button data-go='progress'><span>"+ico('chart',25)+"</span><strong>Track your learning</strong><small>Progress saved on this device</small>"+ico('arrow',18)+"</button><button data-go='ai'><span>"+ico('brain',25)+"</span><strong>AI Tutor preview</strong><small>Try sample study explanations</small>"+ico('arrow',18)+"</button></div></section>"+
-  "<div class='syl-community-cta'><div><span class='syl-kicker'>TOGETHER WE GROW</span><h2>Every big achievement starts with one lesson.</h2><p>Discover your next skill on SYLearn, powered by SYLUTION.</p></div><button data-go='courses'>Start learning "+ico('arrow',17)+"</button></div>"+
+ const selected=curated.filter(c=>VIDEO.progress(c)>0).sort((a,b)=>VIDEO.progress(b)-VIDEO.progress(a))[0];
+ const featured=curated.filter(c=>c.featured);
+ const picks=(featured.length>=4?featured:curated).slice(0,4);
+ const categories=[
+  {name:'Programming',label:'Coding',icon:'laptop',symbol:'</>',tone:'red'},
+  {name:'Data & Analytics',label:'Data',icon:'chart',symbol:'',tone:'blue'},
+  {name:'Engineering & IoT',label:'Robotics & IoT',icon:'settings',symbol:'',tone:'violet'},
+  {name:'Business & Office',label:'Business',icon:'file',symbol:'',tone:'amber'},
+  {name:'Design & Creative',label:'Design',icon:'spark',symbol:'',tone:'pink'},
+  {name:'AI & Automation',label:'AI & Automation',icon:'brain',symbol:'',tone:'gray'}
+ ];
+ const courseTile=c=>"<article class='elite-course-card'><button type='button' class='elite-course-open' data-action='yt-open' data-id='"+esc(c.id)+"' aria-label='View "+esc(c.title)+"'>"+
+  "<span class='elite-course-thumb'>"+img(c.image,c.title)+"<span class='elite-course-play'>"+ico('play',20)+"</span></span>"+
+  "<span class='elite-course-body'><span class='elite-course-category'>"+esc(c.category)+" <b>·</b> "+esc(c.level)+"</span><strong>"+esc(c.title)+"</strong><span class='elite-course-creator'>By "+esc(c.creator)+"</span><span class='elite-course-foot'><span>Free course</span><em>Explore "+ico('arrow',16)+"</em></span></span></button></article>";
+ const heroCourse=curated.find(c=>c.id==='DPqiIzK97K0')||picks[0];
+ const heroArt=heroCourse?"<button class='elite-feature-card' type='button' data-action='yt-open' data-id='"+esc(heroCourse.id)+"' aria-label='View featured course "+esc(heroCourse.title)+"'><span class='elite-feature-thumb'>"+img(heroCourse.image,heroCourse.title)+"<span class='elite-feature-play'>"+ico('play',25)+"</span></span><span class='elite-feature-info'><small>FEATURED COURSE · FREE</small><strong>"+esc(heroCourse.title)+"</strong><span>Original educator: "+esc(heroCourse.creator)+"</span></span></button>":"";
+ const resume=selected?"<section class='elite-resume'><div class='elite-resume-icon'>"+ico('book',22)+"</div><div class='elite-resume-body'><small>CONTINUE LEARNING</small><h3>"+esc(selected.title)+"</h3><div class='elite-resume-meter'><span style='width:"+VIDEO.progress(selected)+"%'></span></div><p>"+VIDEO.progress(selected)+"% of chapters marked studied on this device</p></div><button class='elite-resume-button' data-action='yt-open' data-id='"+esc(selected.id)+"'>Resume "+ico('arrow',17)+"</button></section>"
+ :"<section class='elite-resume elite-resume-empty'><div class='elite-resume-icon'>"+ico('book',22)+"</div><div class='elite-resume-body'><small>MY LEARNING</small><h3>Your learning journey starts here</h3><p>Choose your first course and begin building practical skills.</p></div><button class='elite-resume-button' data-go='courses'>Explore "+ico('arrow',17)+"</button></section>";
+ return "<section class='screen elite-home'>"+
+  "<div class='elite-intro'><span class='elite-kicker'><span class='elite-kicker-dot'></span> SYLearn Digital Academy</span><div class='elite-intro-line'><div><h1>Grow your skills.<br><span>Shape your future.</span></h1><p>Practical courses to help you learn, create and achieve more.</p></div><span class='elite-intro-decoration'>"+ico('spark',22)+"</span></div></div>"+
+  "<div class='elite-hero'><div class='elite-hero-copy'><span class='elite-hero-tag'>LEARN · PRACTISE · BUILD</span><h2>Learn skills that<br><em>open doors.</em></h2><p>Start with real courses in programming, data, robotics, design and technology.</p><div class='elite-hero-actions'><button type='button' class='elite-btn-primary' data-go='courses'>Explore courses "+ico('arrow',17)+"</button><button type='button' class='elite-btn-ghost' data-go='progress'>My learning "+ico('arrow',16)+"</button></div></div><div class='elite-hero-side'><div class='elite-hero-side-label'><span class='elite-red-dot'></span> RECOMMENDED FOR YOU</div>"+heroArt+"</div><span class='elite-hero-orb' aria-hidden='true'></span></div>"+
+  "<form id='home-search-form' class='elite-course-search' role='search'>"+ico('search',21)+"<input id='home-search' name='search' type='search' autocomplete='off' placeholder='What do you want to learn?' aria-label='Search digital skills courses' value='"+esc(VIDEO.state.query||'')+"'/><button type='submit'>Search "+ico('arrow',17)+"</button></form>"+
+  "<section class='elite-section elite-categories'><div class='elite-section-header'><div><span class='elite-section-eyebrow'>FIND YOUR PATH</span><h2>Explore by category</h2></div><button data-go='courses' class='elite-section-link'>All courses "+ico('arrow',16)+"</button></div><div class='elite-category-grid'>"+categories.map(c=>{
+    const active=curated.some(x=>x.category===c.name);
+    return "<button type='button' class='elite-category-item elite-tone-"+c.tone+"' "+(active?"data-action='home-video-filter' data-value='"+esc(c.name)+"'":"disabled aria-disabled='true'")+" ><span class='elite-category-symbol'>"+ico(c.icon,23)+"</span><span class='elite-category-label'>"+esc(c.label)+"</span>"+(active?"<span class='elite-cat-chevron'>"+ico('arrow',14)+"</span>":"<small>Coming soon</small>")+"</button>";
+   }).join('')+"</div></section>"+
+  resume+
+  "<section class='elite-section elite-featured'><div class='elite-section-header'><div><span class='elite-section-eyebrow'>START LEARNING TODAY</span><h2>Featured courses</h2><p>Free learning videos from credited educators.</p></div><button class='elite-section-link' data-go='courses'>View all "+ico('arrow',16)+"</button></div><div class='elite-course-grid'>"+picks.map(courseTile).join('')+"</div></section>"+
+  "<section class='elite-originals'><div class='elite-originals-head'><span class='elite-originals-badge'>SYLearn ORIGINALS</span><span class='elite-originals-pending'>IN DEVELOPMENT</span></div><div class='elite-originals-content'><div class='elite-originals-symbol'>"+ico('cap',28)+"</div><div><h2>Learn directly from SYLearn instructors.</h2><p>Our original lessons, hands-on projects and guided learning tracks are being prepared. More ways to learn are coming.</p></div></div></section>"+
+  "<section class='elite-section elite-tools'><div class='elite-section-header'><div><span class='elite-section-eyebrow'>YOUR TOOLS</span><h2>Everything you need to grow</h2></div></div><div class='elite-tool-grid'><button data-go='progress'><span class='elite-tool-icon elite-tone-blue'>"+ico('chart',24)+"</span><span><strong>Learning progress</strong><small>Resume your saved studies</small></span>"+ico('arrow',17)+"</button><button data-go='ai'><span class='elite-tool-icon elite-tone-violet'>"+ico('brain',24)+"</span><span><strong>AI Tutor preview</strong><small>Explore sample explanations</small></span>"+ico('arrow',17)+"</button></div></section>"+
+  "<section class='elite-telegram'><div class='elite-telegram-icon'>"+ico('users',24)+"</div><div><strong>Grow with our learning community</strong><p>Updates and learner discussions on Telegram.</p></div><a href='https://t.me/SYLearn_Bot' target='_blank' rel='noopener noreferrer' class='elite-telegram-link'>Open bot "+ico('arrow',16)+"</a></section>"+
   "</section>";
 }
-
 function courses(){return VIDEO_UI.library()}
 
 function detail(){
@@ -312,7 +323,8 @@ if(action&&action.startsWith('qa-')&&ASSESS_UI.action(action,b.dataset,{nav,rend
 if(go){if(go==='ytcourse'&&id){VIDEO_UI.open(id,nav,render,toast);return}nav(go,id);return}
 if(!action)return;
 if(action==='qa-record-open'){if(VIDEO.select(id))nav('ytcompletion',id);return}
-if(action==='home-video-filter'){VIDEO.state.items=VIDEO.curated.slice();VIDEO.state.status='curated';VIDEO.state.category=val||'All';VIDEO.state.sort='featured';nav('courses');return}
+if(action==='elite-search'){if(state.page!=='home')nav('home');requestAnimationFrame(()=>document.getElementById('home-search')?.focus());return}
+ if(action==='home-video-filter'){VIDEO.state.items=VIDEO.curated.slice();VIDEO.state.status='curated';VIDEO.state.category=val||'All';VIDEO.state.sort='featured';nav('courses');return}
 if(action==='category'){if(val==='Live Classes'){nav('live');return}if(val==='Exams'){nav('exam');return}state.category=val;nav('courses');return}
 if(action==='hero-slide'){state.heroIndex=Number(b.dataset.index)||0;render();return}
 if(action==='favorite'){favorite(id);return}
