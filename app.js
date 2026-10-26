@@ -364,7 +364,7 @@ function liveSessions(){
 }
 const livePhase=(c,now=Date.now())=>{
  const start=Date.parse(c.startAt),end=Date.parse(c.endAt);
- return now>=end?'past':now>=start-600000?'live':'upcoming';
+ return now>=end?'past':now>=start?'live':'upcoming';
 };
 const liveMeetingUrl=c=>{
  const url=String(c.meetingUrl||'').trim();
@@ -429,7 +429,7 @@ function live(){
   '<div class="syl-live-topic-grid">'+LIVE_TOPIC_IDEAS.map((t,i)=>'<div class="syl-live-topic-card syl-live-topic-'+i+'"><span class="syl-live-topic-icon">'+ico(t.icon,26)+'</span><span class="syl-live-eyebrow">'+esc(t.category)+'</span><h3>'+esc(t.title)+'</h3><p>'+esc(t.description)+'</p><span class="syl-live-topic-status">'+ico('clock')+' Schedule pending</span></div>').join('')+'</div>'+
   '<div class="syl-live-how"><div><span class="syl-live-eyebrow">HOW LIVE LEARNING WORKS</span><h2>One class. Real progress.</h2></div><div class="syl-live-how-steps">'+[['01','Find a class','See confirmed dates, time and what you will learn.'],['02','Save the date','Add an upcoming session to your calendar.'],['03','Join & learn','Open the live meeting when the class is in session.']].map(([num,title,desc])=>'<div><span>'+num+'</span><strong>'+title+'</strong><p>'+desc+'</p></div>').join('')+'</div></div>'+
   '<div class="syl-live-utility"><div><span class="syl-live-eyebrow">LEARN BETWEEN LIVE CLASSES</span><h3>Keep growing at your own pace.</h3><p>Explore free self-paced courses, or open the AI Tutor preview when you need an explanation.</p></div><div><button type="button" data-go="courses">Explore courses '+ico('arrow')+'</button><button type="button" data-go="ai">AI Tutor '+ico('arrow')+'</button></div></div>'+
-  '<div class="syl-live-disclaimer">'+ico('info')+' Saved classes and calendar files are personal reminders, not confirmed enrolment or attendance. Live access is provided only for published sessions that have a valid meeting link.</div>'+
+  '<div class="syl-live-disclaimer">'+ico('info')+' Saved classes and calendar files are personal reminders, not confirmed enrolment or attendance. The Live Now status follows scheduled time and does not verify that an instructor has started broadcasting. Meeting links appear only for scheduled sessions with a valid link.</div>'+
  '</section>';
 }
 function instructor(){
