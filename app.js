@@ -302,14 +302,14 @@ function progress(){
  const emptyMessage=selected==='active'?'Explore a course and mark a chapter as studied to begin building your progress.':selected==='complete'?'Courses will appear here when all their chapters are marked as studied.':selected==='saved'?'Bookmark a course you want to return to.':'Explore courses and save your favourites to start your learning journey.';
  return '<section class="screen real-progress syl-learning-v2">'+
   '<div class="syl-ld-hero"><div class="syl-ld-hero-glow" aria-hidden="true"></div>'+
-   '<div class="syl-ld-hero-top"><span class="syl-ld-kicker">'+ico('graduation')+' SYLEARN · MY LEARNING</span><span class="syl-ld-hero-emblem">'+ico('spark')+'</span></div>'+
+   '<div class="syl-ld-hero-top"><span class="syl-ld-kicker">'+ico('cap')+' SYLEARN · MY LEARNING</span><span class="syl-ld-hero-emblem">'+ico('spark')+'</span></div>'+
    '<h1>Your learning journey.</h1><p>Build your skills with every chapter. Your next step starts here.</p>'+
    '<div class="syl-ld-stats">'+
     '<div class="syl-ld-stat">'+ico('book')+'<strong>'+started.length+'</strong><span>Courses started</span></div>'+
     '<div class="syl-ld-stat">'+ico('check')+'<strong>'+marked+'</strong><span>Chapters studied</span></div>'+
     '<div class="syl-ld-stat">'+ico('award')+'<strong>'+complete.length+'</strong><span>Outlines finished</span></div>'+
    '</div></div>'+
-  (first?'<div class="syl-ld-next-step"><div class="syl-ld-next-text"><span>'+ico('spark')+' PICK UP WHERE YOU LEFT OFF</span><strong>'+esc(first.title)+'</strong><small>'+percent(first)+'% of chapters marked studied</small></div><button type="button" data-action="learning-resume" data-id="'+esc(first.id)+'">Continue '+ico('arrow')+'</button></div>':'')+
+  (first?'<div class="syl-ld-next-step"><div class="syl-ld-next-text"><span>'+ico('spark')+' '+(percent(first)>=100?'REVISIT A FINISHED COURSE':percent(first)>0?'PICK UP WHERE YOU LEFT OFF':'START YOUR NEXT COURSE')+'</span><strong>'+esc(first.title)+'</strong><small>'+percent(first)+'% of chapters marked studied</small></div><button type="button" data-action="learning-resume" data-id="'+esc(first.id)+'">'+(percent(first)>=100?'Review':percent(first)>0?'Continue':'Start')+' '+ico('arrow')+'</button></div>':'')+
   '<div class="syl-ld-section-title"><div><span>YOUR LEARNING SPACE</span><h2>My courses</h2><p>Keep track of what you are learning.</p></div><button type="button" class="syl-ld-browse" data-go="courses">Explore courses '+ico('arrow')+'</button></div>'+
   '<div class="syl-ld-tabs" role="group" aria-label="Filter learning courses">'+tabs.map(([id,label,count])=>'<button type="button" class="'+(selected===id?'is-active':'')+'" data-action="learning-filter" data-value="'+id+'" aria-pressed="'+(selected===id?'true':'false')+'">'+label+' <small>'+count+'</small></button>').join('')+'</div>'+
   (included.length?'<div class="syl-ld-course-grid">'+filteredCards+'</div>':'<div class="syl-ld-empty">'+ico('book')+'<h3>'+emptyHeading+'</h3><p>'+emptyMessage+'</p><button type="button" data-go="courses">Explore courses '+ico('arrow')+'</button></div>')+
