@@ -24,7 +24,59 @@
   <link rel="stylesheet" href="./academy-elite.css?v=20261025immersivev6"/>
 </head>
 <body>
-  <div id="app"></div>
+  <style>
+    #syl-startup-fallback{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:32px 20px;background:#f8f9fc;color:#1e2635;font:500 14px/1.6 'DM Sans',sans-serif;text-align:center}
+    #syl-startup-fallback .syl-startup-inner{width:min(360px,100%);display:flex;flex-direction:column;align-items:center;gap:12px}
+    #syl-startup-fallback .syl-startup-mark{height:54px;width:54px;display:grid;place-items:center;border-radius:16px;background:#ed1645;color:#fff;font:850 21px/1 'Plus Jakarta Sans',sans-serif;box-shadow:0 12px 25px #ed164529}
+    #syl-startup-fallback h1{font:850 23px/1.2 'Plus Jakarta Sans',sans-serif;letter-spacing:-.045em;margin:3px 0 0}
+    #syl-startup-fallback p{max-width:340px;color:#778292;margin:0}
+    #syl-startup-fallback button{margin-top:8px;min-height:46px;padding:0 24px;border-radius:12px;background:#e6224b;color:white;border:0;font-weight:800}
+    #syl-startup-fallback .syl-startup-spinner{width:27px;height:27px;margin:6px;border-radius:50%;border:3px solid #f5cbd4;border-top-color:#dd2550;animation:sylStartupSpin .75s linear infinite}
+    @keyframes sylStartupSpin{to{transform:rotate(360deg)}}
+    @media(prefers-reduced-motion:reduce){#syl-startup-fallback .syl-startup-spinner{animation:none}}
+  </style>
+  <div id="app"><div id="syl-startup-fallback"><div class="syl-startup-inner">
+    <div class="syl-startup-mark">SY</div>
+    <h1>Opening SYLearn</h1>
+    <div class="syl-startup-spinner" role="status" aria-label="Loading"></div>
+    <p>Your digital academy is starting.</p>
+  </div></div></div>
+  <script>
+    (function(){
+      const element=()=>document.getElementById('syl-startup-fallback');
+      function showRecovery(){
+        const root=element();if(!root||root.dataset.failed)return;
+        root.dataset.failed='true';
+        root.querySelector('.syl-startup-inner').innerHTML=
+          '<div class="syl-startup-mark">SY</div>'+
+          '<h1>Could not open SYLearn</h1>'+
+          '<p>The app did not finish loading. Your courses and saved learning records will not be deleted.</p>'+
+          '<button type="button" id="syl-startup-retry">Repair &amp; reopen</button>';
+      }
+      window.addEventListener('error',function(e){
+        if(element()&&(e.target===window||e.target?.tagName==='SCRIPT'))showRecovery();
+      },true);
+      window.addEventListener('unhandledrejection',function(){if(element())showRecovery()});
+      window.addEventListener('DOMContentLoaded',function(){
+        window.setTimeout(function(){if(element())showRecovery()},8000);
+      });
+      document.addEventListener('click',async function(e){
+        if(e.target?.id!=='syl-startup-retry')return;
+        e.target.disabled=true;e.target.textContent='Reopening…';
+        try{
+          if('serviceWorker' in navigator){
+            const regs=await navigator.serviceWorker.getRegistrations();
+            await Promise.all(regs.filter(r=>r.scope.startsWith(location.origin+'/')).map(r=>r.unregister()));
+          }
+          if('caches' in window){
+            const keys=await caches.keys();
+            await Promise.all(keys.filter(k=>/^(sylution-learn|sylution-video|sylution-courses)/.test(k)).map(k=>caches.delete(k)));
+          }
+        }catch(err){}
+        location.reload();
+      });
+    })();
+  </script>
   <script src="./youtube.js?v=20261025immersivev6" defer></script>
   <script src="./learning.js?v=20261025immersivev6" defer></script>
   <script src="./learning-ui.js?v=20261025immersivev6" defer></script>
