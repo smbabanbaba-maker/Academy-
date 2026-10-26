@@ -695,7 +695,21 @@ if(e.target.id==='syl-profile-restore'){
    const pairs=Object.entries(parsed.records).filter(([k,v])=>(allow.includes(k)||/^sylution_yt-note-[a-z0-9_-]+-\d+$/i.test(k))&&typeof v==='string'&&v.length<300000);
    if(!pairs.length||pairs.length>300)throw Error('Backup does not contain valid records');
    for(const [key,val] of pairs){
-    if(!key.startsWith('sylution_yt-note-'))JSON.parse(val);
+    if(key.startsWith('sylution_yt-note-')){
+      if(val.length>6000)throw Error('Invalid note length');
+      continue;
+    }
+    const data=JSON.parse(val),isObject=data&&typeof data==='object'&&!Array.isArray(data);
+    if(key==='sylution_user'){
+      if(!isObject||typeof data.name!=='string'||data.name.length>60||!['Hausa','English'].includes(data.preferred||'Hausa'))throw Error('Invalid profile data');
+      if(data.avatar&& !profilePhoto(data))throw Error('Invalid profile picture');
+    }else if(['sylution_yt-saved','sylution_enrolled','sylution_saved','sylution_liveSaved'].includes(key)){
+      if(!Array.isArray(data)||data.length>300||!data.every(x=>typeof x==='string'&&x.length<=100))throw Error('Invalid saved list');
+    }else if(key==='sylution_yt-progress'){
+      if(!isObject||Object.keys(data).length>300||!Object.values(data).every(x=>Array.isArray(x)&&x.length<=1000&&x.every(i=>Number.isInteger(i)&&i>=0&&i<1000)))throw Error('Invalid progress records');
+    }else if(['sylution_completed','sylution-course-assessments-v1'].includes(key)){
+      if(!isObject||Object.keys(data).length>300)throw Error('Invalid learning records');
+    }
    }
    if(!window.confirm('Restore '+pairs.length+' SYLearn records? Matching records on this device will be replaced.'))return;
    const previous=pairs.map(([key])=>[key,localStorage.getItem(key)]);
