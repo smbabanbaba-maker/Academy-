@@ -119,7 +119,7 @@ const header=()=>{
   "<button type='button' class='elite-brand' data-go='home' aria-label='SYLearn home'><img class='elite-brand-icon' src='./icon.svg' alt='' /><span class='elite-brand-copy'><strong><span>SY</span>Learn</strong><small>Digital Skills Academy</small></span></button>"+
   "<nav class='elite-desktop-nav' aria-label='Main navigation'>"+
   [['home','Home'],['courses','Courses'],['live','Live'],['progress','Learning'],['profile','Profile']].map(([pg,label])=>"<button type='button' class='"+(page===pg||(pg==='courses'&&isCourse)?'is-active':'')+"' data-go='"+pg+"'>"+label+"</button>").join('')+"</nav>"+
-  "<div class='elite-header-actions'><button type='button' class='elite-header-icon' data-action='elite-search' aria-label='Search courses'>"+ico('search',20)+"</button><button type='button' class='elite-header-avatar' data-go='profile' aria-label='Open profile'>"+esc((state.user.name||'L').charAt(0).toUpperCase())+"</button></div>"+
+  "<div class='elite-header-actions'><button type='button' class='elite-header-icon' data-action='elite-search' aria-label='Search courses'>"+ico('search',20)+"</button><button type='button' class='elite-header-avatar' data-go='profile' aria-label='Open profile'>"+(profilePhoto(state.user)?"<img src='"+profilePhoto(state.user)+"' alt='' style='width:100%;height:100%;border-radius:50%;object-fit:cover'/>":esc((state.user.name||'L').charAt(0).toUpperCase()))+"</button></div>"+
   "</div></header>";
 };
 const navBar=()=>{
@@ -580,7 +580,7 @@ function render(){
 const pages={ytassessment:ASSESS_UI.assessment,ytcompletion:ASSESS_UI.certificate,ytlibrary:VIDEO_UI.library,ytcourse:VIDEO_UI.course,ytwatch:VIDEO_UI.watch,home,courses,detail,lesson,ai,exam,results,progress,profile,saved,certificates,downloads,account,billing,notifications,live,instructor,welcome,signup};
 const watching=state.page==='ytwatch';
 document.body.classList.toggle('syl-video-immersive-active',watching);
-const theme=document.querySelector('meta[name="theme-color"]');if(theme)theme.setAttribute('content',watching?'#05070d':'#ffffff');
+const theme=document.querySelector('meta[name="theme-color"]');if(theme)theme.setAttribute('content',watching?'#05070d':'#080c14');
 root.innerHTML=watching
  ?'<div class="syl-immersive-app">'+(pages[state.page]||home)()+'</div>'
  :'<div class="app-shell">'+header()+'<main class="container">'+(pages[state.page]||home)()+'</main>'+footer()+navBar()+overlay()+'</div>';
