@@ -325,5 +325,36 @@ return false
 // Escape closes the drawer; exiting native fullscreen does not discard the lesson.
 document.addEventListener('keydown',event=>{if(event.key==='Escape')closeImmersivePanel()});
 window.addEventListener('hashchange',()=>{if(!location.hash.startsWith('#/ytwatch'))exitTelegramLessonFullscreen()});
+// Startup-critical course handlers. Define these before exporting the UI object.
+function startSearch(form,onDone){
+ let query='';
+ try{query=String(new FormData(form).get('query')||'').trim().slice(0,80)}catch(e){
+   query=String(form?.querySelector?.('[name="query"]')?.value||'').trim().slice(0,80);
+ }
+ const normalized=query.toLocaleLowerCase();
+ V.state.query=query.length>=2?query:'';
+ V.state.items=V.state.query?V.curated.filter(c=>
+   [c.title,c.category,c.description,c.creator,c.level].some(v=>String(v||'').toLocaleLowerCase().includes(normalized))
+ ):V.curated.slice();
+ V.state.category='All';
+ V.state.sort='featured';
+ V.state.status='curated';
+ V.state.kind='video';
+ V.state.message=V.state.items.length?'Explore available courses.':'No matching courses. Try a different skill.';
+ if(typeof onDone==='function')onDone();
+ return Promise.resolve(V.state);
+}
+function open(id,nav,render,toast){
+ if(!V.select(String(id||''))){
+   if(typeof toast==='function')toast('This course is unavailable.');
+   return false;
+ }
+ const selected=V.state.selected;
+ if(typeof nav==='function')nav('ytcourse',selected.id);
+ if(selected.type==='playlist'){
+   V.getLessons().then(()=>{if(V.state.selected?.id===selected.id&&typeof render==='function')render()}).catch(()=>{});
+ }
+ return true;
+}
 window.SYLUTION_VIDEO_UI={library,course,watch,card,action,startSearch,open};
 })();
