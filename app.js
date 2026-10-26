@@ -117,14 +117,14 @@ const header=()=>{
  return "<header class='topbar syl-topbar elite-topbar'><div class='container topbar-inner elite-topbar-row'>"+
   "<button type='button' class='elite-brand' data-go='home' aria-label='SYLearn home'><img class='elite-brand-icon' src='./icon.svg' alt='' /><span class='elite-brand-copy'><strong><span>SY</span>Learn</strong><small>Digital Skills Academy</small></span></button>"+
   "<nav class='elite-desktop-nav' aria-label='Main navigation'>"+
-  [['home','Home'],['courses','Courses'],['progress','Learning'],['live','Live'],['profile','Profile']].map(([pg,label])=>"<button type='button' class='"+(page===pg||(pg==='courses'&&isCourse)?'is-active':'')+"' data-go='"+pg+"'>"+label+"</button>").join('')+"</nav>"+
+  [['home','Home'],['courses','Courses'],['live','Live'],['progress','Learning'],['profile','Profile']].map(([pg,label])=>"<button type='button' class='"+(page===pg||(pg==='courses'&&isCourse)?'is-active':'')+"' data-go='"+pg+"'>"+label+"</button>").join('')+"</nav>"+
   "<div class='elite-header-actions'><button type='button' class='elite-header-icon' data-action='elite-search' aria-label='Search courses'>"+ico('search',20)+"</button><button type='button' class='elite-header-avatar' data-go='profile' aria-label='Open profile'>"+esc((state.user.name||'L').charAt(0).toUpperCase())+"</button></div>"+
   "</div></header>";
 };
 const navBar=()=>{
  const selected=['courses','ytlibrary','ytcourse','ytwatch','ytassessment','ytcompletion','saved'].includes(state.page)?'courses':state.page;
  return "<div class='nav-wrapper syl-bottom-nav elite-nav-wrap'><nav class='bottom-nav elite-bottom-nav' aria-label='Learning navigation'>"+
- [['home','home','Home'],['courses','book','Courses'],['progress','chart','Learning'],['live','radio','Live'],['profile','user','Profile']]
+ [['home','home','Home'],['courses','book','Courses'],['live','radio','Live'],['progress','chart','Learning'],['profile','user','Profile']]
  .map(([pg,icon,label])=>"<button type='button' class='nav-item elite-nav-item "+(selected===pg?'active':'')+"' aria-label='"+label+"' aria-current='"+(selected===pg?'page':'false')+"' data-go='"+pg+"'><span class='elite-nav-icon'>"+ico(icon,22)+"</span><span class='elite-nav-label'>"+label+"</span></button>").join('')+
  "</nav></div>";
 };
