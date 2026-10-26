@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" role="img" aria-label="Futuristic coding workstation with neon technology lighting">
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071019"/><stop offset=".45" stop-color="#131126"/><stop offset="1" stop-color="#2a0920"/></linearGradient>
+ <linearGradient id="red" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#fa2258"/><stop offset=".6" stop-color="#ff496c"/><stop offset="1" stop-color="#ffadbd"/></linearGradient>
+ <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0c4554"/><stop offset="1" stop-color="#071421"/></linearGradient>
+ <radialGradient id="hot"><stop stop-color="#fa1951" stop-opacity=".59"/><stop offset=".45" stop-color="#b51a59" stop-opacity=".20"/><stop offset="1" stop-color="#05090e" stop-opacity="0"/></radialGradient>
+ <radialGradient id="cyan"><stop stop-color="#16dfed" stop-opacity=".34"/><stop offset="1" stop-color="#081018" stop-opacity="0"/></radialGradient>
+ <pattern id="grid" width="38" height="38" patternUnits="userSpaceOnUse"><path d="M38 0H0V38" fill="none" stroke="#7db3cb" stroke-opacity=".09" stroke-width="1"/></pattern>
+ <filter id="glow"><feGaussianBlur stdDeviation="12"/></filter>
+ <filter id="soft"><feGaussianBlur stdDeviation="3"/></filter>
+</defs>
+<rect width="960" height="600" fill="url(#bg)"/>
+<rect width="960" height="600" fill="url(#grid)"/>
+<circle cx="720" cy="298" r="370" fill="url(#hot)"/>
+<circle cx="460" cy="230" r="275" fill="url(#cyan)"/>
+<g stroke="#45d3ea" opacity=".19" fill="none" stroke-width="2"><path d="M0 185H180l54-54h106"/><circle cx="341" cy="131" r="5"/><path d="M920 100h-108l-64 65h-78"/><circle cx="667" cy="165" r="4"/><path d="M950 418H804l-38-38h-78"/><path d="M72 492H280l38-38h90"/></g>
+<g fill="#091321" opacity=".78">
+ <path d="M0 330h54v-98h28v-43h36v141h19v-83h25v-50h34v133h28V180h37v150h28V210h51v120h32v-81h29v81h36v-116h40v116h36v-90h31v90h30v-120h51v120h42v-85h30v85h31v-128h49v128h34v-100h27v100h37v-62h41v62h49V600H0z"/>
+ </g>
+<g opacity=".68" fill="#2f6b82">
+ <rect x="90" y="268" width="5" height="19"/><rect x="112" y="270" width="5" height="12"/><rect x="228" y="216" width="5" height="31"/><rect x="245" y="218" width="5" height="31"/>
+ <rect x="719" y="244" width="4" height="23"/><rect x="736" y="244" width="4" height="23"/><rect x="775" y="282" width="5" height="23"/>
+ </g>
+<!-- Interface overlays -->
+<g transform="translate(350 68)" opacity=".92">
+ <rect x="0" y="0" width="412" height="256" rx="19" fill="#07131f" stroke="#43cbdc" stroke-opacity=".58" stroke-width="2"/>
+ <rect x="5" y="5" width="402" height="246" rx="15" fill="url(#blue)"/>
+ <path d="M5 41H407" stroke="#1d6b7d" stroke-width="2"/>
+ <circle cx="27" cy="22" r="5" fill="#fa3865"/><circle cx="45" cy="22" r="5" fill="#fdca72"/><circle cx="63" cy="22" r="5" fill="#32d6b4"/>
+ <rect x="90" y="14" width="119" height="15" rx="6" fill="#0c2d3a"/>
+ <g stroke-linecap="round" stroke-width="5"><path d="M39 70h120" stroke="#22dce0"/><path d="M60 93h176" stroke="#ad8efa"/><path d="M60 116h87" stroke="#ff668b"/><path d="M87 140h218" stroke="#dce4ef"/><path d="M87 164h153" stroke="#25c7de"/><path d="M62 188h206" stroke="#7e98ff"/><path d="M39 213h109" stroke="#ff6588"/></g>
+ <g opacity=".78"><rect x="327" y="66" width="48" height="7" rx="3" fill="#46d6e0"/><rect x="328" y="88" width="33" height="7" rx="3" fill="#ff7791"/><rect x="327" y="110" width="42" height="7" rx="3" fill="#46d6e0"/><rect x="328" y="132" width="28" height="7" rx="3" fill="#8795eb"/></g>
+</g>
+<path d="M330 326L784 333" stroke="#00e2f0" stroke-width="7" opacity=".17" filter="url(#glow)"/>
+<!-- Workspace desk -->
+<path d="M286 475H938v30H286z" fill="#09101b" stroke="#a63262" stroke-width="2"/>
+<path d="M320 502h22v96h-22zm565 0h22v98h-22z" fill="#08101a"/>
+<path d="M410 455L729 449l68 28H378z" fill="#18263c" stroke="#fe386c" stroke-opacity=".7" stroke-width="2"/>
+<path d="M470 463H665" stroke="#ff2a64" stroke-opacity=".85" stroke-width="5" filter="url(#soft)"/>
+<!-- Student silhouette -->
+<g>
+ <path d="M474 491c-42-20-71-60-77-104-8-54 2-92 35-121 18-16 50-29 82-18 33 11 45 40 47 72l-17 42-8 28 48 45c18 17 37 35 44 62z" fill="#07101c" stroke="#e63869" stroke-width="4"/>
+ <path d="M432 284c-21 25-25 50-19 76l39 30 61 15-15-75-14-47z" fill="#101a2a"/>
+ <path d="M432 270c12-45 35-66 73-61 41 6 66 32 68 69-9-9-21-13-33-16-18-5-27-27-42-22-28 9-38 26-66 30z" fill="#0c101a" stroke="#fa3b6a" stroke-width="2"/>
+ <path d="M521 278c12 9 17 25 16 39 16-9 24-18 36-18-3-17-21-28-33-31z" fill="#ed5076" opacity=".25"/>
+ <path d="M520 341l25 12-15 49-38-5z" fill="#152032"/>
+ <path d="M464 392l58 8 73 36-24 28-87-23z" fill="#11192b" stroke="#9b315e" stroke-width="2"/>
+ <path d="M556 448l49-11 22 24-44 13z" fill="#b95565"/>
+ <path d="M382 389c-5 56-13 82 7 99h91l-21-79z" fill="#101c2f"/>
+ <path d="M393 477h-50c-24 0-43 18-43 40v79h21v-70h64z" fill="#0a1222"/>
+</g>
+<g opacity=".65">
+ <path d="M690 350h154v9H690z" fill="#ff3767"/><path d="M700 371h114v5H700z" fill="#3fdbd8"/><path d="M700 387h95v5H700z" fill="#ff6e8f"/>
+</g>
+<!-- Light sweeps -->
+<rect x="285" y="473" width="660" height="3" fill="url(#red)" opacity=".87"/>
+<path d="M655 70v250" stroke="#03dbff" opacity=".23" stroke-width="4" filter="url(#soft)"/>
+<g fill="#ff4d7a"><circle cx="293" cy="182" r="3"/><circle cx="874" cy="160" r="4"/><circle cx="837" cy="440" r="4"/></g>
+<g fill="#36d7e4"><circle cx="322" cy="87" r="3"/><circle cx="806" cy="105" r="3"/><circle cx="891" cy="322" r="3"/></g>
+</svg>
