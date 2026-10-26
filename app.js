@@ -49,6 +49,7 @@ headphones:'<path d="M3 14v-3a9 9 0 0 1 18 0v3M3 14h4v7H5a2 2 0 0 1-2-2zm18 0h-4
 logout:'<path d="M9 3H4v18h5m3-5 4-4-4-4m4 4H7"/>',
 edit:'<path d="m3 21 4-1 13-13-3-3L4 17l-1 4z"/>',
 calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 2v6m10-6v6M3 10h18"/>',
+camera:'<path d="M4 6h4l2-3h4l2 3h4a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/><circle cx="12" cy="13" r="4"/>',
 flag:'<path d="M5 22V3m0 1c5-3 9 3 15 0v11c-6 3-10-3-15 0"/>',
 volume:'<path d="M4 9h4l5-4v14l-5-4H4zM16 9a5 5 0 0 1 0 6m3-9a9 9 0 0 1 0 12"/>',
 more:'<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>'
@@ -584,6 +585,30 @@ if(action==='live-calendar'){
  }catch(e){toast('Calendar download is unavailable in this browser.')}
  return
 }
+if(action==='profile-hub'){state.learningFilter=['active','complete','saved','all'].includes(val)?val:'active';nav('progress');return}
+if(action==='profile-remove-photo'){
+ if(!state.user?.avatar)return;
+ state.user={...state.user,avatar:''};save('user',state.user);render();toast('Profile photo removed from this device.');return
+}
+if(action==='profile-export'){
+ const records={},fixedKeys=['sylution_user','sylution_yt-progress','sylution_yt-saved','sylution_liveSaved','sylution_completed','sylution_enrolled','sylution_saved','sylution-course-assessments-v1'];
+ try{
+  for(const key of fixedKeys){const value=localStorage.getItem(key);if(value!==null)records[key]=value}
+  for(let i=0;i<localStorage.length;i++){
+    const key=localStorage.key(i);
+    if(/^sylution_yt-note-[a-z0-9_-]+-\d+$/i.test(key)){
+      const value=localStorage.getItem(key);if(value!==null)records[key]=value.slice(0,6000);
+    }
+  }
+  const backup={format:'sylearn-learning-backup',version:1,createdAt:new Date().toISOString(),records};
+  const url=URL.createObjectURL(new Blob([JSON.stringify(backup,null,2)],{type:'application/json'}));
+  const link=document.createElement('a');link.href=url;link.download='SYLearn-learning-backup.json';link.style.display='none';
+  document.body.appendChild(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+  toast('Learning backup prepared for download.');
+ }catch(e){toast('Backup download is not available in this browser.')}
+ return
+}
 if(action==='learning-filter'){state.learningFilter=['active','complete','saved','all'].includes(val)?val:'active';render();return}
 if(action==='learning-resume'){
  if(!VIDEO.select(String(id||''))){toast('Course unavailable.');return}
@@ -624,10 +649,65 @@ if(e.target.id==='course-search'){e.preventDefault();state.search=String(new For
 if(e.target.id==='ai-form'){e.preventDefault();const f=new FormData(e.target);const q=String(f.get('message')||'').trim();if(!q)return;state.chat.push({from:'user',text:q},{from:'ai',text:respond(q)});save('chat',state.chat);render();setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}),0);return}
 if(e.target.id==='pronounce-form'){e.preventDefault();checkPronunciation(String(new FormData(e.target).get('spoken')||''));return}
 if(e.target.id==='signup-form'){e.preventDefault();const data=new FormData(e.target);state.user={name:String(data.get('name')||'Learner').trim().slice(0,60),preferred:String(data.get('preferred')||'Hausa')};save('user',state.user);state.category=String(data.get('goal')||'All');nav('courses');toast('Welcome to SYLearn, '+state.user.name+'!');return}
-if(e.target.id==='account-form'){e.preventDefault();const f=new FormData(e.target);state.user={name:String(f.get('name')||'Learner').trim().slice(0,60),preferred:String(f.get('preferred')||'Hausa')};save('user',state.user);nav('profile');toast('Account preferences saved on this device.');return}
+if(e.target.id==='account-form'){e.preventDefault();const f=new FormData(e.target);state.user={...state.user,name:String(f.get('name')||'Learner').trim().slice(0,60),preferred:['Hausa','English'].includes(String(f.get('preferred')))?String(f.get('preferred')):'Hausa'};save('user',state.user);nav('profile');toast('Account preferences saved on this device.');return}
 if(e.target.id==='draft-form'){e.preventDefault();const f=new FormData(e.target);state.drafts.push({title:String(f.get('title')).slice(0,70),cat:String(f.get('cat')),desc:String(f.get('desc')).slice(0,300)});save('drafts',state.drafts);render();toast('Your course draft is saved locally.');return}
 });
 document.addEventListener('change',e=>{
+if(e.target.id==='syl-profile-photo'){
+ const file=e.target.files?.[0];if(!file)return;
+ if(!/^image\/(png|jpeg|webp)$/.test(file.type)||file.size>5000000){toast('Choose a JPG, PNG or WebP photo smaller than 5 MB.');return}
+ const reader=new FileReader();
+ reader.onerror=()=>toast('Could not read this photo.');
+ reader.onload=()=>{
+  const image=new Image();
+  image.onerror=()=>toast('This image could not be opened.');
+  image.onload=()=>{
+   try{
+    const canvas=document.createElement('canvas'),max=192,scale=Math.min(1,max/Math.max(image.width,image.height));
+    canvas.width=Math.max(1,Math.round(image.width*scale));
+    canvas.height=Math.max(1,Math.round(image.height*scale));
+    const ctx=canvas.getContext('2d');if(!ctx)throw Error('Missing canvas context');
+    ctx.fillStyle='#ffffff';ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(image,0,0,canvas.width,canvas.height);
+    const value=canvas.toDataURL('image/jpeg',.78);
+    if(!profilePhoto({avatar:value}))throw Error('Photo is too large to save');
+    const previous=state.user;
+    try{state.user={...previous,avatar:value};localStorage.setItem('sylution_user',JSON.stringify(state.user))}
+    catch(err){state.user=previous;throw err}
+    render();toast('Your profile photo is saved on this device.');
+   }catch(err){toast('Could not save this photo. Try a smaller image.')}
+  };
+  image.src=reader.result;
+ };
+ reader.readAsDataURL(file);
+ return
+}
+if(e.target.id==='syl-profile-restore'){
+ const file=e.target.files?.[0];if(!file)return;
+ if(file.size>1000000||!/(?:\.json$|json$)/i.test(file.name||'') ){toast('Choose a SYLearn JSON backup smaller than 1 MB.');return}
+ const reader=new FileReader();
+ reader.onerror=()=>toast('Could not read this backup.');
+ reader.onload=()=>{
+  try{
+   const parsed=JSON.parse(String(reader.result||''));
+   if(parsed.format!=='sylearn-learning-backup'||parsed.version!==1||!parsed.records||typeof parsed.records!=='object'||Array.isArray(parsed.records))throw Error('Unrecognized SYLearn backup');
+   const allow=['sylution_user','sylution_yt-progress','sylution_yt-saved','sylution_liveSaved','sylution_completed','sylution_enrolled','sylution_saved','sylution-course-assessments-v1'];
+   const pairs=Object.entries(parsed.records).filter(([k,v])=>(allow.includes(k)||/^sylution_yt-note-[a-z0-9_-]+-\d+$/i.test(k))&&typeof v==='string'&&v.length<300000);
+   if(!pairs.length||pairs.length>300)throw Error('Backup does not contain valid records');
+   for(const [key,val] of pairs){
+    if(!key.startsWith('sylution_yt-note-'))JSON.parse(val);
+   }
+   if(!window.confirm('Restore '+pairs.length+' SYLearn records? Matching records on this device will be replaced.'))return;
+   const previous=pairs.map(([key])=>[key,localStorage.getItem(key)]);
+   try{for(const [key,val] of pairs)localStorage.setItem(key,val)}
+   catch(err){for(const [key,value] of previous){try{if(value===null)localStorage.removeItem(key);else localStorage.setItem(key,value)}catch(e){}}throw err}
+   toast('Backup restored. Reloading your learning records.');
+   location.reload();
+  }catch(err){toast('Could not restore this file. Please use a valid SYLearn backup.')}
+ };
+ reader.readAsText(file);
+ return
+}
 if(e.target.id==='sort-courses'){state.sort=e.target.value;render()}
 if(e.target.id==='speaking-language'){state.lang=e.target.value;state.pronounce='';render()}
 });
