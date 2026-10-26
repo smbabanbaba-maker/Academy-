@@ -90,7 +90,7 @@ const QUESTIONS=[
 ];
 const read=(k,d)=>{try{const x=localStorage.getItem('sylution_'+k);return x?JSON.parse(x):d}catch(e){return d}};
 const save=(k,v)=>{try{localStorage.setItem('sylution_'+k,JSON.stringify(v))}catch(e){}};
-const state={page:'home',category:'All',search:'',sort:'popular',courseId:'python',heroIndex:0,detailTab:'overview',lessonTab:'notes',saved:read('saved',[]),enrolled:read('enrolled',[]),completed:read('completed',{}),user:read('user',{name:'Learner',preferred:'Hausa'}),chat:read('chat',[{from:'ai',text:'Hi there! 👋 I’m your SYLearn AI Tutor preview. Ask about Python, design, robotics or digital skills. You can ask me to explain in Hausa!'}]),quizIndex:0,answers:{},quizEnds:0,quizSubmitted:false,quizResult:0,modal:null,lessonPlaying:false,drafts:read('drafts',[]),toastTimer:null};
+const state={page:'home',category:'All',search:'',sort:'popular',courseId:'python',heroIndex:0,detailTab:'overview',lessonTab:'notes',saved:read('saved',[]),enrolled:read('enrolled',[]),completed:read('completed',{}),user:read('user',{name:'Learner',preferred:'Hausa'}),chat:read('chat',[{from:'ai',text:'Hi there! 👋 I’m your SYLearn AI Tutor preview. Ask about Python, design, robotics or digital skills. You can ask me to explain in Hausa!'}]),quizIndex:0,answers:{},quizEnds:0,quizSubmitted:false,quizResult:0,modal:null,lessonPlaying:false,liveTab:'upcoming',liveSaved:read('liveSaved',[]),drafts:read('drafts',[]),toastTimer:null};
 const money=n=>n?'₦'+n.toLocaleString('en-NG'):'Free';
 const course=id=>COURSES.find(c=>c.id===id)||COURSES[0];
 const ct=id=>state.completed[id]||0;
@@ -117,14 +117,14 @@ const header=()=>{
  return "<header class='topbar syl-topbar elite-topbar'><div class='container topbar-inner elite-topbar-row'>"+
   "<button type='button' class='elite-brand' data-go='home' aria-label='SYLearn home'><img class='elite-brand-icon' src='./icon.svg' alt='' /><span class='elite-brand-copy'><strong><span>SY</span>Learn</strong><small>Digital Skills Academy</small></span></button>"+
   "<nav class='elite-desktop-nav' aria-label='Main navigation'>"+
-  [['home','Home'],['courses','Courses'],['progress','Learning'],['ai','AI'],['profile','Profile']].map(([pg,label])=>"<button type='button' class='"+(page===pg||(pg==='courses'&&isCourse)?'is-active':'')+"' data-go='"+pg+"'>"+label+"</button>").join('')+"</nav>"+
+  [['home','Home'],['courses','Courses'],['progress','Learning'],['live','Live'],['profile','Profile']].map(([pg,label])=>"<button type='button' class='"+(page===pg||(pg==='courses'&&isCourse)?'is-active':'')+"' data-go='"+pg+"'>"+label+"</button>").join('')+"</nav>"+
   "<div class='elite-header-actions'><button type='button' class='elite-header-icon' data-action='elite-search' aria-label='Search courses'>"+ico('search',20)+"</button><button type='button' class='elite-header-avatar' data-go='profile' aria-label='Open profile'>"+esc((state.user.name||'L').charAt(0).toUpperCase())+"</button></div>"+
   "</div></header>";
 };
 const navBar=()=>{
  const selected=['courses','ytlibrary','ytcourse','ytwatch','ytassessment','ytcompletion','saved'].includes(state.page)?'courses':state.page;
  return "<div class='nav-wrapper syl-bottom-nav elite-nav-wrap'><nav class='bottom-nav elite-bottom-nav' aria-label='Learning navigation'>"+
- [['home','home','Home'],['courses','book','Courses'],['progress','chart','Learning'],['ai','brain','AI'],['profile','user','Profile']]
+ [['home','home','Home'],['courses','book','Courses'],['progress','chart','Learning'],['live','radio','Live'],['profile','user','Profile']]
  .map(([pg,icon,label])=>"<button type='button' class='nav-item elite-nav-item "+(selected===pg?'active':'')+"' aria-label='"+label+"' aria-current='"+(selected===pg?'page':'false')+"' data-go='"+pg+"'><span class='elite-nav-icon'>"+ico(icon,22)+"</span><span class='elite-nav-label'>"+label+"</span></button>").join('')+
  "</nav></div>";
 };
@@ -343,8 +343,95 @@ function downloads(){return '<section class="screen"><button class="back-btn" da
 function account(){return '<section class="screen"><button class="back-btn" data-go="profile">'+ico('back')+' Profile</button><div class="form-card"><h1>Account Settings</h1><p class="muted">Customize your learning experience.</p><form id="account-form"><div class="field"><label for="account-name">Display name</label><input id="account-name" name="name" required maxlength="60" value="'+esc(state.user.name)+'"/></div><div class="field"><label for="account-language">Learning explanations language</label><select name="preferred" id="account-language">'+['Hausa','English'].map(x=>'<option '+(state.user.preferred===x?'selected':'')+'>'+x+'</option>').join('')+'</select></div><button type="submit" class="btn btn-primary btn-block">Save Changes '+ico('check')+'</button></form><p class="fine-print mt-2">Preview settings are saved in this browser. Secure login has not yet been connected.</p></div></section>';}
 function billing(){return '<section class="screen"><button class="back-btn" data-go="profile">'+ico('back')+' Profile</button><div class="form-card center"><div class="red">'+ico('card',40)+'</div><h1>Membership & Billing</h1><p class="muted">Choose how you want to learn.</p><div class="panel" style="padding:20px"><h3>Free Preview</h3><p class="muted small">Access sample content and test the UI.</p><div class="stat-number">₦0</div><p class="fine-print">Online payments, subscription plans and enrollments are not enabled in this demo.</p></div><button class="btn btn-primary btn-block mt-3" data-action="pro">Explore Premium</button></div></section>';}
 function notifications(){return '<section class="screen"><button class="back-btn" data-go="profile">'+ico('back')+' Profile</button><h1>Notifications</h1><p class="muted">Your learning updates in one place.</p><div class="panel mt-3">'+[['book','Welcome to SYLearn','Start exploring digital skills courses today.'],['flame','Keep your streak alive','Practise for a few minutes daily.'],['brain','AI Tutor preview','Try a sample explanation in Hausa.']].map(([i,t,s])=>'<div class="settings-row">'+ico(i)+'<span class="grow"><strong>'+t+'</strong><small>'+s+'</small></span>'+badge('Demo')+'</div>').join('')+'</div></section>';}
-function live(){return '<section class="screen live-screen theme-blue"><button class="back-btn" data-go="home">'+ico('back')+' Home</button><div class="screen-header"><h1>Live Classes</h1><p class="muted">Learn with instructors and your community.</p></div><div class="panel" style="padding:22px;background:linear-gradient(120deg,#fff0f1,#fff)"><div class="red">'+ico('radio',32)+'</div><h2 class="mt-2">Learn together, grow together</h2><p class="muted">Live classes will include scheduled sessions, chat, questions and instructor-led exercises. Sample sessions below are illustrative.</p></div>'+
-heading('Upcoming Session Examples','','')+'<div class="grid-2">'+[['Python Project Workshop','Programming'],['Introduction to Arduino','Engineering & IoT'],['UI/UX Design Session','Creative Skills'],['AI for Beginners','AI & Automation']].map(([n,c])=>'<div class="panel" style="padding:20px"><div class="red">'+ico('calendar')+'</div><h3 class="mt-2">'+n+'</h3><p class="muted small">'+c+' · Schedule pending</p><button class="btn btn-outline" data-action="session-alert">Notify me when available</button></div>').join('')+'</div></section>';}
+const LIVE_TOPIC_IDEAS=[
+ {title:'Python Live Coding',category:'PROGRAMMING',icon:'laptop',description:'Build practical projects while following an instructor step by step.'},
+ {title:'Arduino Project Lab',category:'ENGINEERING & IoT',icon:'settings',description:'Learn real circuits, sensors and practical electronics projects.'},
+ {title:'UI/UX Design Workshop',category:'DESIGN & CREATIVE',icon:'edit',description:'Create wireframes and prototype digital products.'},
+ {title:'AI Skills Workshop',category:'ARTIFICIAL INTELLIGENCE',icon:'brain',description:'Understand AI tools and practice useful digital workflows.'}
+];
+function liveSessions(){
+ const source=Array.isArray(window.SYLEARN_LIVE_SESSIONS)?window.SYLEARN_LIVE_SESSIONS:[];
+ const seen=new Set();
+ return source.filter(c=>{
+   if(!c||typeof c!=='object'||!/^[a-z0-9][a-z0-9_-]{1,70}$/i.test(String(c.id||'')))return false;
+   if(seen.has(c.id))return false;
+   if(!String(c.title||'').trim()||!String(c.instructor||'').trim())return false;
+   if(!/(?:Z|[+-]\d{2}:\d{2})$/.test(String(c.startAt||''))||!/(?:Z|[+-]\d{2}:\d{2})$/.test(String(c.endAt||'')))return false;
+   if(!Number.isFinite(Date.parse(c.startAt))||!Number.isFinite(Date.parse(c.endAt))||Date.parse(c.endAt)<=Date.parse(c.startAt))return false;
+   seen.add(c.id);
+   return true;
+ }).sort((x,y)=>Date.parse(x.startAt)-Date.parse(y.startAt));
+}
+const livePhase=(c,now=Date.now())=>{
+ const start=Date.parse(c.startAt),end=Date.parse(c.endAt);
+ return now>=end?'past':now>=start-600000?'live':'upcoming';
+};
+const liveMeetingUrl=c=>{
+ const url=String(c.meetingUrl||'').trim();
+ return /^https:\/\/[a-z0-9.-]+(?::443)?(?:\/|$)/i.test(url)&&!url.includes('@')?url:'';
+};
+const liveWhen=c=>{
+ const d=new Date(c.startAt);
+ try{return new Intl.DateTimeFormat('en-NG',{weekday:'short',day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit',timeZone:'Africa/Lagos',timeZoneName:'short'}).format(d)}
+ catch(e){return d.toUTCString()}
+};
+function live(){
+ const sessions=liveSessions(),now=Date.now(),saved=state.liveSaved||[];
+ const upcoming=sessions.filter(c=>livePhase(c,now)==='upcoming');
+ const happening=sessions.filter(c=>livePhase(c,now)==='live');
+ const past=sessions.filter(c=>livePhase(c,now)==='past');
+ const mine=sessions.filter(c=>saved.includes(c.id)&&livePhase(c,now)!=='past');
+ const tab=['upcoming','now','mine','past'].includes(state.liveTab)?state.liveTab:'upcoming';
+ const tabs=[['upcoming','Upcoming',upcoming.length],['now','Live now',happening.length],['mine','My saved',mine.length],['past','Past',past.length]];
+ const rows=(tab==='now'?happening:tab==='mine'?mine:tab==='past'?past:upcoming);
+ const renderSession=c=>{
+   const phase=livePhase(c,now),hasLink=!!liveMeetingUrl(c),isSaved=saved.includes(c.id);
+   const paid=c.access==='paid',amount=Number(c.priceNGN);
+   const fee=paid?(Number.isFinite(amount)&&amount>0?'₦'+Math.round(amount).toLocaleString('en-NG'):'PAID'):(c.access==='free'?'FREE':'ACCESS TO BE CONFIRMED');
+   const outcomes=(Array.isArray(c.outcomes)?c.outcomes:[]).slice(0,4),reqs=(Array.isArray(c.requirements)?c.requirements:[]).slice(0,3);
+   const cover=String(c.image||'');
+   const coverValid=/^https:\/\/[a-z0-9.-]+(?::443)?\//i.test(cover)&&!cover.includes('@');
+   const liveNow=phase==='live';
+   return '<article class="syl-live-class-card">'+
+    '<div class="syl-live-class-media">'+(coverValid?'<img src="'+esc(cover)+'" alt="" loading="lazy"/>':'<div class="syl-live-class-art" aria-hidden="true">'+ico('radio',51)+'</div>')+
+     '<span class="syl-live-class-tag '+(liveNow?'is-live':'')+'">'+(liveNow?'● LIVE NOW':phase==='past'?'FINISHED':'UPCOMING')+'</span>'+
+     '<span class="syl-live-class-fee">'+esc(fee)+'</span></div>'+
+    '<div class="syl-live-class-copy"><span class="syl-live-topic">'+esc(c.category||'Digital Skills')+'</span>'+
+    '<h3>'+esc(c.title)+'</h3><p>'+esc(c.description||'Instructor-led live learning session.')+'</p>'+
+    '<div class="syl-live-class-info"><span>'+ico('calendar')+' '+esc(liveWhen(c))+'</span>'+
+      '<span>'+ico('user')+' '+esc(c.instructor)+'</span>'+
+      '<span>'+ico('clock')+' '+Math.round((Date.parse(c.endAt)-Date.parse(c.startAt))/60000)+' minutes</span></div>'+
+    ((outcomes.length||reqs.length)?'<details class="syl-live-session-details"><summary>Session details '+ico('arrow')+'</summary>'+
+       (outcomes.length?'<strong>What you will learn</strong><ul>'+outcomes.map(t=>'<li>'+esc(t)+'</li>').join('')+'</ul>':'')+
+       (reqs.length?'<strong>What you need</strong><ul>'+reqs.map(t=>'<li>'+esc(t)+'</li>').join('')+'</ul>':'')+'</details>':'')+
+    '<div class="syl-live-card-footer">'+
+     (phase==='past'?'<span class="syl-live-ended">Session ended</span>':
+       liveNow&&hasLink?'<button type="button" class="syl-live-join" data-action="live-join" data-id="'+esc(c.id)+'">'+ico('radio')+' Join live</button>':
+       '<button type="button" class="syl-live-save '+(isSaved?'is-saved':'')+'" data-action="live-save" data-id="'+esc(c.id)+'" aria-pressed="'+(isSaved?'true':'false')+'">'+ico(isSaved?'check':'bookmark')+' '+(isSaved?'Saved to my list':'Save class')+'</button>')+
+     (phase==='past'?'':'<button type="button" class="syl-live-calendar" data-action="live-calendar" data-id="'+esc(c.id)+'" aria-label="Add '+esc(c.title)+' to calendar">'+ico('calendar')+' Add to calendar</button>')+
+     '</div></div></article>';
+ };
+ const emptyTitle=tab==='now'?'No class is live right now':tab==='mine'?'No classes saved yet':tab==='past'?'No previous classes yet':'No live classes announced yet';
+ const emptyText=tab==='now'?'Check the upcoming timetable for announced sessions.':tab==='mine'?'Save an announced class to keep it on this device. Saving is not an official registration.':tab==='past'?'Completed sessions will appear here after their scheduled time.':'Our team is preparing the first instructor-led classes. Dates and joining links will appear here once they are confirmed.';
+ return '<section class="screen syl-live-hub">'+
+  '<div class="syl-live-hero"><div class="syl-live-hero-graphic" aria-hidden="true"></div>'+
+   '<div class="syl-live-hero-top"><span class="syl-live-kicker">'+ico('radio')+' SYLEARN · LIVE ACADEMY</span><span class="syl-live-hero-icon">'+ico('calendar')+'</span></div>'+
+   '<div class="syl-live-hero-head"><div><h1>Learn live.<span> Build real skills.</span></h1><p>Join scheduled instructor-led classes, work on real projects and ask questions as you learn.</p></div>'+
+    '<div class="syl-live-hero-mini"><strong>'+happening.length+'</strong><span>Live right now</span></div></div>'+
+   '<div class="syl-live-hero-pills"><span>'+ico('calendar')+' Scheduled workshops</span><span>'+ico('users')+' Real instructors</span><span>'+ico('globe')+' West Africa Time (WAT)</span></div></div>'+
+  '<div class="syl-live-top-features"><div>'+ico('radio')+'<strong>Live lessons</strong><span>Learn in real time</span></div><div>'+ico('calendar')+'<strong>Flexible sessions</strong><span>Join at a scheduled time</span></div><div>'+ico('book')+'<strong>Practical learning</strong><span>Build as you study</span></div></div>'+
+  '<div class="syl-live-section-heading"><div><span class="syl-live-eyebrow">YOUR CLASSROOM CALENDAR</span><h2>Live class schedule</h2><p>Only confirmed sessions are published here.</p></div><span class="syl-live-schedule-zone">'+ico('clock')+' Times in WAT</span></div>'+
+  '<div class="syl-live-tabs" role="group" aria-label="Filter live classes">'+tabs.map(([key,label,count])=>'<button type="button" class="'+(tab===key?'is-active':'')+'" data-action="live-tab" data-value="'+key+'" aria-pressed="'+(tab===key?'true':'false')+'">'+label+' <small>'+count+'</small></button>').join('')+'</div>'+
+  (rows.length?'<div class="syl-live-cards">'+rows.map(renderSession).join('')+'</div>':
+   '<div class="syl-live-empty"><span class="syl-live-empty-icon">'+ico(tab==='now'?'radio':'calendar')+'</span><h3>'+emptyTitle+'</h3><p>'+emptyText+'</p>'+
+   (tab!=='upcoming'?'<button type="button" data-action="live-tab" data-value="upcoming">View upcoming classes '+ico('arrow')+'</button>':'<span class="syl-live-empty-sub">'+ico('info')+' No date or meeting link has been published yet.</span>')+'</div>')+
+  '<div class="syl-live-section-heading syl-live-next-heading"><div><span class="syl-live-eyebrow">WHAT WE ARE PREPARING</span><h2>Hands-on learning tracks</h2><p>Potential workshop subjects — dates to be announced.</p></div></div>'+
+  '<div class="syl-live-topic-grid">'+LIVE_TOPIC_IDEAS.map((t,i)=>'<div class="syl-live-topic-card syl-live-topic-'+i+'"><span class="syl-live-topic-icon">'+ico(t.icon,26)+'</span><span class="syl-live-eyebrow">'+esc(t.category)+'</span><h3>'+esc(t.title)+'</h3><p>'+esc(t.description)+'</p><span class="syl-live-topic-status">'+ico('clock')+' Schedule pending</span></div>').join('')+'</div>'+
+  '<div class="syl-live-how"><div><span class="syl-live-eyebrow">HOW LIVE LEARNING WORKS</span><h2>One class. Real progress.</h2></div><div class="syl-live-how-steps">'+[['01','Find a class','See confirmed dates, time and what you will learn.'],['02','Save the date','Add an upcoming session to your calendar.'],['03','Join & learn','Open the live meeting when the class is in session.']].map(([num,title,desc])=>'<div><span>'+num+'</span><strong>'+title+'</strong><p>'+desc+'</p></div>').join('')+'</div></div>'+
+  '<div class="syl-live-utility"><div><span class="syl-live-eyebrow">LEARN BETWEEN LIVE CLASSES</span><h3>Keep growing at your own pace.</h3><p>Explore free self-paced courses, or open the AI Tutor preview when you need an explanation.</p></div><div><button type="button" data-go="courses">Explore courses '+ico('arrow')+'</button><button type="button" data-go="ai">AI Tutor '+ico('arrow')+'</button></div></div>'+
+  '<div class="syl-live-disclaimer">'+ico('info')+' Saved classes and calendar files are personal reminders, not confirmed enrolment or attendance. Live access is provided only for published sessions that have a valid meeting link.</div>'+
+ '</section>';
+}
 function instructor(){
 return '<section class="screen instructor-screen theme-purple"><button class="back-btn" data-go="profile">'+ico('back')+' Profile</button><div class="screen-header"><h1>Instructor Studio</h1><p class="muted">Create course drafts for review before publishing.</p></div><div class="split"><div class="panel" style="padding:24px"><h2>New Course Draft</h2><form id="draft-form"><div class="field"><label>Course title</label><input name="title" maxlength="70" required placeholder="e.g. Introduction to IoT"/></div><div class="field"><label>Category</label><select name="cat">'+['Programming','AI & Automation','Cybersecurity','Design & Creative','Data & Analytics','Engineering & IoT','Business & Office'].map(c=>'<option>'+c+'</option>').join('')+'</select></div><div class="field"><label>Description</label><textarea name="desc" rows="4" required maxlength="300" placeholder="What students will learn"></textarea></div><button class="btn btn-primary btn-block">Save Course Draft '+ico('arrow')+'</button></form></div><div><div class="panel" style="padding:22px"><h2>My Drafts</h2><p class="small muted">Saved in this browser only; publishing requires a secure instructor backend.</p>'+(state.drafts.length?state.drafts.map((d,i)=>'<div class="module"><span class="module-num">'+(i+1)+'</span><span class="module-text"><strong>'+esc(d.title)+'</strong><small>'+esc(d.cat)+' · Draft</small></span>'+badge('Draft')+'</div>').join(''):'<div class="empty" style="padding:25px"><h3>No drafts yet</h3><p class="small muted">Your course drafts will appear here.</p></div>')+'</div></div></div></section>';}
 
@@ -397,6 +484,34 @@ if(action&&action.startsWith('yt-')&&VIDEO_UI.action(action,b.dataset,{nav,rende
 if(action&&action.startsWith('qa-')&&ASSESS_UI.action(action,b.dataset,{nav,render,toast}))return;
 if(go){if(go==='ytcourse'&&id){VIDEO_UI.open(id,nav,render,toast);return}nav(go,id);return}
 if(!action)return;
+if(action==='live-tab'){state.liveTab=['upcoming','now','mine','past'].includes(val)?val:'upcoming';render();return}
+if(action==='live-save'){
+ const session=liveSessions().find(s=>s.id===id);
+ if(!session){toast('Class is not available.');return}
+ if(state.liveSaved.includes(id)){state.liveSaved=state.liveSaved.filter(x=>x!==id);toast('Class removed from your saved list.')}
+ else{state.liveSaved=[...new Set([...state.liveSaved,id])];toast('Saved on this device — not an official class registration.')}
+ save('liveSaved',state.liveSaved);render();return
+}
+if(action==='live-join'){
+ const session=liveSessions().find(s=>s.id===id);
+ if(!session||livePhase(session)!=='live'||!liveMeetingUrl(session)){toast('This live class is not open yet.');return}
+ window.open(liveMeetingUrl(session),'_blank','noopener,noreferrer');return
+}
+if(action==='live-calendar'){
+ const session=liveSessions().find(s=>s.id===id);
+ if(!session){toast('Class schedule unavailable.');return}
+ const stamp=d=>new Date(d).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
+ const line=x=>String(x||'').replace(/\\/g,'\\\\').replace(/\r?\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;');
+ const date=new Date(),message='SYLearn Live Academy — '+session.title;
+ const calendar=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//SYLUTION//SYLearn Live Academy//EN','BEGIN:VEVENT','UID:'+line(session.id)+'@sylutionacademy.vercel.app','DTSTAMP:'+stamp(date),'DTSTART:'+stamp(session.startAt),'DTEND:'+stamp(session.endAt),'SUMMARY:'+line(message),'DESCRIPTION:'+line(session.description||'Live course workshop'),'BEGIN:VALARM','TRIGGER:-PT30M','ACTION:DISPLAY','DESCRIPTION:Live class begins soon','END:VALARM','END:VEVENT','END:VCALENDAR'].join('\r\n');
+ try{
+  const url=URL.createObjectURL(new Blob([calendar],{type:'text/calendar;charset=utf-8'}));
+  const anchor=document.createElement('a');anchor.href=url;anchor.download='SYLearn-'+session.id+'.ics';
+  anchor.style.display='none';document.body.appendChild(anchor);anchor.click();anchor.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);toast('Calendar file created. Import it to set a reminder.');
+ }catch(e){toast('Calendar download is unavailable in this browser.')}
+ return
+}
 if(action==='learning-filter'){state.learningFilter=['active','complete','saved','all'].includes(val)?val:'active';render();return}
 if(action==='learning-resume'){
  if(!VIDEO.select(String(id||''))){toast('Course unavailable.');return}
