@@ -2918,3 +2918,123 @@ body.syl-video-immersive-active .syl-immersive-page{
   .syl-learning-v2 .syl-ld-image img,
   .syl-learning-v2 .syl-ld-course{transition:none!important}
 }
+
+
+/* SYLearn Learning Dashboard V2 — compact two-column course cards */
+@media(max-width:750px){
+  .syl-learning-v2 .syl-ld-course-grid{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+    align-items:stretch;
+  }
+  .syl-learning-v2 .syl-ld-course{
+    display:flex!important;
+    flex-direction:column!important;
+    min-width:0!important;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    border-radius:13px!important;
+  }
+  .syl-learning-v2 .syl-ld-image{
+    display:block!important;
+    flex:none!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    aspect-ratio:16/9!important;
+    overflow:hidden;
+  }
+  .syl-learning-v2 .syl-ld-picture{
+    display:block;width:100%;height:100%;
+  }
+  .syl-learning-v2 .syl-ld-image img{
+    width:100%;height:100%;
+    object-fit:cover;object-position:center;
+  }
+  .syl-learning-v2 .syl-ld-image-tag{
+    left:7px;bottom:7px;
+    max-width:calc(100% - 14px);
+    padding:5px 6px;
+    border-radius:6px;font-size:8px;line-height:1.25;
+  }
+  .syl-learning-v2 .syl-ld-course-body{
+    flex:1;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:7px!important;
+    padding:11px 10px!important;
+    min-width:0!important;
+  }
+  .syl-learning-v2 .syl-ld-course-topline{
+    min-height:16px;
+    font-size:9px;
+    line-height:1.3;
+    gap:4px;
+  }
+  .syl-learning-v2 .syl-ld-saved{
+    font-size:8px;
+    flex:none;
+  }
+  .syl-learning-v2 .syl-ld-saved svg{width:11px;height:11px}
+  .syl-learning-v2 .syl-ld-course-title{
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    line-clamp:2;
+    overflow:hidden;
+    min-height:34px;
+    font-size:11px!important;
+    line-height:1.48!important;
+    font-weight:850!important;
+    letter-spacing:-.015em;
+  }
+  .syl-learning-v2 .syl-ld-next{
+    min-height:27px;
+    font-size:9px;
+    line-height:1.45;
+    -webkit-line-clamp:2;
+    line-clamp:2;
+    overflow:hidden;
+  }
+  .syl-learning-v2 .syl-ld-percentline{
+    margin-top:2px;
+    gap:5px;
+    align-items:flex-start;
+    font-size:9px;
+    line-height:1.35;
+    min-width:0;
+  }
+  .syl-learning-v2 .syl-ld-percentline>span{
+    min-width:0;
+    flex:1;
+  }
+  .syl-learning-v2 .syl-ld-percentline strong{
+    flex:none;
+    font-size:10px;
+  }
+  .syl-learning-v2 .syl-ld-bar{
+    height:5px;
+    flex:none;
+  }
+  .syl-learning-v2 .syl-ld-resume{
+    min-height:36px;
+    margin-top:auto;
+    padding:10px 0 0;
+    gap:5px;
+    font-size:10px;
+    line-height:1.25;
+    text-align:left;
+  }
+  .syl-learning-v2 .syl-ld-resume svg{
+    width:15px;height:15px;flex:none;
+  }
+}
+@media(max-width:370px){
+  .syl-learning-v2 .syl-ld-course-grid{gap:8px!important}
+  .syl-learning-v2 .syl-ld-course-body{padding:9px 8px!important;gap:6px!important}
+  .syl-learning-v2 .syl-ld-course-title{font-size:10px!important;min-height:31px}
+  .syl-learning-v2 .syl-ld-image-tag{font-size:7px}
+  .syl-learning-v2 .syl-ld-resume{font-size:9px}
+}
