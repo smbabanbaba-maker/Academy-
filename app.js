@@ -179,18 +179,52 @@ function home(){
    "<span class='elite-course-foot'><span>View course</span><em>"+ico('arrow',16)+"</em></span></span></button>"+
    "<button type='button' class='syl-v3-home-save "+(saved?'is-saved':'')+"' data-action='yt-save' data-id='"+esc(c.id)+"' aria-label='"+(saved?'Remove saved course':'Save course')+"' aria-pressed='"+(saved?'true':'false')+"'>"+ico('bookmark',17)+"</button></article>";
  };
- return "<section class='screen elite-home'>"+
-  "<form id='home-search-form' class='elite-course-search elite-search-top' role='search'>"+ico('search',21)+"<input id='home-search' name='search' type='search' autocomplete='off' placeholder='Search Python, AI, design, robotics...' aria-label='Search digital skills courses' value='"+esc(VIDEO.state.query||'')+"'/><button type='submit'>Search "+ico('arrow',17)+"</button></form>"+
-  "<section class='elite-promo-banner' aria-label='Discover your potential'><div class='elite-promo-media'>"+img(PHOTOS.hero,'Students working together around a laptop')+"</div><div class='elite-promo-wash' aria-hidden='true'></div><div class='elite-promo-copy'><span class='elite-promo-eyebrow'><span class='elite-promo-spark'>✦</span> DISCOVER YOUR POTENTIAL</span><h1>A brighter you<br><em>through better learning.</em></h1><p>Practical digital skills and real learning opportunities — all in one place.</p><button type='button' class='elite-promo-button' data-go='courses'>Explore courses "+ico('arrow',18)+"</button></div></section>"+
-  "<section class='elite-section elite-skills-section' aria-label='Explore Skills'><div class='elite-skills-heading'><div><span class='elite-section-eyebrow'>CHOOSE YOUR NEXT SKILL</span><h2>Explore Skills</h2></div><button type='button' data-go='courses' class='elite-skills-viewall'>View all "+ico('arrow',16)+"</button></div>"+
-  "<div class='elite-skill-carousel' aria-label='Browse skills in one moving row'><div class='elite-skill-track'><div class='elite-skill-set'>"+
-  categories.map(c=>skillChip(c,false)).join('')+
-  "</div><div class='elite-skill-set' aria-hidden='true'>"+
-  categories.map(c=>skillChip(c,true)).join('')+
-  "</div></div></div></section>"+
-  "<section class='elite-section elite-featured'><div class='elite-section-header'><div><span class='elite-section-eyebrow'>START LEARNING TODAY</span><h2>Featured courses</h2><p>Practical lessons to help you reach your goals.</p></div><button class='elite-section-link' data-go='courses'>View all "+ico('arrow',16)+"</button></div><div class='elite-course-grid'>"+picks.map(courseTile).join('')+"</div></section>"+
-  "<div class='elite-community-strip'><span class='elite-community-mark'>"+ico('users',19)+"</span><span class='elite-community-copy'><strong>Connect with SYLearn</strong><small>Open our Telegram bot for the latest learning updates and class information.</small></span><a href='https://t.me/SYLearn_Bot' target='_blank' rel='noopener noreferrer' class='elite-community-action' aria-label='Open SYLearn bot for community link'>Open bot "+ico('arrow',15)+"</a></div>"+
-  "</section>";
+ const started=curated.filter(c=>VIDEO.progress(c)>0);
+ const continuing=started.find(c=>VIDEO.progress(c)<100)||started[0]||null;
+ const lead=continuing||picks[0]||curated[0]||null;
+ const active=continuing&&VIDEO.progress(continuing)>0;
+ const leadProgress=lead?Math.min(100,Math.max(0,VIDEO.progress(lead)||0)):0;
+ const totalChapters=started.reduce((n,c)=>n+(Array.isArray(c.chapters)?c.chapters.length:0),0);
+ const markedChapters=started.reduce((n,c)=>{
+  const key=(c.type||'video')+':'+c.id,rows=VIDEO.state.courseProgress[key]||[];
+  return n+(Array.isArray(rows)?new Set(rows.filter(i=>Number.isInteger(i)&&i>=0&&i<(c.chapters?.length||0))).size:0);
+ },0);
+ const overall=totalChapters?Math.round(markedChapters/totalChapters*100):0;
+ const savedCount=curated.filter(c=>VIDEO.state.saved.includes(c.id)).length;
+ const name=String(state.user?.name||'Learner').trim()||'Learner';
+ const firstName=name.split(/\s+/)[0];
+ const hours=new Date().getHours();
+ const greeting=hours<12?'Good morning':hours<17?'Good afternoon':'Good evening';
+ const photo=typeof profilePhoto==='function'?profilePhoto(state.user):'';
+ const avatar=photo?"<img src='"+photo+"' alt=''/>":esc(firstName.charAt(0).toUpperCase());
+ const quick=[
+  ['book','All Courses',curated.length+' available','courses','crimson'],
+  ['radio','Live Classes','Sessions & workshops','live','magenta'],
+  ['brain','Study Companion','Guided explanations','ai','cyan'],
+  ['bookmark','Saved',savedCount+' bookmarked','saved','violet']
+ ];
+ const shortcuts=quick.map(([ic,title,sub,pg,tone])=>"<button type='button' class='syl-n-quick syl-n-tone-"+tone+"' data-go='"+pg+"'>"+
+  "<span class='syl-n-quick-icon'>"+ico(ic,25)+"</span>"+
+  "<strong>"+esc(title)+"</strong><small>"+esc(sub)+"</small>"+
+  "<span class='syl-n-quick-arrow'>"+ico('arrow',16)+"</span></button>").join('');
+ const leadAction=lead?(active?"data-action='learning-resume'":"data-action='yt-open'")+" data-id='"+esc(lead.id)+"'":"data-go='courses'";
+ const bannerTitle=lead?esc(lead.title):'Build your next digital skill';
+ const bannerText=lead?esc(lead.description||'Follow structured lessons and learn by doing.'):'Practical technology courses and real skills for the future.';
+ const completionText=lead?(leadProgress>=100?'All chapters marked studied':leadProgress>0?'Chapter progress saved on this device':'Start a new learning path'):'Explore programming, AI, electronics and digital design.';
+ const leadProgressHTML=leadProgress>0?"<div class='syl-n-hero-progress'><div class='syl-n-progress-meta'><span>CHAPTER PROGRESS</span><strong>"+leadProgress+"%</strong></div><div class='syl-n-progress-rail' role='progressbar' aria-label='Chapters marked studied' aria-valuemin='0' aria-valuemax='100' aria-valuenow='"+leadProgress+"'><span style='width:"+leadProgress+"%'></span></div><small>"+completionText+"</small></div>":"<p class='syl-n-hero-context'>"+completionText+"</p>";
+ const chips="<div class='elite-skill-carousel' aria-label='Browse skills in one moving row'><div class='elite-skill-track'><div class='elite-skill-set'>"+
+ categories.map(c=>skillChip(c,false)).join('')+"</div><div class='elite-skill-set' aria-hidden='true'>"+
+ categories.map(c=>skillChip(c,true)).join('')+"</div></div></div>";
+ return "<section class='screen elite-home syl-neon-home'>"+
+ "<div class='syl-n-welcome'><div class='syl-n-welcome-avatar'>"+avatar+"</div><div class='syl-n-welcome-copy'><small>"+greeting+",</small><h1>"+esc(firstName)+" <span aria-hidden='true'>✦</span></h1><p>Learn. Build. Grow. Your next step starts here.</p></div><button type='button' class='syl-n-welcome-profile' data-go='profile' aria-label='View profile'>"+ico('user',22)+"</button></div>"+
+ "<form id='home-search-form' class='elite-course-search elite-search-top syl-n-search' role='search'>"+ico('search',21)+"<input id='home-search' name='search' type='search' autocomplete='off' placeholder='Search Python, AI, design, robotics...' aria-label='Search digital skills courses' value='"+esc(VIDEO.state.query||'')+"'/><button type='submit'>Search "+ico('arrow',16)+"</button></form>"+
+ "<section class='syl-n-hero' aria-label='"+(active?'Continue learning':'Discover your next course')+"'><div class='syl-n-hero-grid' aria-hidden='true'></div><div class='syl-n-hero-scene' aria-hidden='true'></div><div class='syl-n-hero-content'><div class='syl-n-hero-top'><span class='syl-n-hero-eyebrow'>"+ico('spark',15)+" "+(active?'CONTINUE LEARNING':'FEATURED LEARNING PATH')+"</span><span class='syl-n-hero-status'><i></i>"+(active?'In progress':'Explore skills')+"</span></div><h2>"+bannerTitle+"</h2><p class='syl-n-hero-description'>"+bannerText+"</p>"+leadProgressHTML+"<button type='button' class='syl-n-hero-button' "+leadAction+">"+ico(active?'play':'arrow',17)+" "+(active?'Resume Learning':'Explore Course')+" "+ico('arrow',17)+"</button></div><div class='syl-n-hero-side' aria-hidden='true'><span>LEARN</span><span>PRACTISE</span><span>BUILD</span><span>GROW</span></div></section>"+
+ "<section class='syl-n-shortcuts' aria-label='Quick access'>"+shortcuts+"</section>"+
+ "<section class='syl-n-overview'><button type='button' class='syl-n-ring' data-go='progress' aria-label='View your learning progress'><span style='--syl-ring:"+overall+"'>"+overall+"%</span><small>Chapters studied</small></button><div class='syl-n-overview-details'><div class='syl-n-overview-heading'><div><span class='syl-n-overline'>YOUR LEARNING JOURNEY</span><h2>Learning Progress</h2><p>Based on chapters you've marked as studied.</p></div><button type='button' data-go='progress' aria-label='Open your learning dashboard'>"+ico('arrow',18)+"</button></div><div class='syl-n-metrics'><div><span>"+ico('book',17)+"</span><strong>"+started.length+"</strong><small>Started</small></div><div><span>"+ico('check',17)+"</span><strong>"+markedChapters+"</strong><small>Chapters</small></div><div><span>"+ico('bookmark',17)+"</span><strong>"+savedCount+"</strong><small>Saved</small></div></div></div></section>"+
+ "<section class='elite-section elite-featured syl-n-featured'><div class='elite-section-header'><div><span class='elite-section-eyebrow'>SYLearn · COURSES</span><h2>Explore your next skill</h2><p>Real courses and practical learning, at your own pace.</p></div><button type='button' class='elite-section-link' data-go='courses'>View all "+ico('arrow',16)+"</button></div><div class='elite-course-grid'>"+picks.map(courseTile).join('')+"</div></section>"+
+ "<section class='elite-section elite-skills-section syl-n-skills' aria-label='Explore skills'><div class='elite-skills-heading'><div><span class='elite-section-eyebrow'>DISCOVER TECHNOLOGY</span><h2>Skill tracks</h2></div><button type='button' data-go='courses' class='elite-skills-viewall'>All skills "+ico('arrow',16)+"</button></div>"+chips+"</section>"+
+ "<div class='elite-community-strip syl-n-community'><span class='elite-community-mark'>"+ico('users',19)+"</span><span class='elite-community-copy'><strong>Connect with SYLearn</strong><small>Class updates and learning news through our Telegram bot.</small></span><a href='https://t.me/SYLearn_Bot' target='_blank' rel='noopener noreferrer' class='elite-community-action'>Open bot "+ico('arrow',15)+"</a></div>"+
+ "</section>";
 }
 function courses(){return VIDEO_UI.library()}
 
