@@ -293,7 +293,7 @@ function progress(){
    '<div class="syl-ld-course-body"><div class="syl-ld-course-topline"><span>'+esc(c.level||'All levels')+'</span>'+(saved?'<span class="syl-ld-saved">'+ico('bookmark')+' Saved</span>':'')+'</div>'+
    '<button type="button" class="syl-ld-course-title" data-action="yt-open" data-id="'+esc(c.id)+'">'+esc(c.title)+'</button>'+
    '<p class="syl-ld-next">'+esc(nextInfo(c))+'</p>'+
-   '<div class="syl-ld-percentline"><span>'+Math.min(recorded,total)+' of '+total+' chapters studied</span><strong>'+n+'%</strong></div>'+
+   '<div class="syl-ld-percentline"><span aria-label="'+Math.min(recorded,total)+' of '+total+' chapters marked studied">'+Math.min(recorded,total)+' / '+total+' chapters</span><strong>'+n+'%</strong></div>'+
    '<div class="syl-ld-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+n+'" aria-label="Study progress"><span style="width:'+n+'%"></span></div>'+
    '<button type="button" class="syl-ld-resume" data-action="learning-resume" data-id="'+esc(c.id)+'"><span>'+label+'</span>'+ico('arrow')+'</button></div></article>';
  };
