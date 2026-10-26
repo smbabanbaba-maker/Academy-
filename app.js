@@ -262,15 +262,59 @@ QUESTIONS.map((q,i)=>'<div style="text-align:left;border-bottom:1px solid var(--
 }
 
 function progress(){
- const courses=VIDEO.curated.filter(c=>VIDEO.progress(c)>0);
- const marked=Object.values(VIDEO.state.courseProgress||{}).reduce((n,arr)=>n+(Array.isArray(arr)?arr.length:0),0);
- const finished=courses.filter(c=>VIDEO.progress(c)===100).length;
- const assessed=courses.filter(c=>ASSESS.record(c.id).passedAt).length;
- const cards=courses.map(c=>'<button class="real-progress-course" data-action="yt-open" data-id="'+esc(c.id)+'"><span class="real-progress-thumb">'+img(c.image,c.title)+'</span><span class="real-progress-copy"><strong>'+esc(c.title)+'</strong><small>Educator: '+esc(c.creator)+'</small><span class="real-progress-meter"><span style="width:'+VIDEO.progress(c)+'%"></span></span><small>'+VIDEO.progress(c)+'% manually marked</small></span>'+ico('arrow')+'</button>').join('');
- return '<section class="screen real-progress"><div class="real-page-head"><span class="home-block-eyebrow">YOUR LEARNING JOURNEY</span><h1>Your progress.</h1><p>Chapters you marked as studied, saved in this browser. Not verified watch time.</p></div>'+
- '<div class="real-progress-stats"><div><strong>'+courses.length+'</strong><small>Courses started</small></div><div><strong>'+marked+'</strong><small>Chapters studied</small></div><div><strong>'+finished+'</strong><small>Course outlines completed</small></div></div>'+
- '<div class="home-section-heading"><div><span class="home-block-eyebrow">CONTINUE LEARNING</span><h2>Your learning history</h2></div><button class="home-text-link" data-go="courses">All courses '+ico('arrow')+'</button></div>'+
- (courses.length?'<div class="real-progress-list">'+cards+'</div>':'<div class="real-empty">'+ico('book')+'<h3>No chapters marked yet</h3><p>Choose a course and mark chapters after studying them.</p><button class="btn btn-primary" data-go="courses">Explore courses</button></div>')+'</section>';
+ const all=VIDEO.curated.slice();
+ const started=all.filter(c=>VIDEO.progress(c)>0);
+ const active=started.filter(c=>VIDEO.progress(c)<100);
+ const complete=started.filter(c=>VIDEO.progress(c)>=100);
+ const bookmarked=all.filter(c=>VIDEO.state.saved.includes(c.id));
+ const tabs=[['active','In progress',active.length],['complete','Completed',complete.length],['saved','Saved',bookmarked.length],['all','All courses',new Set([...started,...bookmarked].map(c=>c.id)).size]];
+ const selected=['active','complete','saved','all'].includes(state.learningFilter)?state.learningFilter:'active';
+ const included=selected==='active'?active:selected==='complete'?complete:selected==='saved'?bookmarked:all.filter(c=>started.includes(c)||bookmarked.includes(c));
+ const marked=started.reduce((n,c)=>{
+  const key=(c.type||'video')+':'+c.id;
+  const rows=VIDEO.state.courseProgress[key];
+  return n+(Array.isArray(rows)?new Set(rows.filter(Number.isInteger)).size:0);
+ },0);
+ const first=active[0]||complete[0]||bookmarked[0]||null;
+ const percent=c=>Math.max(0,Math.min(100,VIDEO.progress(c)||0));
+ const chapters=c=>Array.isArray(c.chapters)?c.chapters.length:0;
+ const nextInfo=c=>{
+   const key=(c.type||'video')+':'+c.id,seen=VIDEO.state.courseProgress[key]||[];
+   const next=Array.isArray(c.chapters)?c.chapters.findIndex((row,i)=>!seen.includes(i)):-1;
+   return percent(c)>=100?'All chapters marked studied':next>=0?'Next: '+String(c.chapters[next]?.[0]||'Continue the course'):'Start your first chapter';
+ };
+ const card=c=>{
+  const n=percent(c),total=chapters(c),key=(c.type||'video')+':'+c.id;
+  const recorded=Array.isArray(VIDEO.state.courseProgress[key])?VIDEO.state.courseProgress[key].length:0;
+  const saved=VIDEO.state.saved.includes(c.id);
+  const label=n>=100?'Review course':n>0?'Resume learning':'Start learning';
+  return '<article class="syl-ld-course">'+
+   '<button type="button" class="syl-ld-image" data-action="yt-open" data-id="'+esc(c.id)+'" aria-label="View '+esc(c.title)+'"><span class="syl-ld-picture">'+img(c.image,c.title)+'</span><span class="syl-ld-image-tag">'+esc(c.category||'Digital Skills')+'</span></button>'+
+   '<div class="syl-ld-course-body"><div class="syl-ld-course-topline"><span>'+esc(c.level||'All levels')+'</span>'+(saved?'<span class="syl-ld-saved">'+ico('bookmark')+' Saved</span>':'')+'</div>'+
+   '<button type="button" class="syl-ld-course-title" data-action="yt-open" data-id="'+esc(c.id)+'">'+esc(c.title)+'</button>'+
+   '<p class="syl-ld-next">'+esc(nextInfo(c))+'</p>'+
+   '<div class="syl-ld-percentline"><span>'+Math.min(recorded,total)+' of '+total+' chapters studied</span><strong>'+n+'%</strong></div>'+
+   '<div class="syl-ld-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+n+'" aria-label="Study progress"><span style="width:'+n+'%"></span></div>'+
+   '<button type="button" class="syl-ld-resume" data-action="learning-resume" data-id="'+esc(c.id)+'"><span>'+label+'</span>'+ico('arrow')+'</button></div></article>';
+ };
+ const filteredCards=included.map(card).join('');
+ const emptyHeading=selected==='active'?'No courses in progress yet':selected==='complete'?'Your completed courses will appear here':selected==='saved'?'No saved courses yet':'Your learning space is ready';
+ const emptyMessage=selected==='active'?'Explore a course and mark a chapter as studied to begin building your progress.':selected==='complete'?'Courses will appear here when all their chapters are marked as studied.':selected==='saved'?'Bookmark a course you want to return to.':'Explore courses and save your favourites to start your learning journey.';
+ return '<section class="screen real-progress syl-learning-v2">'+
+  '<div class="syl-ld-hero"><div class="syl-ld-hero-glow" aria-hidden="true"></div>'+
+   '<div class="syl-ld-hero-top"><span class="syl-ld-kicker">'+ico('graduation')+' SYLEARN · MY LEARNING</span><span class="syl-ld-hero-emblem">'+ico('spark')+'</span></div>'+
+   '<h1>Your learning journey.</h1><p>Build your skills with every chapter. Your next step starts here.</p>'+
+   '<div class="syl-ld-stats">'+
+    '<div class="syl-ld-stat">'+ico('book')+'<strong>'+started.length+'</strong><span>Courses started</span></div>'+
+    '<div class="syl-ld-stat">'+ico('check')+'<strong>'+marked+'</strong><span>Chapters studied</span></div>'+
+    '<div class="syl-ld-stat">'+ico('award')+'<strong>'+complete.length+'</strong><span>Outlines finished</span></div>'+
+   '</div></div>'+
+  (first?'<div class="syl-ld-next-step"><div class="syl-ld-next-text"><span>'+ico('spark')+' PICK UP WHERE YOU LEFT OFF</span><strong>'+esc(first.title)+'</strong><small>'+percent(first)+'% of chapters marked studied</small></div><button type="button" data-action="learning-resume" data-id="'+esc(first.id)+'">Continue '+ico('arrow')+'</button></div>':'')+
+  '<div class="syl-ld-section-title"><div><span>YOUR LEARNING SPACE</span><h2>My courses</h2><p>Keep track of what you are learning.</p></div><button type="button" class="syl-ld-browse" data-go="courses">Explore courses '+ico('arrow')+'</button></div>'+
+  '<div class="syl-ld-tabs" role="group" aria-label="Filter learning courses">'+tabs.map(([id,label,count])=>'<button type="button" class="'+(selected===id?'is-active':'')+'" data-action="learning-filter" data-value="'+id+'" aria-pressed="'+(selected===id?'true':'false')+'">'+label+' <small>'+count+'</small></button>').join('')+'</div>'+
+  (included.length?'<div class="syl-ld-course-grid">'+filteredCards+'</div>':'<div class="syl-ld-empty">'+ico('book')+'<h3>'+emptyHeading+'</h3><p>'+emptyMessage+'</p><button type="button" data-go="courses">Explore courses '+ico('arrow')+'</button></div>')+
+  '<div class="syl-ld-data-note">'+ico('info')+' <span>Progress reflects chapters marked as studied and is stored in this browser. It is not verified viewing time or an accredited credential.</span></div>'+
+ '</section>';
 }
 
 function profile(){
@@ -353,6 +397,11 @@ if(action&&action.startsWith('yt-')&&VIDEO_UI.action(action,b.dataset,{nav,rende
 if(action&&action.startsWith('qa-')&&ASSESS_UI.action(action,b.dataset,{nav,render,toast}))return;
 if(go){if(go==='ytcourse'&&id){VIDEO_UI.open(id,nav,render,toast);return}nav(go,id);return}
 if(!action)return;
+if(action==='learning-filter'){state.learningFilter=['active','complete','saved','all'].includes(val)?val:'active';render();return}
+if(action==='learning-resume'){
+ if(!VIDEO.select(String(id||''))){toast('Course unavailable.');return}
+ VIDEO_UI.action('yt-start',{}, {nav,render,toast});return
+}
 if(action==='qa-record-open'){if(VIDEO.select(id))nav('ytcompletion',id);return}
 if(action==='elite-search'){if(state.page!=='home')nav('home');requestAnimationFrame(()=>document.getElementById('home-search')?.focus());return}
  if(action==='home-video-filter'){VIDEO.state.items=VIDEO.curated.slice();VIDEO.state.status='curated';VIDEO.state.category=val||'All';VIDEO.state.sort='featured';nav('courses');return}
