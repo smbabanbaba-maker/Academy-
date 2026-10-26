@@ -317,14 +317,68 @@ function progress(){
  '</section>';
 }
 
+/* Premium student profile: read authentic local learning records, never estimate watch time. */
+const profilePhoto=user=>{
+ const raw=String(user?.avatar||'');
+ return /^data:image\/(?:jpeg|png|webp);base64,[a-z0-9+/=]+$/i.test(raw)&&raw.length<210000?raw:'';
+};
+const studentOverview=()=>{
+ const courses=Array.isArray(VIDEO.curated)?VIDEO.curated:[];
+ const started=courses.filter(c=>VIDEO.progress(c)>0);
+ const finished=started.filter(c=>VIDEO.progress(c)>=100);
+ const startedIds=new Set(started.map(c=>c.id));
+ const studied=started.reduce((n,c)=>{
+   const key=(c.type||'video')+':'+c.id, rows=VIDEO.state.courseProgress[key];
+   if(!Array.isArray(rows))return n;
+   const total=Array.isArray(c.chapters)?c.chapters.length:0;
+   return n+new Set(rows.filter(i=>Number.isInteger(i)&&i>=0&&i<total)).size;
+ },0);
+ const saved=Array.isArray(VIDEO.state.saved)?courses.filter(c=>VIDEO.state.saved.includes(c.id)).length:0;
+ const liveSaved=Array.isArray(state.liveSaved)?state.liveSaved.length:0;
+ const assessments=courses.filter(c=>{
+   try{return (ASSESS.record(c.id)?.bestScore||0)>=80}catch(e){return false}
+ }).length;
+ return {started:startedIds.size,studied,finished:finished.length,saved,liveSaved,assessments};
+};
+const profileStatTile=(icon,num,title)=>'<div class="syl-p3-stat">'+ico(icon,19)+'<strong>'+num+'</strong><span>'+title+'</span></div>';
 function profile(){
-return '<section class="screen profile-screen theme-brand"><div class="page-intro"><div><div class="eyebrow-light"><span class="status-spark">✦</span> YOUR PERSONAL SPACE</div><h1>My <span class="red">profile.</span></h1><p class="muted">Your journey and everything that makes it yours.</p></div></div>'+
-'<div class="profile-cover"><div class="profile-cover-light" aria-hidden="true">✳</div><div class="profile-cover-inner">'+'<span class="profile-monogram">'+esc((state.user.name||'L').charAt(0).toUpperCase())+'</span>'+'<div class="profile-identity"><span class="micro-kicker">SYLUTION LEARN MEMBER</span><h2>'+esc(state.user.name)+'</h2><p>Growing every day, one lesson at a time.</p><span class="profile-member-tag">'+ico('spark')+' Learning Explorer</span></div><button class="btn btn-hero-outline" data-go="account">'+ico('edit')+' Edit profile</button></div></div>'+
-'<div class="stat-grid profile-kpis">'+[['Courses started',VIDEO.curated.filter(c=>VIDEO.progress(c)>0).length,'book'],['Chapters studied',Object.values(VIDEO.state.courseProgress||{}).reduce((n,a)=>n+(Array.isArray(a)?a.length:0),0),'check'],['Saved courses',VIDEO.state.saved.length,'bookmark']].map(([l,n,ic])=>'<div class="stat-card"><span class="kpi-icon">'+ico(ic)+'</span><div class="stat-number">'+n+'</div><p class="small muted">'+l+'</p></div>').join('')+'</div>'+
-'<div class="section-title-group">'+heading('My learning space','','')+'</div>'+
-'<div class="profile-link-grid">'+[['bookmark','Saved Courses','saved'],['chart','Learning Stats','progress']].map(([i,t,p])=>'<button class="profile-link" data-go="'+p+'"><span class="profile-link-icon">'+ico(i)+'</span><strong>'+t+'</strong>'+ico('arrow')+'</button>').join('')+'</div>'+
-'<div class="section-title-group">'+heading('Your settings','','')+'</div><div class="panel">'+[['user','Account Information','Name, display name and profile','account'],['globe','Explanation Language',state.user.preferred||'Hausa','account'],['book','Explore Courses','Explore practical courses','courses']].map(([i,t,s,p])=>'<button class="settings-row" data-go="'+p+'"><span class="settings-icon">'+ico(i)+'</span><span class="grow"><strong>'+t+'</strong><small>'+esc(s)+'</small></span>'+ico('arrow')+'</button>').join('')+'</div>'+
-'<div class="section-title-group">'+heading('Support & About','','')+'</div><div class="panel"><button class="settings-row" data-action="help"><span class="settings-icon">'+ico('help')+'</span><span class="grow"><strong>Help & Support</strong><small>How this learning preview works</small></span>'+ico('arrow')+'</button><button class="settings-row" data-action="about"><span class="settings-icon">'+ico('info')+'</span><span class="grow"><strong>About SYLearn</strong><small>A product of SYLUTION · Preview 2.0</small></span>'+ico('arrow')+'</button></div></section>';
+ const name=String(state.user?.name||'Learner').trim()||'Learner';
+ const photo=profilePhoto(state.user),stats=studentOverview();
+ const initials=(name.match(/\b[\p{L}\p{N}]/gu)||[name[0]]).slice(0,2).join('').toUpperCase();
+ const subtitle=stats.studied>0?'You have marked '+stats.studied+' '+(stats.studied===1?'chapter':'chapters')+' as studied. Keep building your skills.':'Your next skill starts with your first lesson.';
+ const photoHtml=photo?'<img src="'+photo+'" alt="Your saved profile picture"/>':'<span aria-hidden="true">'+esc(initials)+'</span>';
+ const tiles=[
+  ['book','My courses','Continue your learning journey','progress','active'],
+  ['bookmark','Saved courses','Pick up your favourites','saved',''],
+  ['chart','My progress','Chapters and study history','progress','all'],
+  ['calendar','Live classes','Sessions and schedules','live','']
+ ];
+ const links=tiles.map(([icon,title,desc,page,tab])=>'<button type="button" class="syl-p3-link" '+(tab?'data-action="profile-hub" data-value="'+tab+'"':'data-go="'+page+'"')+'><span class="syl-p3-link-icon">'+ico(icon,22)+'</span><strong>'+title+'</strong><small>'+desc+'</small><span class="syl-p3-link-arrow">'+ico('arrow',15)+'</span></button>').join('');
+ const settings=[
+  ['user','Personal information','Name, picture and preferences','account'],
+  ['globe','Learning language',String(state.user?.preferred||'Hausa'),'account'],
+  ['lock','Account & data','Local profile, backup and restore','account']
+ ];
+ return '<section class="screen profile-screen syl-profile-v3">'+
+  '<div class="syl-p3-hero"><div class="syl-p3-hero-glow" aria-hidden="true"></div>'+
+   '<div class="syl-p3-topline"><span>'+ico('cap',16)+' SYLEARN · STUDENT PROFILE</span><span class="syl-p3-topicon">'+ico('spark',20)+'</span></div>'+
+   '<div class="syl-p3-identity"><div class="syl-p3-avatar">'+photoHtml+'</div>'+
+    '<div class="syl-p3-identity-copy"><span class="syl-p3-identity-label">YOUR PERSONAL LEARNING SPACE</span><h1>'+esc(name)+'</h1><p>'+esc(subtitle)+'</p>'+
+     '<span class="syl-p3-local-label">'+ico('info',13)+' Saved on this device</span></div>'+
+    '<button type="button" class="syl-p3-hero-edit" data-go="account">'+ico('edit',16)+' Edit profile</button></div>'+
+   '<div class="syl-p3-stats">'+profileStatTile('book',stats.started,'Courses started')+profileStatTile('check',stats.studied,'Chapters studied')+profileStatTile('bookmark',stats.saved,'Saved courses')+'</div>'+
+  '</div>'+
+  '<div class="syl-p3-section-head"><div><span class="syl-p3-eyebrow">YOUR WORKSPACE</span><h2>My learning hub</h2><p>Everything you need to keep moving forward.</p></div></div>'+
+  '<div class="syl-p3-links">'+links+'</div>'+
+  '<div class="syl-p3-achievement"><span class="syl-p3-achievement-icon">'+ico(stats.studied>0?'award':'cap',23)+'</span><div><span class="syl-p3-eyebrow">LEARNING MILESTONES</span><h3>'+(stats.finished?'Courses studied — '+stats.finished:stats.studied?'Learning in progress':'Your journey starts here')+'</h3><p>'+(stats.finished?'You have marked every chapter in '+stats.finished+' course outline'+(stats.finished===1?'':'s')+' as studied.':stats.studied?'You have marked '+stats.studied+' chapters as studied. Keep going at your own pace.':'Begin a course and mark your first chapter as studied to see your progress here.')+'</p></div><button type="button" data-go="progress">View progress '+ico('arrow',15)+'</button></div>'+
+  '<div class="syl-p3-section-head"><div><span class="syl-p3-eyebrow">MADE FOR YOU</span><h2>Account & preferences</h2><p>Make SYLearn comfortable for the way you learn.</p></div></div>'+
+  '<div class="syl-p3-settings">'+settings.map(([icon,title,desc,page])=>'<button type="button" class="syl-p3-settings-row" data-go="'+page+'"><span class="syl-p3-settings-icon">'+ico(icon,20)+'</span><span><strong>'+title+'</strong><small>'+esc(desc)+'</small></span><span class="syl-p3-settings-arrow">'+ico('arrow',16)+'</span></button>').join('')+'</div>'+
+  '<div class="syl-p3-section-head syl-p3-support-head"><div><span class="syl-p3-eyebrow">HERE TO HELP</span><h2>Support & about</h2></div></div>'+
+  '<div class="syl-p3-settings">'+
+   '<button type="button" class="syl-p3-settings-row" data-action="help"><span class="syl-p3-settings-icon">'+ico('help',20)+'</span><span><strong>Help & support</strong><small>How to use SYLearn and your learning records</small></span><span class="syl-p3-settings-arrow">'+ico('arrow',16)+'</span></button>'+
+   '<button type="button" class="syl-p3-settings-row" data-action="about"><span class="syl-p3-settings-icon">'+ico('info',20)+'</span><span><strong>About SYLearn</strong><small>Digital Skills Academy by SYLUTION</small></span><span class="syl-p3-settings-arrow">'+ico('arrow',16)+'</span></button></div>'+
+  '<div class="syl-p3-privacy">'+ico('lock',17)+' <span>Profile details, your study history and saved classes are stored locally. Secure sign-in and automatic cloud synchronisation are not connected yet.</span></div>'+
+ '</section>';
 }
 
 function saved(){
@@ -340,7 +394,25 @@ function certificates(){
 }
 
 function downloads(){return '<section class="screen"><button class="back-btn" data-go="profile">'+ico('back')+' Profile</button><h1>My Downloads</h1><div class="empty mt-3">'+ico('download')+'<h3>Offline lessons</h3><p class="muted">Offline video and lesson downloads will be available when the secure media library and storage are connected.</p><button class="btn btn-primary" data-go="courses">Browse Courses</button></div></section>';}
-function account(){return '<section class="screen"><button class="back-btn" data-go="profile">'+ico('back')+' Profile</button><div class="form-card"><h1>Account Settings</h1><p class="muted">Customize your learning experience.</p><form id="account-form"><div class="field"><label for="account-name">Display name</label><input id="account-name" name="name" required maxlength="60" value="'+esc(state.user.name)+'"/></div><div class="field"><label for="account-language">Learning explanations language</label><select name="preferred" id="account-language">'+['Hausa','English'].map(x=>'<option '+(state.user.preferred===x?'selected':'')+'>'+x+'</option>').join('')+'</select></div><button type="submit" class="btn btn-primary btn-block">Save Changes '+ico('check')+'</button></form><p class="fine-print mt-2">Preview settings are saved in this browser. Secure login has not yet been connected.</p></div></section>';}
+function account(){
+ const photo=profilePhoto(state.user),name=String(state.user?.name||'Learner');
+ const short=(name.match(/\b[\p{L}\p{N}]/gu)||[name[0]||'L']).slice(0,2).join('').toUpperCase();
+ return '<section class="screen syl-account-v3"><button type="button" class="syl-account-back" data-go="profile">'+ico('back',17)+' Back to profile</button>'+
+  '<div class="syl-account-head"><span class="syl-p3-eyebrow">YOUR ACCOUNT</span><h1>Make it yours.</h1><p>Personalise your student profile and learning experience.</p></div>'+
+  '<div class="syl-account-card"><div class="syl-account-avatar-row"><div class="syl-account-avatar">'+(photo?'<img src="'+photo+'" alt="Your profile photo"/>':'<span>'+esc(short)+'</span>')+'</div>'+
+   '<div><h2>Profile picture</h2><p>Upload a clear photo, or use your initials.</p><label class="syl-account-file-label" for="syl-profile-photo">'+ico('camera',16)+' Choose photo</label>'+
+   (photo?'<button type="button" class="syl-account-remove" data-action="profile-remove-photo">Remove photo</button>':'')+
+   '<input id="syl-profile-photo" type="file" accept="image/jpeg,image/png,image/webp" aria-label="Choose profile photo"/></div></div>'+
+   '<form id="account-form"><div class="syl-account-field"><label for="account-name">Display name</label><input id="account-name" name="name" required minlength="2" maxlength="60" autocomplete="nickname" value="'+esc(name)+'" placeholder="Enter your name"/></div>'+
+   '<div class="syl-account-field"><label for="account-language">Learning explanations language</label><select name="preferred" id="account-language">'+['Hausa','English'].map(x=>'<option value="'+x+'" '+(state.user.preferred===x?'selected':'')+'>'+x+'</option>').join('')+'</select></div>'+
+   '<button type="submit" class="syl-account-primary">'+ico('check',17)+' Save profile changes</button></form>'+
+   '<p class="syl-account-help">'+ico('info',14)+' Your picture and settings are stored on this device, not in an online account.</p></div>'+
+  '<div class="syl-account-data"><div><span class="syl-p3-eyebrow">YOUR RECORDS</span><h2>Data & backup</h2><p>Keep a personal copy of your courses, chapters and saved classes. You can restore a backup on another device manually.</p></div>'+
+   '<div class="syl-account-data-actions"><button type="button" data-action="profile-export">'+ico('download',18)+' Download backup</button><label for="syl-profile-restore">'+ico('repeat',18)+' Restore backup</label><input type="file" id="syl-profile-restore" accept=".json,application/json" aria-label="Restore SYLearn learning backup"/></div>'+
+   '<p>Restoring a backup replaces the matching records on this device. Automatic syncing is not available yet.</p></div>'+
+  '<div class="syl-account-security"><span>'+ico('lock',20)+'</span><div><h2>Secure student sign-in</h2><p>Email or Google sign-in, account recovery and cloud progress sync require a configured authentication service and database. They are not active yet.</p></div></div>'+
+ '</section>';
+}
 function billing(){return '<section class="screen"><button class="back-btn" data-go="profile">'+ico('back')+' Profile</button><div class="form-card center"><div class="red">'+ico('card',40)+'</div><h1>Membership & Billing</h1><p class="muted">Choose how you want to learn.</p><div class="panel" style="padding:20px"><h3>Free Preview</h3><p class="muted small">Access sample content and test the UI.</p><div class="stat-number">₦0</div><p class="fine-print">Online payments, subscription plans and enrollments are not enabled in this demo.</p></div><button class="btn btn-primary btn-block mt-3" data-action="pro">Explore Premium</button></div></section>';}
 function notifications(){return '<section class="screen"><button class="back-btn" data-go="profile">'+ico('back')+' Profile</button><h1>Notifications</h1><p class="muted">Your learning updates in one place.</p><div class="panel mt-3">'+[['book','Welcome to SYLearn','Start exploring digital skills courses today.'],['flame','Keep your streak alive','Practise for a few minutes daily.'],['brain','AI Tutor preview','Try a sample explanation in Hausa.']].map(([i,t,s])=>'<div class="settings-row">'+ico(i)+'<span class="grow"><strong>'+t+'</strong><small>'+s+'</small></span>'+badge('Demo')+'</div>').join('')+'</div></section>';}
 const LIVE_TOPIC_IDEAS=[
