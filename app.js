@@ -237,15 +237,14 @@ function home(){
  const overall=totalChapters?Math.round(markedChapters/totalChapters*100):0;
  const savedCount=curated.filter(c=>VIDEO.state.saved.includes(c.id)).length;
  const quick=[
-  ['book','All Courses',curated.length+' available','courses','crimson'],
-  ['radio','Live Classes','Sessions & workshops','live','magenta'],
-  ['brain','Study Companion','Guided explanations','ai','cyan'],
+  ['radio','Live Classes','Live sessions','live','magenta'],
+  ['brain','Study Companion','Ask & learn','ai','cyan'],
   ['bookmark','Saved',savedCount+' bookmarked','saved','violet']
  ];
- const shortcuts=quick.map(([ic,title,sub,pg,tone])=>"<button type='button' class='syl-n-quick syl-n-tone-"+tone+"' data-go='"+pg+"'>"+
-  "<span class='syl-n-quick-icon'>"+ico(ic,25)+"</span>"+
+ const shortcuts=quick.map(([ic,title,sub,pg,tone],i)=>"<button type='button' class='syl-n-quick syl-n-tone-"+tone+"' data-go='"+pg+"' aria-label='"+esc(title)+" — "+esc(sub)+"' style='--syl-card-order:"+i+"'>"+
+  "<span class='syl-n-quick-icon'>"+ico(ic,23)+"</span>"+
   "<strong>"+esc(title)+"</strong><small>"+esc(sub)+"</small>"+
-  "<span class='syl-n-quick-arrow'>"+ico('arrow',16)+"</span></button>").join('');
+  "<span class='syl-n-quick-arrow'>"+ico('arrow',14)+"</span></button>").join('');
  const chips="<div class='elite-skill-carousel' aria-label='Browse skills in one moving row'><div class='elite-skill-track'><div class='elite-skill-set'>"+
  categories.map(c=>skillChip(c,false)).join('')+"</div><div class='elite-skill-set' aria-hidden='true'>"+
  categories.map(c=>skillChip(c,true)).join('')+"</div></div></div>";
