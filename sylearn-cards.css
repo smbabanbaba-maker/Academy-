@@ -336,3 +336,18 @@
  #app .syl-neon-home .syl-course-v3.elite-featured-card,
  #app .syl-clean-catalog .syl-catalog-home-card{transition:none!important}
 }
+
+
+/* Keep wide-screen catalog density; mobile still has exactly two course cards per row. */
+@media(min-width:1100px){
+ #app .syl-clean-catalog .yt-course-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:15px!important;
+ }
+}
+@media(min-width:761px) and (max-width:1099px){
+ #app .syl-clean-catalog .yt-course-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:13px!important;
+ }
+}
