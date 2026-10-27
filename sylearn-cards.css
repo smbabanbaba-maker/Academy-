@@ -1,0 +1,338 @@
+/* SYLearn Cyber Course Card System V1
+   Final high-specificity visual layer over legacy white !important card rules.
+   Affects presentation only: no course data, study progress, teacher attribution
+   or interactive element behavior is modified. */
+:root{
+ --scc-bg:#101a29;
+ --scc-panel:#131f30;
+ --scc-border:#2e455d;
+ --scc-text:#f2f7ff;
+ --scc-muted:#b0bfd1;
+ --scc-soft:#90a4bb;
+ --scc-hot:#ff447b;
+ --scc-cyan:#48d6e8;
+ --scc-track:#2a394e;
+}
+/* Feature cards (Home and the complete Courses catalogue): root and ALL nested
+   surfaces must be dark, including the button that has background:#fff!important
+   in academy-elite.css. These scoped declarations intentionally outrank it. */
+#app .syl-neon-home .elite-course-grid,
+#app .syl-clean-catalog .yt-course-grid{
+ display:grid!important;
+ grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ gap:clamp(10px,1.6vw,17px)!important;
+ align-items:stretch;
+}
+#app .syl-neon-home .syl-course-v3.elite-featured-card,
+#app .syl-clean-catalog .syl-catalog-home-card{
+ position:relative;isolation:isolate;min-width:0;overflow:hidden;
+ display:flex;flex-direction:column;
+ background:linear-gradient(156deg,#152438 0%,#101a29 58%,#0d1725 100%)!important;
+ color:var(--scc-text)!important;
+ border:1px solid var(--scc-border)!important;
+ border-radius:15px!important;
+ box-shadow:0 7px 24px rgba(0,0,0,.23),inset 0 1px 0 rgba(255,255,255,.035)!important;
+ transition:transform .23s ease,border-color .23s ease,box-shadow .23s ease!important;
+}
+#app .syl-neon-home .syl-course-v3.elite-featured-card:focus-within,
+#app .syl-clean-catalog .syl-catalog-home-card:focus-within{
+ border-color:#e65384!important;
+ box-shadow:0 0 0 2px rgba(255,63,123,.2),0 0 20px rgba(255,50,106,.10)!important;
+}
+@media(hover:hover){
+ #app .syl-neon-home .syl-course-v3.elite-featured-card:hover,
+ #app .syl-clean-catalog .syl-catalog-home-card:hover{
+  transform:translateY(-3px)!important;
+  border-color:#ef5284!important;
+  box-shadow:0 11px 29px rgba(0,0,0,.34),0 0 22px rgba(255,54,113,.12)!important;
+ }
+}
+#app .syl-neon-home .syl-course-v3 .elite-course-open,
+#app .syl-clean-catalog .syl-catalog-home-card .elite-course-open{
+ display:flex!important;flex:1;flex-direction:column;
+ padding:0!important;min-width:0;width:100%;height:100%;
+ border:0!important;outline-offset:-2px;
+ background:linear-gradient(156deg,#152438,#101a29 56%,#0d1725)!important;
+ color:var(--scc-text)!important;
+ text-align:left!important;
+}
+#app .syl-neon-home .syl-course-v3 .elite-course-body,
+#app .syl-clean-catalog .syl-catalog-home-card .elite-course-body{
+ display:flex!important;flex:1;flex-direction:column;align-items:stretch;
+ gap:7px!important;
+ min-width:0;width:100%;box-sizing:border-box;
+ padding:14px 14px 15px!important;
+ border:0!important;
+ background:linear-gradient(156deg,#152438,#101a29 60%,#0d1725)!important;
+ color:var(--scc-text)!important;
+}
+/* Explicit child typography prevents white-on-white from previous styles. */
+#app .syl-neon-home .syl-course-v3 .elite-featured-name,
+#app .syl-clean-catalog .syl-catalog-home-card .elite-featured-name{
+ display:-webkit-box!important;
+ -webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;
+ overflow:hidden;min-height:34px;
+ color:var(--scc-text)!important;
+ font-weight:850!important;
+ font-size:clamp(11px,1.35vw,15px)!important;
+ line-height:1.45!important;
+ letter-spacing:-.025em!important;
+ text-shadow:none!important;
+}
+#app .syl-neon-home .syl-course-v3 .elite-course-category,
+#app .syl-clean-catalog .syl-catalog-home-card .elite-course-category{
+ font-weight:850!important;font-size:10px!important;letter-spacing:.025em;
+ line-height:1.45!important;color:#ff86a8!important;
+}
+#app .syl-neon-home .syl-course-v3 .elite-course-category b,
+#app .syl-clean-catalog .syl-catalog-home-card .elite-course-category b{
+ color:#647f99!important;font-weight:600;
+}
+#app .syl-neon-home .syl-course-v3 .elite-course-description,
+#app .syl-clean-catalog .syl-catalog-home-card .elite-course-description{
+ display:-webkit-box!important;-webkit-box-orient:vertical;
+ -webkit-line-clamp:2;line-clamp:2;
+ overflow:hidden;min-height:31px;
+ font-weight:550!important;font-size:11px!important;
+ line-height:1.55!important;color:var(--scc-muted)!important;
+}
+#app .syl-neon-home .syl-course-v3 .syl-card-facts,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-card-facts,
+#app .syl-neon-home .syl-course-v3 .syl-card-rating,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-card-rating{
+ display:flex;align-items:center;gap:7px 10px;flex-wrap:wrap;
+ font-size:10px!important;font-weight:700!important;
+ line-height:1.45!important;color:#9eb2c7!important;
+}
+#app .syl-neon-home .syl-course-v3 .syl-card-facts span,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-card-facts span,
+#app .syl-neon-home .syl-course-v3 .syl-card-rating small,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-card-rating small{
+ color:#a6b7ca!important;
+}
+#app .syl-neon-home .syl-course-v3 .syl-card-facts svg,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-card-facts svg{
+ color:#ff6491!important;stroke:#ff6491!important;opacity:1;
+}
+#app .syl-neon-home .syl-course-v3 .syl-card-rating svg,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-card-rating svg{
+ color:#ffc779!important;stroke:#ffc779!important;fill:#ffc779!important;
+}
+/* Progress gets its own dark surface and unmistakable readable numbers. */
+#app .syl-neon-home .syl-course-v3 .syl-v3-progress,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-v3-progress{
+ margin-top:4px!important;gap:7px!important;
+ background:transparent!important;
+}
+#app .syl-neon-home .syl-course-v3 .syl-v3-progress>span:first-child,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-v3-progress>span:first-child{
+ color:#d3dce9!important;
+ font-size:10px!important;
+}
+#app .syl-neon-home .syl-course-v3 .syl-v3-progress strong,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-v3-progress strong{
+ color:#eaf2ff!important;font-weight:750!important;
+}
+#app .syl-neon-home .syl-course-v3 .syl-v3-progress em,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-v3-progress em{
+ color:#ff8fac!important;font-weight:850!important;
+}
+#app .syl-neon-home .syl-course-v3 .syl-v3-meter,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-v3-meter{
+ display:block!important;width:100%;height:6px!important;
+ overflow:hidden;border:1px solid #354862!important;border-radius:999px!important;
+ background:var(--scc-track)!important;
+}
+#app .syl-neon-home .syl-course-v3 .syl-v3-meter>span,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-v3-meter>span{
+ border-radius:inherit;background:linear-gradient(90deg,#fb326c,#ff769f)!important;
+ box-shadow:0 0 10px rgba(255,64,123,.4)!important;
+}
+/* Buttons, footers, thumbs and badges */
+#app .syl-neon-home .syl-course-v3 .elite-course-foot,
+#app .syl-clean-catalog .syl-catalog-home-card .elite-course-foot{
+ display:flex!important;justify-content:space-between;align-items:center;
+ margin-top:auto!important;min-height:42px;
+ padding:11px 0 0!important;border-top:1px solid #354359!important;
+ background:transparent!important;
+ color:#ff90ad!important;font-size:11px!important;font-weight:850!important;
+}
+#app .syl-neon-home .syl-course-v3 .elite-course-foot>span,
+#app .syl-clean-catalog .syl-catalog-home-card .elite-course-foot>span{color:#ff90ad!important}
+#app .syl-neon-home .syl-course-v3 .elite-course-foot em,
+#app .syl-clean-catalog .syl-catalog-home-card .elite-course-foot em{
+ display:grid;place-items:center;flex:none;width:30px;height:30px;
+ border-radius:10px;background:linear-gradient(145deg,#452039,#291d35)!important;
+ border:1px solid #633352;color:#ff7da3!important;font-style:normal;
+ box-shadow:0 0 14px rgba(240,45,106,.11);
+}
+#app .syl-neon-home .syl-course-v3 .elite-course-foot svg,
+#app .syl-clean-catalog .syl-catalog-home-card .elite-course-foot svg{
+ color:#ff80a8!important;stroke:#ff80a8!important;
+}
+#app .syl-neon-home .syl-course-v3 .syl-home-video-thumb,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-home-video-thumb{
+ display:block;position:relative;overflow:hidden;width:100%;
+ aspect-ratio:16/9;background:#111b2b!important;
+}
+#app .syl-neon-home .syl-course-v3 .syl-home-video-thumb img,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-home-video-thumb img{
+ width:100%;height:100%;object-fit:cover;display:block;
+ filter:saturate(1.06) contrast(1.04);
+}
+#app .syl-neon-home .syl-course-v3 .elite-card-play,
+#app .syl-clean-catalog .syl-catalog-home-card .elite-card-play{
+ background:rgba(12,20,34,.87)!important;color:#fff!important;
+ border:1px solid rgba(172,210,231,.38)!important;
+ box-shadow:0 3px 12px rgba(0,0,0,.33);
+ backdrop-filter:blur(8px);
+}
+#app .syl-neon-home .syl-course-v3 .elite-card-play svg,
+#app .syl-clean-catalog .syl-catalog-home-card .elite-card-play svg{stroke:#fff!important;color:#fff!important}
+#app .syl-neon-home .syl-course-v3 .syl-card-price.syl-is-free,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-card-price.syl-is-free{
+ border:1px solid #28634d!important;
+ background:rgba(14,58,43,.96)!important;color:#b4ffd9!important;
+}
+#app .syl-neon-home .syl-course-v3 .syl-card-price.syl-is-paid,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-card-price.syl-is-paid{
+ border:1px solid #803e5a!important;
+ background:rgba(65,28,48,.96)!important;color:#ffb5c7!important;
+}
+#app .syl-neon-home .syl-course-v3 .syl-v3-home-save,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-v3-home-save{
+ display:grid;place-items:center;
+ background:rgba(14,23,37,.93)!important;
+ border:1px solid #516179!important;color:#f1f6ff!important;
+ box-shadow:0 5px 16px rgba(0,0,0,.28)!important;
+ backdrop-filter:blur(8px);
+}
+#app .syl-neon-home .syl-course-v3 .syl-v3-home-save svg,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-v3-home-save svg{
+ stroke:#f3f7ff!important;color:#f3f7ff!important;
+}
+#app .syl-neon-home .syl-course-v3 .syl-v3-home-save.is-saved,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-v3-home-save.is-saved{
+ background:#482039!important;border-color:#ff5282!important;color:#ff96b1!important;
+}
+#app .syl-neon-home .syl-course-v3 .syl-v3-home-save.is-saved svg,
+#app .syl-clean-catalog .syl-catalog-home-card .syl-v3-home-save.is-saved svg{
+ stroke:#ff96b1!important;color:#ff96b1!important;
+}
+/* Saved course cards use an older course-card renderer: make it part of the same system. */
+#app .saved-real .yt-course-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#app .saved-real .yt-course-card{
+ position:relative;overflow:hidden;
+ background:linear-gradient(154deg,#152337,#101a29)!important;
+ color:var(--scc-text)!important;border:1px solid var(--scc-border)!important;
+ border-radius:15px!important;box-shadow:0 8px 24px rgba(0,0,0,.22)!important;
+}
+#app .saved-real .yt-course-card .yt-card-body{
+ display:flex;flex-direction:column;gap:8px;
+ padding:14px!important;min-height:0;background:transparent!important;color:var(--scc-text)!important;
+}
+#app .saved-real .yt-course-card .yt-card-type{color:#ff8aab!important;font-weight:800!important}
+#app .saved-real .yt-course-card .yt-card-name{
+ color:#f4f7ff!important;font-weight:850!important;
+ font-size:13px!important;line-height:1.4!important;text-align:left;
+}
+#app .saved-real .yt-course-card .yt-author{color:#adbfd1!important;font-size:10px!important}
+#app .saved-real .yt-course-card .yt-card-bottom{border-color:#34445b!important;background:transparent!important}
+#app .saved-real .yt-course-card .yt-view{
+ color:#ff90ae!important;background:transparent!important;font-weight:800!important;
+}
+#app .saved-real .yt-course-card .yt-card-image{background:#0e1828!important}
+#app .saved-real .yt-course-card .yt-card-badge{background:#163b33!important;color:#b5f7d3!important;border-color:#28664e!important}
+#app .saved-real .yt-course-card .yt-save{background:#172339!important;border:1px solid #465774!important;color:#ffc0d0!important}
+/* Learning history retains its approved two-across layout. */
+#app .syl-learning-v2 .syl-ld-course-grid{
+ display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;
+}
+#app .syl-learning-v2 .syl-ld-course{
+ background:linear-gradient(152deg,#162339,#111b29)!important;
+ border:1px solid #30455e!important;
+ color:#f4f7ff!important;border-radius:15px!important;
+ box-shadow:0 8px 23px rgba(0,0,0,.22)!important;
+}
+#app .syl-learning-v2 .syl-ld-course-body{background:transparent!important;color:#f2f7ff!important}
+#app .syl-learning-v2 .syl-ld-course-title{color:#f4f8ff!important}
+#app .syl-learning-v2 .syl-ld-course-topline{color:#ff90ad!important}
+#app .syl-learning-v2 .syl-ld-saved{color:#d8abc2!important}
+#app .syl-learning-v2 .syl-ld-next{color:#afbdd1!important}
+#app .syl-learning-v2 .syl-ld-percentline{color:#bed0de!important}
+#app .syl-learning-v2 .syl-ld-percentline strong{color:#ff94b2!important}
+#app .syl-learning-v2 .syl-ld-bar{background:#2b3d53!important}
+#app .syl-learning-v2 .syl-ld-bar>span{background:linear-gradient(90deg,#ff356c,#fd7d9f)!important}
+#app .syl-learning-v2 .syl-ld-resume{color:#ff8eac!important;border-color:#35465b!important}
+#app .syl-learning-v2 .syl-ld-image-tag{color:#fff!important;background:rgba(10,19,33,.89)!important}
+#app .syl-learning-v2 .syl-ld-course:hover{border-color:#f04d7d!important}
+/* Published and proposed Live class cards, without changing session status. */
+#app .syl-live-hub .syl-live-class-card,
+#app .syl-live-hub .syl-live-topic-card{
+ background:linear-gradient(145deg,#142135,#0e1828)!important;
+ border:1px solid #32475d!important;color:#eef5ff!important;
+ box-shadow:0 9px 24px rgba(0,0,0,.23)!important;
+}
+#app .syl-live-hub .syl-live-class-copy{background:transparent!important}
+#app .syl-live-hub :is(.syl-live-class-copy h3,.syl-live-topic-card h3){color:#f5f7ff!important}
+#app .syl-live-hub :is(.syl-live-class-copy p,.syl-live-topic-card p){color:#aebed0!important}
+#app .syl-live-hub .syl-live-topic-status{color:#ff89ac!important}
+#app .syl-live-hub .syl-live-card-footer{border-top-color:#36495c!important}
+#app .syl-live-hub .syl-live-save{color:#fff!important}
+#app .syl-live-hub .syl-live-save.is-saved{color:#b7f4d4!important;background:#164234!important}
+@media(max-width:760px){
+ #app .syl-neon-home .elite-course-grid,
+ #app .syl-clean-catalog .yt-course-grid,
+ #app .syl-learning-v2 .syl-ld-course-grid,
+ #app .saved-real .yt-course-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+}
+@media(max-width:480px){
+ #app .syl-neon-home .syl-course-v3 .elite-course-body,
+ #app .syl-clean-catalog .syl-catalog-home-card .elite-course-body{
+  padding:11px 10px 12px!important;gap:6px!important;
+ }
+ #app .syl-neon-home .syl-course-v3 .elite-featured-name,
+ #app .syl-clean-catalog .syl-catalog-home-card .elite-featured-name{
+  font-size:11px!important;min-height:32px;line-height:1.43!important;
+ }
+ #app .syl-neon-home .syl-course-v3 .elite-course-category,
+ #app .syl-clean-catalog .syl-catalog-home-card .elite-course-category{
+  font-size:9px!important;
+ }
+ #app .syl-neon-home .syl-course-v3 .elite-course-description,
+ #app .syl-clean-catalog .syl-catalog-home-card .elite-course-description{
+  font-size:10px!important;line-height:1.48!important;min-height:30px;
+ }
+ #app .syl-neon-home .syl-course-v3 .syl-card-facts,
+ #app .syl-clean-catalog .syl-catalog-home-card .syl-card-facts{
+  gap:4px 7px;font-size:9px!important;
+ }
+ #app .syl-neon-home .syl-course-v3 .syl-v3-progress>span:first-child,
+ #app .syl-clean-catalog .syl-catalog-home-card .syl-v3-progress>span:first-child{
+  font-size:9px!important;
+ }
+ #app .syl-neon-home .syl-course-v3 .elite-course-foot,
+ #app .syl-clean-catalog .syl-catalog-home-card .elite-course-foot{
+  min-height:37px;font-size:10px!important;padding-top:8px!important;
+ }
+ #app .syl-neon-home .syl-course-v3 .elite-course-foot em,
+ #app .syl-clean-catalog .syl-catalog-home-card .elite-course-foot em{
+  width:28px;height:28px;border-radius:9px;
+ }
+ #app .saved-real .yt-course-card .yt-card-body{padding:11px!important}
+ #app .saved-real .yt-course-card .yt-card-name{font-size:11px!important}
+ #app .syl-learning-v2 .syl-ld-course{flex-direction:column!important}
+ #app .syl-learning-v2 .syl-ld-image{min-height:0!important;width:100%!important;aspect-ratio:16/9!important}
+}
+@media(max-width:370px){
+ #app .syl-neon-home .elite-course-grid,
+ #app .syl-clean-catalog .yt-course-grid,
+ #app .syl-learning-v2 .syl-ld-course-grid,
+ #app .saved-real .yt-course-grid{gap:8px!important}
+ #app .syl-neon-home .syl-course-v3 .elite-course-body,
+ #app .syl-clean-catalog .syl-catalog-home-card .elite-course-body{padding:9px 8px 10px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #app .syl-neon-home .syl-course-v3.elite-featured-card,
+ #app .syl-clean-catalog .syl-catalog-home-card{transition:none!important}
+}
