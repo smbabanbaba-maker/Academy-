@@ -1,5 +1,5 @@
 /* SYLearn Digital Academy PWA: network-first updates, no API response caching. */
-const VERSION='sylution-learn-slimpromov1a-20261027';
+const VERSION='sylution-learn-quick3v1-20261027';
 const ASSETS=['./','./index.html','./styles.css','./premium.css','./palette.css','./responsive.css','./youtube.css','./home-premium.css','./learning.css','./academy-elite.css','./profile-v3.css','./sylearn-tech.css','./sylearn-neon.css','./sylearn-cards.css','./sylearn-promo.css','./tech-education-hero.svg','./youtube.js','./learning.js','./learning-ui.js','./learning-player.js','./youtube-ui.js','./live-sessions.js','./promo-slides.js','./app.js','./icon.svg','./manifest.webmanifest'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(VERSION).then(cache=>cache.addAll(ASSETS)));
