@@ -14,39 +14,60 @@
   <link rel="icon" type="image/svg+xml" href="./icon.svg"/>
   <link rel="manifest" href="./manifest.webmanifest"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <link rel="stylesheet" href="./styles.css?v=20261027spectrumv1"/>
-  <link rel="stylesheet" href="./premium.css?v=20261027spectrumv1"/>
-  <link rel="stylesheet" href="./palette.css?v=20261027spectrumv1"/>
-  <link rel="stylesheet" href="./responsive.css?v=20261027spectrumv1"/>
-  <link rel="stylesheet" href="./youtube.css?v=20261027spectrumv1"/>
-  <link rel="stylesheet" href="./home-premium.css?v=20261027spectrumv1"/>
-  <link rel="stylesheet" href="./learning.css?v=20261027spectrumv1"/>
-  <link rel="stylesheet" href="./academy-elite.css?v=20261027spectrumv1"/>
-  <link rel="stylesheet" href="./profile-v3.css?v=20261027spectrumv1"/>
-  <link rel="stylesheet" href="./sylearn-tech.css?v=20261027spectrumv1"/>
-  <link rel="stylesheet" href="./sylearn-neon.css?v=20261027spectrumv1"/>
-  <link rel="stylesheet" href="./sylearn-cards.css?v=20261027spectrumv1"/>
-  <link rel="stylesheet" href="./sylearn-promo.css?v=20261027spectrumv1"/>
-  <link rel="stylesheet" href="./sylearn-spectrum.css?v=20261027spectrumv1"/>
+  <link rel="stylesheet" href="./styles.css?v=20261027brandlaunchv1"/>
+  <link rel="stylesheet" href="./premium.css?v=20261027brandlaunchv1"/>
+  <link rel="stylesheet" href="./palette.css?v=20261027brandlaunchv1"/>
+  <link rel="stylesheet" href="./responsive.css?v=20261027brandlaunchv1"/>
+  <link rel="stylesheet" href="./youtube.css?v=20261027brandlaunchv1"/>
+  <link rel="stylesheet" href="./home-premium.css?v=20261027brandlaunchv1"/>
+  <link rel="stylesheet" href="./learning.css?v=20261027brandlaunchv1"/>
+  <link rel="stylesheet" href="./academy-elite.css?v=20261027brandlaunchv1"/>
+  <link rel="stylesheet" href="./profile-v3.css?v=20261027brandlaunchv1"/>
+  <link rel="stylesheet" href="./sylearn-tech.css?v=20261027brandlaunchv1"/>
+  <link rel="stylesheet" href="./sylearn-neon.css?v=20261027brandlaunchv1"/>
+  <link rel="stylesheet" href="./sylearn-cards.css?v=20261027brandlaunchv1"/>
+  <link rel="stylesheet" href="./sylearn-promo.css?v=20261027brandlaunchv1"/>
+  <link rel="stylesheet" href="./sylearn-spectrum.css?v=20261027brandlaunchv1"/>
 </head>
 <body>
   <style>
-    #syl-startup-fallback{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:32px 20px;background:#080c14;color:#ecf3ff;font:500 14px/1.6 'DM Sans',sans-serif;text-align:center}
-    #syl-startup-fallback .syl-startup-inner{width:min(360px,100%);display:flex;flex-direction:column;align-items:center;gap:12px}
-    #syl-startup-fallback .syl-startup-mark{height:54px;width:54px;display:grid;place-items:center;border-radius:16px;background:#ec2c62;color:#fff;font:850 21px/1 'Plus Jakarta Sans',sans-serif;box-shadow:0 12px 25px #ed164529}
-    #syl-startup-fallback h1{font:850 23px/1.2 'Plus Jakarta Sans',sans-serif;letter-spacing:-.045em;margin:3px 0 0}
-    #syl-startup-fallback p{max-width:340px;color:#9faec4;margin:0}
-    #syl-startup-fallback button{margin-top:8px;min-height:46px;padding:0 24px;border-radius:12px;background:#e6224b;color:white;border:0;font-weight:800}
-    #syl-startup-fallback .syl-startup-spinner{width:27px;height:27px;margin:6px;border-radius:50%;border:3px solid #4b2537;border-top-color:#fc477a;animation:sylStartupSpin .75s linear infinite}
-    @keyframes sylStartupSpin{to{transform:rotate(360deg)}}
-    @media(prefers-reduced-motion:reduce){#syl-startup-fallback .syl-startup-spinner{animation:none}}
+    /* Standalone, instant-start branding. Keeps fallback available without app JS. */
+    #syl-startup-fallback{position:relative;isolation:isolate;min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px 20px;background:radial-gradient(ellipse 280px 240px at 50% 44%,rgba(222,37,99,.085),transparent 75%),radial-gradient(ellipse 230px 200px at 58% 48%,rgba(54,210,232,.055),transparent 80%),#080e19;color:#f2f7ff;font:500 14px/1.55 'DM Sans',sans-serif;text-align:center;overflow:hidden}
+    #syl-startup-fallback .syl-startup-grid{position:absolute;inset:0;pointer-events:none;opacity:.42;background-image:linear-gradient(rgba(76,120,161,.075) 1px,transparent 1px),linear-gradient(90deg,rgba(76,120,161,.075) 1px,transparent 1px);background-size:30px 30px;-webkit-mask-image:radial-gradient(ellipse 46% 43% at 50% 50%,#000,transparent);mask-image:radial-gradient(ellipse 46% 43% at 50% 50%,#000,transparent)}
+    #syl-startup-fallback .syl-startup-inner{position:relative;z-index:1;width:min(335px,100%);min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+    #syl-startup-fallback .syl-startup-halo{position:relative;display:grid;place-items:center;width:146px;height:146px;margin-bottom:14px}
+    #syl-startup-fallback .syl-startup-halo:before{content:"";position:absolute;inset:2px;border-radius:50%;background:conic-gradient(from 20deg,rgba(255,65,117,.1),rgba(54,214,237,.24),transparent 58%,rgba(177,130,255,.2));filter:blur(18px);animation:sylStartupGlow 3.7s ease-in-out infinite}
+    #syl-startup-fallback .syl-startup-halo:after{content:"";position:absolute;inset:9px;border-radius:33px;border:1px solid rgba(208,71,123,.22);background:linear-gradient(135deg,rgba(30,37,58,.4),rgba(11,19,33,.5));box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 14px 40px rgba(0,0,0,.22);transform:rotate(-3deg)}
+    #syl-startup-fallback .syl-startup-logo{position:relative;z-index:2;display:block;width:114px;height:114px;object-fit:contain;filter:drop-shadow(0 9px 15px rgba(0,0,0,.35));animation:sylStartupMark 3.5s ease-in-out infinite}
+    #syl-startup-fallback .syl-startup-wordmark{display:flex;flex-direction:column;align-items:center;gap:5px}
+    #syl-startup-fallback h1{font:850 31px/1.16 'Plus Jakarta Sans','DM Sans',sans-serif;letter-spacing:-.06em;margin:0;color:#f5f8ff}
+    #syl-startup-fallback h1 span{color:#ff5389}
+    #syl-startup-fallback .syl-startup-subtitle{font-size:9px;font-weight:850;line-height:1.5;letter-spacing:.23em;color:#98b2c9;margin:0;text-transform:uppercase}
+    #syl-startup-fallback .syl-startup-message{margin:32px 0 12px!important;color:#d5e1ef!important;font-size:12px;line-height:1.5;font-weight:650}
+    #syl-startup-fallback .syl-startup-line{position:relative;width:176px;height:3px;border-radius:99px;overflow:hidden;background:#243245;box-shadow:inset 0 1px 2px rgba(0,0,0,.5)}
+    #syl-startup-fallback .syl-startup-line span{position:absolute;display:block;width:36%;height:100%;border-radius:99px;background:linear-gradient(90deg,#fa356f,#a37bff,#42d9e8);box-shadow:0 0 14px #ff5688;animation:sylStartupLoad 1.8s ease-in-out infinite}
+    #syl-startup-fallback .syl-startup-motto{font-size:9px;font-weight:750;letter-spacing:.19em;color:#72869f;margin:25px 0 0!important}
+    #syl-startup-fallback .syl-startup-repair-copy{max-width:280px;color:#9fb0c5;margin:10px 0 12px!important;font-size:12px}
+    #syl-startup-fallback button{min-height:45px;margin-top:7px;padding:0 21px;border:1px solid rgba(255,115,160,.48);border-radius:12px;background:linear-gradient(112deg,#ef316c,#a82564);color:white;font:800 13px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 9px 23px rgba(241,48,103,.17)}
+    #syl-startup-fallback button:focus-visible{outline:3px solid #4edfe9;outline-offset:3px}
+    #syl-startup-fallback[data-failed="true"] .syl-startup-halo{width:110px;height:110px;margin-bottom:13px}
+    #syl-startup-fallback[data-failed="true"] .syl-startup-logo{width:86px;height:86px;animation:none}
+    #syl-startup-fallback[data-failed="true"] .syl-startup-message{display:none}
+    @keyframes sylStartupMark{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+    @keyframes sylStartupGlow{0%,100%{opacity:.65;transform:scale(.94)}50%{opacity:1;transform:scale(1.07)}}
+    @keyframes sylStartupLoad{0%{left:-37%}50%{left:47%}100%{left:101%}}
+    @media(prefers-reduced-motion:reduce){#syl-startup-fallback .syl-startup-logo,#syl-startup-fallback .syl-startup-halo:before,#syl-startup-fallback .syl-startup-line span{animation:none!important}#syl-startup-fallback .syl-startup-line span{left:30%!important;width:40%!important}}
   </style>
-  <div id="app"><div id="syl-startup-fallback"><div class="syl-startup-inner">
-    <div class="syl-startup-mark">SY</div>
-    <h1>Opening SYLearn</h1>
-    <div class="syl-startup-spinner" role="status" aria-label="Loading"></div>
-    <p>Your digital academy is starting.</p>
-  </div></div></div>
+  <div id="app"><div id="syl-startup-fallback" role="status" aria-label="Opening SYLearn">
+    <div class="syl-startup-grid" aria-hidden="true"></div>
+    <div class="syl-startup-inner">
+      <div class="syl-startup-halo"><img class="syl-startup-logo" src="./sylearn-brand.svg" alt="SYLearn logo"/></div>
+      <div class="syl-startup-wordmark"><h1>SY<span>Learn</span></h1><p class="syl-startup-subtitle">Digital Skills Academy</p></div>
+      <p class="syl-startup-message">Preparing your learning space</p>
+      <div class="syl-startup-line" aria-hidden="true"><span></span></div>
+      <p class="syl-startup-motto">LEARN · BUILD · GROW</p>
+    </div>
+  </div></div>
   <script>
     (function(){
       const element=()=>document.getElementById('syl-startup-fallback');
@@ -54,9 +75,9 @@
         const root=element();if(!root||root.dataset.failed)return;
         root.dataset.failed='true';
         root.querySelector('.syl-startup-inner').innerHTML=
-          '<div class="syl-startup-mark">SY</div>'+
-          '<h1>Could not open SYLearn</h1>'+
-          '<p>The app did not finish loading. Your courses and saved learning records will not be deleted.</p>'+
+          '<div class="syl-startup-halo"><img class="syl-startup-logo" src="./sylearn-brand.svg" alt="SYLearn logo"/></div>'+
+          '<h1>Could not open <span>SYLearn</span></h1>'+
+          '<p class="syl-startup-repair-copy">The academy did not finish loading. Your saved learning records will not be deleted.</p>'+
           '<button type="button" id="syl-startup-retry">Repair &amp; reopen</button>';
       }
       window.addEventListener('error',function(e){
@@ -83,21 +104,21 @@
       });
     })();
   </script>
-  <script src="./youtube.js?v=20261027spectrumv1" defer></script>
-  <script src="./learning.js?v=20261027spectrumv1" defer></script>
-  <script src="./learning-ui.js?v=20261027spectrumv1" defer></script>
-  <script src="./learning-player.js?v=20261027spectrumv1" defer></script>
-  <script src="./youtube-ui.js?v=20261027spectrumv1" defer></script>
-  <script src="./live-sessions.js?v=20261027spectrumv1" defer></script>
-  <script src="./promo-slides.js?v=20261027spectrumv1" defer></script>
-  <script src="./app.js?v=20261027spectrumv1" defer></script>
+  <script src="./youtube.js?v=20261027brandlaunchv1" defer></script>
+  <script src="./learning.js?v=20261027brandlaunchv1" defer></script>
+  <script src="./learning-ui.js?v=20261027brandlaunchv1" defer></script>
+  <script src="./learning-player.js?v=20261027brandlaunchv1" defer></script>
+  <script src="./youtube-ui.js?v=20261027brandlaunchv1" defer></script>
+  <script src="./live-sessions.js?v=20261027brandlaunchv1" defer></script>
+  <script src="./promo-slides.js?v=20261027brandlaunchv1" defer></script>
+  <script src="./app.js?v=20261027brandlaunchv1" defer></script>
   <script>
 if("serviceWorker" in navigator){
   navigator.serviceWorker.addEventListener("controllerchange",()=>{
-    const key="sylution-learn-controller-20261027spectrumv1";
+    const key="sylution-learn-controller-20261027brandlaunchv1";
     if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,"1");location.reload()}
   });
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?release=20261027spectrumv1",{updateViaCache:"none"}).then(reg=>reg.update()).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?release=20261027brandlaunchv1",{updateViaCache:"none"}).then(reg=>reg.update()).catch(()=>{}));
 }
 </script>
 </body>
