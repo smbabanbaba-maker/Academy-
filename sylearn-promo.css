@@ -163,3 +163,161 @@
  #app .syl-neon-home .syl-promo-track,
  #app .syl-neon-home .syl-promo-dot{transition:none!important}
 }
+
+
+/* SYLearn compact animated three-card Home shortcuts V1 */
+#app .syl-neon-home .syl-n-shortcuts{
+ display:grid!important;
+ grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ align-items:stretch!important;
+ gap:10px!important;
+ margin:8px 0 15px!important;
+ padding:0!important;
+ width:100%;min-width:0;
+}
+#app .syl-neon-home .syl-n-shortcuts .syl-n-quick{
+ --syl-quick-color:#fe65a0;
+ display:flex!important;flex-direction:column!important;justify-content:flex-start!important;align-items:flex-start!important;
+ gap:0!important;
+ position:relative;isolation:isolate;
+ width:100%;min-width:0!important;max-width:none!important;
+ height:106px!important;min-height:106px!important;
+ padding:11px 12px 10px!important;
+ margin:0!important;
+ overflow:hidden;
+ background:linear-gradient(145deg,#172234 0%,#0e1625 88%)!important;
+ border:1px solid #38455d!important;
+ border-radius:14px!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 6px 17px rgba(0,0,0,.2)!important;
+ text-align:left!important;
+ animation:sylQuickReveal .52s cubic-bezier(.2,.85,.24,1) both;
+ animation-delay:calc(var(--syl-card-order,0) * 110ms);
+ transition:transform .19s ease,box-shadow .19s ease,border-color .19s ease!important;
+}
+#app .syl-neon-home .syl-n-shortcuts .syl-n-tone-magenta{--syl-quick-color:#ff64a3}
+#app .syl-neon-home .syl-n-shortcuts .syl-n-tone-cyan{--syl-quick-color:#54e0ed}
+#app .syl-neon-home .syl-n-shortcuts .syl-n-tone-violet{--syl-quick-color:#b88bff}
+#app .syl-neon-home .syl-n-shortcuts .syl-n-quick:before{
+ content:"";position:absolute;z-index:-1;inset:0;
+ background:radial-gradient(circle at 6% 0%,color-mix(in srgb,var(--syl-quick-color) 14%,transparent),transparent 57%);
+ opacity:.8;pointer-events:none;
+}
+#app .syl-neon-home .syl-n-shortcuts .syl-n-quick:after{
+ content:"";position:absolute;left:12px;right:12px;bottom:0;
+ height:1px;border-radius:99px;
+ background:linear-gradient(90deg,transparent,var(--syl-quick-color),transparent);
+ opacity:.4;pointer-events:none;
+ animation:sylQuickPulse 4s ease-in-out infinite;
+ animation-delay:calc(var(--syl-card-order,0) * 650ms);
+}
+#app .syl-neon-home .syl-n-shortcuts .syl-n-quick-icon{
+ flex:none!important;display:grid!important;place-items:center!important;
+ height:32px!important;width:32px!important;
+ margin:0 0 9px!important;padding:0!important;
+ border-radius:10px!important;
+ border:1px solid color-mix(in srgb,var(--syl-quick-color) 44%,transparent)!important;
+ background:linear-gradient(140deg,#26243c,#112033)!important;
+ color:var(--syl-quick-color)!important;
+ box-shadow:0 0 14px color-mix(in srgb,var(--syl-quick-color) 13%,transparent)!important;
+ animation:sylQuickIconFloat 3.9s ease-in-out infinite;
+ animation-delay:calc(var(--syl-card-order,0) * -700ms);
+}
+#app .syl-neon-home .syl-n-shortcuts .syl-n-quick-icon svg{
+ width:18px!important;height:18px!important;
+ stroke:currentColor!important;
+}
+#app .syl-neon-home .syl-n-shortcuts .syl-n-quick strong{
+ display:-webkit-box!important;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+ max-width:100%;min-height:0!important;
+ color:#f2f6ff!important;
+ font:800 11px/1.23 'Plus Jakarta Sans',sans-serif!important;
+ letter-spacing:-.025em!important;
+ margin:0 0 4px!important;padding:0!important;
+ overflow-wrap:normal;
+}
+#app .syl-neon-home .syl-n-shortcuts .syl-n-quick small{
+ display:block!important;
+ width:100%;max-width:100%;min-width:0;
+ color:#98a7bb!important;
+ font:600 9px/1.25 'DM Sans',sans-serif!important;
+ margin:0!important;padding:0!important;
+ overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+}
+#app .syl-neon-home .syl-n-shortcuts .syl-n-quick-arrow{
+ position:absolute!important;
+ right:10px!important;top:17px!important;bottom:auto!important;left:auto!important;
+ display:grid!important;place-items:center!important;
+ width:14px;height:14px;color:#8396b0!important;
+ opacity:.78;
+}
+#app .syl-neon-home .syl-n-shortcuts .syl-n-quick-arrow svg{width:13px!important;height:13px!important}
+#app .syl-neon-home .syl-n-shortcuts .syl-n-quick:hover,
+#app .syl-neon-home .syl-n-shortcuts .syl-n-quick:focus-visible{
+ transform:translateY(-3px)!important;
+ border-color:var(--syl-quick-color)!important;
+ box-shadow:0 0 24px color-mix(in srgb,var(--syl-quick-color) 16%,transparent)!important;
+}
+#app .syl-neon-home .syl-n-shortcuts .syl-n-quick:active{transform:scale(.97)!important}
+#app .syl-neon-home .syl-n-shortcuts .syl-n-quick:focus-visible{outline:2px solid #fc7a9b!important;outline-offset:2px}
+@keyframes sylQuickReveal{
+ from{opacity:0;transform:translateY(11px) scale(.965)}
+ to{opacity:1;transform:translateY(0) scale(1)}
+}
+@keyframes sylQuickIconFloat{
+ 0%,100%{transform:translateY(0)}
+ 50%{transform:translateY(-2px)}
+}
+@keyframes sylQuickPulse{
+ 0%,100%{opacity:.21}
+ 50%{opacity:.63}
+}
+/* Keep carousel controls lean so the Home begins immediately with the shortcuts. */
+#app .syl-neon-home .syl-promo-controls{
+ gap:7px!important;padding:5px 1px 0!important;
+ min-height:32px!important;
+}
+#app .syl-neon-home .syl-promo-controls-label{
+ font-size:8px!important;letter-spacing:.035em!important;
+}
+#app .syl-neon-home .syl-promo-counter{font-size:10px!important;margin-left:5px!important}
+#app .syl-neon-home .syl-promo-arrow{
+ width:29px!important;height:29px!important;min-width:29px!important;min-height:29px!important;
+ border-radius:9px!important;
+}
+#app .syl-neon-home .syl-promo-dots{gap:5px!important}
+#app .syl-neon-home .syl-promo-dot{width:7px!important;min-width:7px!important;height:7px!important;min-height:7px!important}
+#app .syl-neon-home .syl-promo-dot.is-active{width:21px!important;min-width:21px!important}
+@media(max-width:560px){
+ #app .syl-neon-home .syl-n-shortcuts{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:8px!important;margin:5px 0 13px!important;
+ }
+ #app .syl-neon-home .syl-n-shortcuts .syl-n-quick{
+  height:102px!important;min-height:102px!important;
+  padding:9px 9px 8px!important;border-radius:12px!important;
+ }
+ #app .syl-neon-home .syl-n-shortcuts .syl-n-quick-icon{
+  height:30px!important;width:30px!important;margin-bottom:7px!important;border-radius:9px!important;
+ }
+ #app .syl-neon-home .syl-n-shortcuts .syl-n-quick-icon svg{width:17px!important;height:17px!important}
+ #app .syl-neon-home .syl-n-shortcuts .syl-n-quick strong{
+  font-size:10px!important;line-height:1.21!important;margin-bottom:4px!important;
+ }
+ #app .syl-neon-home .syl-n-shortcuts .syl-n-quick small{font-size:8px!important;line-height:1.2!important}
+ #app .syl-neon-home .syl-n-shortcuts .syl-n-quick-arrow{right:8px!important;top:15px!important}
+ #app .syl-neon-home .syl-promo-controls{min-height:29px!important}
+}
+@media(max-width:370px){
+ #app .syl-neon-home .syl-n-shortcuts{gap:6px!important}
+ #app .syl-neon-home .syl-n-shortcuts .syl-n-quick{height:99px!important;min-height:99px!important;padding:8px 7px!important}
+ #app .syl-neon-home .syl-n-shortcuts .syl-n-quick strong{font-size:9px!important}
+ #app .syl-neon-home .syl-n-shortcuts .syl-n-quick small{font-size:7.5px!important}
+ #app .syl-neon-home .syl-n-shortcuts .syl-n-quick-arrow{right:6px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #app .syl-neon-home .syl-n-shortcuts .syl-n-quick,
+ #app .syl-neon-home .syl-n-shortcuts .syl-n-quick-icon,
+ #app .syl-neon-home .syl-n-shortcuts .syl-n-quick:after{
+  animation:none!important;transition:none!important;
+ }
+}
