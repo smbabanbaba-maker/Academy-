@@ -91,7 +91,7 @@ const QUESTIONS=[
 ];
 const read=(k,d)=>{try{const x=localStorage.getItem('sylution_'+k);return x?JSON.parse(x):d}catch(e){return d}};
 const save=(k,v)=>{try{localStorage.setItem('sylution_'+k,JSON.stringify(v))}catch(e){}};
-const state={page:'home',category:'All',search:'',sort:'popular',courseId:'python',heroIndex:0,detailTab:'overview',lessonTab:'notes',saved:read('saved',[]),enrolled:read('enrolled',[]),completed:read('completed',{}),user:read('user',{name:'Learner',preferred:'Hausa'}),chat:read('chat',[{from:'ai',text:'Welcome to SYLearn Study Companion. Choose a topic such as Python, design or robotics, and explore a guided explanation in Hausa or English!'}]),quizIndex:0,answers:{},quizEnds:0,quizSubmitted:false,quizResult:0,modal:null,lessonPlaying:false,liveTab:'upcoming',liveSaved:read('liveSaved',[]),drafts:read('drafts',[]),toastTimer:null};
+const state={page:'home',category:'All',search:'',sort:'popular',courseId:'python',heroIndex:0,promoIndex:0,detailTab:'overview',lessonTab:'notes',saved:read('saved',[]),enrolled:read('enrolled',[]),completed:read('completed',{}),user:read('user',{name:'Learner',preferred:'Hausa'}),chat:read('chat',[{from:'ai',text:'Welcome to SYLearn Study Companion. Choose a topic such as Python, design or robotics, and explore a guided explanation in Hausa or English!'}]),quizIndex:0,answers:{},quizEnds:0,quizSubmitted:false,quizResult:0,modal:null,lessonPlaying:false,liveTab:'upcoming',liveSaved:read('liveSaved',[]),drafts:read('drafts',[]),toastTimer:null};
 const money=n=>n?'₦'+n.toLocaleString('en-NG'):'Free';
 const course=id=>COURSES.find(c=>c.id===id)||COURSES[0];
 const ct=id=>state.completed[id]||0;
@@ -130,6 +130,55 @@ const navBar=()=>{
  "</nav></div>";
 };
 const footer=()=>"<footer class='footer syl-footer elite-footer elite-footer-minimal'><strong>SYLearn</strong><p>Learn. Build. Grow. <span>·</span> Powered by SYLUTION</p></footer>";
+
+/* Published Home promotions are presentation-only, not learning progress or enrolment. */
+const promotions=()=>{
+ const list=Array.isArray(window.SYLEARN_PROMOTIONS)?window.SYLEARN_PROMOTIONS:[];
+ return list.slice(0,8).filter(p=>p&&typeof p.title==='string'&&p.title.trim()&&
+   typeof p.description==='string'&&typeof p.cta==='string'&&
+   ['courses','live'].includes(p.route)).map(p=>({
+   title:p.title.slice(0,100),description:p.description.slice(0,170),cta:p.cta.slice(0,35),
+   eyebrow:String(p.eyebrow||'SYLearn Digital Skills Academy').slice(0,45),
+   theme:['crimson','cyan','violet'].includes(p.theme)?p.theme:'crimson',
+   icon:['spark','radio','settings','book'].includes(p.icon)?p.icon:'spark',
+   route:p.route,
+   category:p.route==='courses'&&VIDEO.curated.some(c=>c.category===p.category)?p.category:''
+ }));
+};
+let promoTimer=0,promoTouch=null;
+function changePromo(index,manual=false){
+ const carousel=document.querySelector('.syl-promo-carousel');
+ if(!carousel||state.page!=='home')return;
+ const slides=[...carousel.querySelectorAll('.syl-promo-slide')],dots=[...carousel.querySelectorAll('.syl-promo-dot')];
+ if(!slides.length)return;
+ state.promoIndex=((index%slides.length)+slides.length)%slides.length;
+ const track=carousel.querySelector('.syl-promo-track');
+ if(track)track.style.transform='translateX(-'+state.promoIndex*100+'%)';
+ slides.forEach((slide,i)=>{
+  const hidden=i!==state.promoIndex;
+  slide.setAttribute('aria-hidden',String(hidden));
+  slide.inert=hidden;
+ });
+ dots.forEach((dot,i)=>{
+  dot.classList.toggle('is-active',i===state.promoIndex);
+  dot.setAttribute('aria-current',i===state.promoIndex?'true':'false');
+  dot.setAttribute('aria-label','Show promotion '+(i+1)+' of '+slides.length);
+ });
+ const count=carousel.querySelector('.syl-promo-counter');
+ if(count)count.textContent=String(state.promoIndex+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
+ if(manual)schedulePromo(9000);
+}
+function schedulePromo(delay=6500){
+ if(promoTimer){clearTimeout(promoTimer);promoTimer=0}
+ if(state.page!=='home'||promotions().length<2)return;
+ promoTimer=setTimeout(()=>{
+  promoTimer=0;
+  if(state.page==='home'&&document.querySelector('.syl-promo-carousel')){
+   if(!document.hidden)changePromo(state.promoIndex+1);
+   schedulePromo();
+  }
+ },delay);
+}
 
 function home(){
  const curated=VIDEO.curated||[];
@@ -180,10 +229,6 @@ function home(){
    "<button type='button' class='syl-v3-home-save "+(saved?'is-saved':'')+"' data-action='yt-save' data-id='"+esc(c.id)+"' aria-label='"+(saved?'Remove saved course':'Save course')+"' aria-pressed='"+(saved?'true':'false')+"'>"+ico('bookmark',17)+"</button></article>";
  };
  const started=curated.filter(c=>VIDEO.progress(c)>0);
- const continuing=started.find(c=>VIDEO.progress(c)<100)||started[0]||null;
- const lead=continuing||picks[0]||curated[0]||null;
- const active=continuing&&VIDEO.progress(continuing)>0;
- const leadProgress=lead?Math.min(100,Math.max(0,VIDEO.progress(lead)||0)):0;
  const totalChapters=started.reduce((n,c)=>n+(Array.isArray(c.chapters)?c.chapters.length:0),0);
  const markedChapters=started.reduce((n,c)=>{
   const key=(c.type||'video')+':'+c.id,rows=VIDEO.state.courseProgress[key]||[];
@@ -207,18 +252,26 @@ function home(){
   "<span class='syl-n-quick-icon'>"+ico(ic,25)+"</span>"+
   "<strong>"+esc(title)+"</strong><small>"+esc(sub)+"</small>"+
   "<span class='syl-n-quick-arrow'>"+ico('arrow',16)+"</span></button>").join('');
- const leadAction=lead?(active?"data-action='learning-resume'":"data-action='yt-open'")+" data-id='"+esc(lead.id)+"'":"data-go='courses'";
- const bannerTitle=lead?esc(lead.title):'Build your next digital skill';
- const bannerText=lead?esc(lead.description||'Follow structured lessons and learn by doing.'):'Practical technology courses and real skills for the future.';
- const completionText=lead?(leadProgress>=100?'All chapters marked studied':leadProgress>0?'Chapter progress saved on this device':'Start a new learning path'):'Explore programming, AI, electronics and digital design.';
- const leadProgressHTML=leadProgress>0?"<div class='syl-n-hero-progress'><div class='syl-n-progress-meta'><span>CHAPTER PROGRESS</span><strong>"+leadProgress+"%</strong></div><div class='syl-n-progress-rail' role='progressbar' aria-label='Chapters marked studied' aria-valuemin='0' aria-valuemax='100' aria-valuenow='"+leadProgress+"'><span style='width:"+leadProgress+"%'></span></div><small>"+completionText+"</small></div>":"<p class='syl-n-hero-context'>"+completionText+"</p>";
  const chips="<div class='elite-skill-carousel' aria-label='Browse skills in one moving row'><div class='elite-skill-track'><div class='elite-skill-set'>"+
  categories.map(c=>skillChip(c,false)).join('')+"</div><div class='elite-skill-set' aria-hidden='true'>"+
  categories.map(c=>skillChip(c,true)).join('')+"</div></div></div>";
+ const slides=promotions(),selected=Math.min(Math.max(0,state.promoIndex||0),Math.max(0,slides.length-1));
+ const promoMarkup=slides.length?"<section class='syl-promo-carousel' aria-label='SYLearn promotions' role='region' aria-roledescription='carousel'>"+
+  "<div class='syl-promo-viewport'><div class='syl-promo-track' style='transform:translateX(-"+selected*100+"%)'>"+
+  slides.map((p,i)=>"<article class='syl-promo-slide syl-promo-theme-"+p.theme+"' role='group' aria-roledescription='slide' aria-label='Promotion "+(i+1)+" of "+slides.length+"' aria-hidden='"+(i!==selected?"true":"false")+"'>"+
+   "<div class='syl-promo-art' aria-hidden='true'></div><div class='syl-promo-wash' aria-hidden='true'></div>"+
+   "<div class='syl-promo-copy'><span class='syl-promo-eyebrow'>"+ico(p.icon,14)+" "+esc(p.eyebrow)+"</span>"+
+   "<h2>"+esc(p.title)+"</h2><p>"+esc(p.description)+"</p>"+
+   "<button type='button' class='syl-promo-cta' "+(p.category?"data-action='home-video-filter' data-value='"+esc(p.category)+"'":"data-go='"+p.route+"'")+">"+esc(p.cta)+" "+ico('arrow',15)+"</button></div></article>").join('')+
+  "</div></div>"+
+  "<div class='syl-promo-controls'><span class='syl-promo-controls-label'>FEATURED FOR YOU <b class='syl-promo-counter'>"+String(selected+1).padStart(2,'0')+" / "+String(slides.length).padStart(2,'0')+"</b></span>"+
+  "<div class='syl-promo-dots' role='group' aria-label='Choose promotion'>"+slides.map((p,i)=>"<button type='button' class='syl-promo-dot "+(i===selected?"is-active":"")+"' data-action='promo-dot' data-index='"+i+"' aria-label='Show promotion "+(i+1)+" of "+slides.length+"' aria-current='"+(i===selected?"true":"false")+"'></button>").join('')+"</div>"+
+  "<div class='syl-promo-arrows'><button type='button' class='syl-promo-arrow' data-action='promo-prev' aria-label='Previous promotion'>"+ico('back',16)+"</button><button type='button' class='syl-promo-arrow' data-action='promo-next' aria-label='Next promotion'>"+ico('arrow',16)+"</button></div></div></section>":"";
+
  return "<section class='screen elite-home syl-neon-home'>"+
  "<div class='syl-n-welcome'><div class='syl-n-welcome-avatar'>"+avatar+"</div><div class='syl-n-welcome-copy'><small>"+greeting+",</small><h1>"+esc(firstName)+" <span aria-hidden='true'>✦</span></h1><p>Learn. Build. Grow. Your next step starts here.</p></div><button type='button' class='syl-n-welcome-profile' data-go='profile' aria-label='View profile'>"+ico('user',22)+"</button></div>"+
  "<form id='home-search-form' class='elite-course-search elite-search-top syl-n-search' role='search'>"+ico('search',21)+"<input id='home-search' name='search' type='search' autocomplete='off' placeholder='Search Python, AI, design, robotics...' aria-label='Search digital skills courses' value='"+esc(VIDEO.state.query||'')+"'/><button type='submit'>Search "+ico('arrow',16)+"</button></form>"+
- "<section class='syl-n-hero' aria-label='"+(active?'Continue learning':'Discover your next course')+"'><div class='syl-n-hero-grid' aria-hidden='true'></div><div class='syl-n-hero-scene' aria-hidden='true'></div><div class='syl-n-hero-content'><div class='syl-n-hero-top'><span class='syl-n-hero-eyebrow'>"+ico('spark',15)+" "+(active?'CONTINUE LEARNING':'FEATURED LEARNING PATH')+"</span><span class='syl-n-hero-status'><i></i>"+(active?'In progress':'Explore skills')+"</span></div><h2>"+bannerTitle+"</h2><p class='syl-n-hero-description'>"+bannerText+"</p>"+leadProgressHTML+"<button type='button' class='syl-n-hero-button' "+leadAction+">"+ico(active?'play':'arrow',17)+" "+(active?'Resume Learning':'Explore Course')+" "+ico('arrow',17)+"</button></div><div class='syl-n-hero-side' aria-hidden='true'><span>LEARN</span><span>PRACTISE</span><span>BUILD</span><span>GROW</span></div></section>"+
+ promoMarkup+
  "<section class='syl-n-shortcuts' aria-label='Quick access'>"+shortcuts+"</section>"+
  "<section class='syl-n-overview'><button type='button' class='syl-n-ring' data-go='progress' aria-label='View your learning progress'><span style='--syl-ring:"+overall+"'>"+overall+"%</span><small>Chapters studied</small></button><div class='syl-n-overview-details'><div class='syl-n-overview-heading'><div><span class='syl-n-overline'>YOUR LEARNING JOURNEY</span><h2>Learning Progress</h2><p>Based on chapters you've marked as studied.</p></div><button type='button' data-go='progress' aria-label='Open your learning dashboard'>"+ico('arrow',18)+"</button></div><div class='syl-n-metrics'><div><span>"+ico('book',17)+"</span><strong>"+started.length+"</strong><small>Started</small></div><div><span>"+ico('check',17)+"</span><strong>"+markedChapters+"</strong><small>Chapters</small></div><div><span>"+ico('bookmark',17)+"</span><strong>"+savedCount+"</strong><small>Saved</small></div></div></div></section>"+
  "<section class='elite-section elite-featured syl-n-featured'><div class='elite-section-header'><div><span class='elite-section-eyebrow'>SYLearn · COURSES</span><h2>Explore your next skill</h2><p>Real courses and practical learning, at your own pace.</p></div><button type='button' class='elite-section-link' data-go='courses'>View all "+ico('arrow',16)+"</button></div><div class='elite-course-grid'>"+picks.map(courseTile).join('')+"</div></section>"+
@@ -584,6 +637,7 @@ const theme=document.querySelector('meta[name="theme-color"]');if(theme)theme.se
 root.innerHTML=watching
  ?'<div class="syl-immersive-app">'+(pages[state.page]||home)()+'</div>'
  :'<div class="app-shell">'+header()+'<main class="container">'+(pages[state.page]||home)()+'</main>'+footer()+navBar()+overlay()+'</div>';
+if(state.page==='home'){changePromo(state.promoIndex);schedulePromo()}else if(promoTimer){clearTimeout(promoTimer);promoTimer=0}
 if(state.page==='exam')tickClock();
 if(watching)window.SYLUTION_PLAYER?.attach?.();
 }
@@ -611,6 +665,9 @@ if(action&&action.startsWith('yt-')&&VIDEO_UI.action(action,b.dataset,{nav,rende
 if(action&&action.startsWith('qa-')&&ASSESS_UI.action(action,b.dataset,{nav,render,toast}))return;
 if(go){if(go==='ytcourse'&&id){VIDEO_UI.open(id,nav,render,toast);return}nav(go,id);return}
 if(!action)return;
+if(action==='promo-prev'){changePromo(state.promoIndex-1,true);return}
+if(action==='promo-next'){changePromo(state.promoIndex+1,true);return}
+if(action==='promo-dot'){changePromo(Number(b.dataset.index)||0,true);return}
 if(action==='live-tab'){state.liveTab=['upcoming','now','mine','past'].includes(val)?val:'upcoming';render();return}
 if(action==='live-save'){
  const session=liveSessions().find(s=>s.id===id);
@@ -779,6 +836,18 @@ if(e.target.id==='syl-profile-restore'){
 if(e.target.id==='sort-courses'){state.sort=e.target.value;render()}
 if(e.target.id==='speaking-language'){state.lang=e.target.value;state.pronounce='';render()}
 });
+document.addEventListener('touchstart',e=>{
+ const carousel=e.target.closest?.('.syl-promo-carousel');
+ if(!carousel||e.touches.length!==1)return;
+ promoTouch={x:e.touches[0].clientX,y:e.touches[0].clientY};
+},{passive:true});
+document.addEventListener('touchend',e=>{
+ const carousel=e.target.closest?.('.syl-promo-carousel');
+ if(!carousel||!promoTouch||!e.changedTouches.length){promoTouch=null;return}
+ const dx=e.changedTouches[0].clientX-promoTouch.x,dy=e.changedTouches[0].clientY-promoTouch.y;
+ promoTouch=null;
+ if(Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.3)changePromo(state.promoIndex+(dx<0?1:-1),true);
+},{passive:true});
 document.addEventListener('keydown',e=>{
 if(e.target.id==='home-search'&&e.key==='Enter'){e.preventDefault();state.search=e.target.value;state.category='All';nav('courses')}
 if(e.key==='Escape'&&state.modal){state.modal=null;render()}
