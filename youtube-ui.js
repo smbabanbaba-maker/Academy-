@@ -181,6 +181,7 @@ function watch(){
     '<button type="button" data-action="yt-prev" '+(index===0?'disabled':'')+' aria-label="Previous chapter">'+icon('back')+'<span>Prev</span></button>'+
     '<button type="button" data-action="yt-complete" class="syl-immersive-complete'+(completed?' is-done':'')+'" '+(completed?'disabled':'')+' aria-label="'+(completed?'Chapter marked studied':'Mark this chapter studied')+'">'+icon('check')+'<span>'+(completed?'Studied':'Mark studied')+'</span></button>'+
     '<button type="button" data-action="yt-next" '+(index===lessons.length-1?'disabled':'')+' aria-label="Next chapter"><span>Next</span>'+icon('arrow')+'</button>'+
+    '<button type="button" data-action="yt-panel" data-panel="chapters" aria-controls="syl-immersive-drawer" aria-expanded="false" aria-label="Open course chapters">'+icon('book')+'<span>Chapters</span></button>'+
     '<button type="button" data-action="yt-panel" data-panel="notes" aria-controls="syl-immersive-drawer" aria-expanded="false" aria-label="Open study notes">'+icon('file')+'<span>Notes</span></button>'+
     '<button type="button" data-action="yt-panel" data-panel="options" aria-controls="syl-immersive-drawer" aria-expanded="false" aria-label="More video options">'+icon('more')+'</button>'+
    '</nav>'+
