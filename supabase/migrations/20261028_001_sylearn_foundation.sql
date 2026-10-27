@@ -252,9 +252,10 @@ create policy sylearn_profile_update on public.profiles
  for update to authenticated using(id=(select auth.uid()))
  with check(id=(select auth.uid()));
 
-create policy sylearn_course_read on public.courses
- for select to anon,authenticated
- using(is_published or (select public.sylearn_is_staff()));
+create policy sylearn_course_public_read on public.courses
+ for select to anon,authenticated using(is_published);
+create policy sylearn_course_staff_read on public.courses
+ for select to authenticated using((select public.sylearn_is_staff()));
 create policy sylearn_course_create_staff on public.courses
  for insert to authenticated with check((select public.sylearn_is_staff()));
 create policy sylearn_course_edit_staff on public.courses
@@ -263,11 +264,12 @@ create policy sylearn_course_edit_staff on public.courses
 create policy sylearn_course_delete_staff on public.courses
  for delete to authenticated using((select public.sylearn_is_staff()));
 
-create policy sylearn_chapters_read on public.course_chapters
+create policy sylearn_chapters_public_read on public.course_chapters
  for select to anon,authenticated using(exists(
-   select 1 from public.courses c where c.id=course_id and
-   (c.is_published or (select public.sylearn_is_staff()))
+   select 1 from public.courses c where c.id=course_id and c.is_published
  ));
+create policy sylearn_chapters_staff_read on public.course_chapters
+ for select to authenticated using((select public.sylearn_is_staff()));
 create policy sylearn_chapters_add_staff on public.course_chapters
  for insert to authenticated with check((select public.sylearn_is_staff()));
 create policy sylearn_chapters_edit_staff on public.course_chapters
@@ -307,8 +309,10 @@ create policy sylearn_assessments_selfreport on public.assessment_attempts
    user_id=(select auth.uid()) and verified=false and origin in ('legacy_unverified','self_reported')
  );
 
-create policy sylearn_live_read on public.live_sessions
- for select to anon,authenticated using(is_published or (select public.sylearn_is_staff()));
+create policy sylearn_live_public_read on public.live_sessions
+ for select to anon,authenticated using(is_published);
+create policy sylearn_live_staff_read on public.live_sessions
+ for select to authenticated using((select public.sylearn_is_staff()));
 create policy sylearn_live_add_staff on public.live_sessions
  for insert to authenticated with check((select public.sylearn_is_staff()));
 create policy sylearn_live_edit_staff on public.live_sessions
