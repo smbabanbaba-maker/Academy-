@@ -151,8 +151,8 @@ const classroomFullscreenStyles="\n/* Fullscreen classroom video controls: no Yo
 const classroomBundledStyles="/* SYLearn Classroom V5 — learning-player route only */\n.syl-classroom-v5{\n  --class-ink:#1f2939;--class-muted:#778292;\n  --class-red:#d92b50;--class-line:#e7ebf1;\n  --class-panel:#fff;\n  color:var(--class-ink);\n  padding:20px 0 46px;\n}\n.syl-classroom-v5 .syl-classroom-topline{\n  display:flex;align-items:center;gap:10px;\n  min-width:0;margin-bottom:19px;\n  color:#a0a8b3;font-size:11px;font-weight:750;\n}\n.syl-classroom-v5 .syl-classroom-return{\n  display:inline-flex;align-items:center;gap:5px;\n  flex:none;border:0;padding:7px 0;\n  color:#515e72;background:transparent;font-size:11px;font-weight:850;\n}\n.syl-classroom-v5 .syl-classroom-return:hover{color:#c32b4c}\n.syl-classroom-v5 .syl-classroom-return svg{width:17px;height:17px}\n.syl-classroom-v5 .syl-classroom-crumb{\n  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;\n  min-width:0;max-width:400px;color:#8995a4;\n}\n.syl-classroom-v5 .syl-classroom-class-tag{\n  margin-left:auto;white-space:nowrap;padding:7px 10px;\n  border-radius:8px;background:#fbeef2;color:#b9264c;\n  font-size:10px;letter-spacing:.015em;\n}\n.syl-classroom-v5 .syl-classroom-heading{\n  display:flex;align-items:end;justify-content:space-between;\n  gap:15px;margin:0 0 20px;\n}\n.syl-classroom-v5 .syl-classroom-overline{\n  display:block;color:#ca3454;\n  font:850 10px/1.4 'Plus Jakarta Sans',sans-serif;\n  letter-spacing:.13em;\n}\n.syl-classroom-v5 .syl-classroom-heading h1{\n  color:#1f2a39;margin:7px 0 5px;\n  font:850 clamp(25px,3vw,34px)/1.2 'Plus Jakarta Sans',sans-serif;\n  letter-spacing:-.055em;\n}\n.syl-classroom-v5 .syl-classroom-heading p{\n  color:#7c8798;font-size:12px;line-height:1.6;margin:0;\n}\n.syl-classroom-v5 .syl-classroom-heading-progress{\n  display:flex;flex-direction:column;align-items:flex-end;gap:3px;\n  flex:none;\n}\n.syl-classroom-v5 .syl-classroom-heading-progress strong{\n  color:#1b805f;font:850 27px/1 'Plus Jakarta Sans',sans-serif;\n}\n.syl-classroom-v5 .syl-classroom-heading-progress span{\n  color:#8591a0;font-size:10px;font-weight:750;\n}\n.syl-classroom-v5 .syl-classroom-layout{\n  display:grid;\n  grid-template-columns:minmax(0,1.76fr) minmax(260px,.79fr);\n  gap:17px;align-items:start;\n}\n.syl-classroom-v5 .syl-classroom-main{\n  display:flex;flex-direction:column;gap:15px;min-width:0;\n}\n.syl-classroom-v5 .syl-classroom-player-card{\n  background:#111923;color:#fff;\n  border:1px solid #283344;border-radius:19px;\n  overflow:hidden;\n  box-shadow:0 12px 33px rgba(17,26,39,.14);\n}\n.syl-classroom-v5 .syl-classroom-player-label{\n  display:flex;align-items:center;gap:9px;\n  min-height:43px;padding:10px 15px;\n  background:#151e2b;\n  color:#fff;font-size:11px;letter-spacing:.01em;\n}\n.syl-classroom-v5 .syl-classroom-player-label strong{\n  font-size:11px;font-weight:850;white-space:nowrap;\n}\n.syl-classroom-v5 .syl-classroom-player-label>span:last-child{\n  margin-left:auto;font-size:10px;color:#a6b3c6;\n  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\n}\n.syl-classroom-v5 .syl-classroom-live-dot{\n  width:8px;height:8px;flex:none;\n  border-radius:50%;background:#66e3bd;\n  box-shadow:0 0 0 4px rgba(102,227,189,.13);\n}\n.syl-classroom-v5 .syl-classroom-video-ratio{\n  position:relative;width:100%;aspect-ratio:16/9;\n  overflow:hidden;background:#0a1019;\n}\n.syl-classroom-v5 .syl-classroom-video-ratio iframe{\n  display:block;position:absolute;inset:0;\n  width:100%;height:100%;border:0;background:#0a1019;\n}\n.syl-classroom-v5 .syl-classroom-video-caption{\n  display:flex;justify-content:space-between;align-items:center;gap:10px;\n  padding:11px 15px;background:#151e2b;color:#a4b1c2;\n}\n.syl-classroom-v5 .syl-classroom-video-caption>span{\n  display:inline-flex;align-items:center;gap:7px;\n  font-size:10px;font-weight:700;\n}\n.syl-classroom-v5 .syl-classroom-video-caption svg{\n  width:14px;height:14px;flex:none;\n}\n.syl-classroom-v5 .syl-classroom-video-caption a{\n  display:inline-flex;align-items:center;gap:5px;\n  color:#edf4ff;font-size:10px;font-weight:800;\n  text-decoration:none;\n}\n.syl-classroom-v5 .syl-classroom-video-caption a:hover{text-decoration:underline}\n.syl-classroom-v5 .syl-classroom-lesson-card,\n.syl-classroom-v5 .syl-classroom-sidebar,\n.syl-classroom-v5 .syl-classroom-tool-card,\n.syl-classroom-v5 .syl-classroom-notes-card{\n  background:#fff;\n  border:1px solid var(--class-line);\n  box-shadow:0 5px 21px rgba(21,33,55,.035);\n  border-radius:17px;\n  min-width:0;\n}\n.syl-classroom-v5 .syl-classroom-lesson-card{padding:20px 21px 16px}\n.syl-classroom-v5 .syl-classroom-lesson-kicker{\n  display:flex;justify-content:space-between;align-items:center;gap:9px;\n  margin-bottom:10px;\n  color:#c33253;font:850 10px/1.45 'Plus Jakarta Sans',sans-serif;\n  letter-spacing:.07em;\n}\n.syl-classroom-v5 .syl-classroom-course-level{\n  background:#f4f6f9;color:#7f8b9b;padding:6px 8px;\n  border-radius:7px;font-size:10px;letter-spacing:0;\n}\n.syl-classroom-v5 .syl-classroom-lesson-card h2{\n  color:#222b39;\n  font:850 clamp(20px,2.3vw,28px)/1.27 'Plus Jakarta Sans',sans-serif;\n  letter-spacing:-.04em;margin:0 0 7px;\n}\n.syl-classroom-v5 .syl-classroom-belongs{\n  color:#8a94a3;font-size:11px;line-height:1.65;\n  margin:0;padding-bottom:18px;\n  border-bottom:1px solid #eef0f4;\n}\n.syl-classroom-v5 .syl-classroom-belongs strong{color:#617084;font-weight:800}\n.syl-classroom-v5 .syl-classroom-lesson-actions{\n  display:flex;align-items:center;justify-content:space-between;\n  gap:12px;margin:17px 0 0;flex-wrap:wrap;\n}\n.syl-classroom-v5 .syl-classroom-study-button{\n  display:inline-flex;align-items:center;justify-content:center;gap:8px;\n  border:0;border-radius:11px;\n  background:#dc2b51;color:#fff;\n  min-height:43px;padding:10px 14px;\n  font-size:11px;font-weight:800;\n  box-shadow:0 5px 12px rgba(220,43,81,.12);\n}\n.syl-classroom-v5 .syl-classroom-study-button:hover{\n  background:#be1b40;\n}\n.syl-classroom-v5 .syl-classroom-study-button.is-finished{\n  background:#ebf9f2;color:#187653;\n  box-shadow:none;opacity:1;cursor:default;\n}\n.syl-classroom-v5 .syl-classroom-study-button svg{width:17px;height:17px}\n.syl-classroom-v5 .syl-classroom-step-buttons{\n  display:flex;align-items:center;gap:7px;flex-wrap:wrap;\n}\n.syl-classroom-v5 .syl-classroom-step-buttons button{\n  display:inline-flex;align-items:center;justify-content:center;gap:6px;\n  border:1px solid #e3e8ef;border-radius:10px;\n  background:#fff;color:#596779;\n  min-height:43px;padding:9px 12px;\n  font-size:11px;font-weight:800;\n}\n.syl-classroom-v5 .syl-classroom-step-buttons button.is-next{\n  color:#c12547;background:#fff4f6;border-color:#f2d1d9;\n}\n.syl-classroom-v5 .syl-classroom-step-buttons button:disabled{opacity:.35}\n.syl-classroom-v5 .syl-classroom-step-buttons svg{width:15px;height:15px}\n.syl-classroom-v5 .syl-classroom-study-status{\n  min-height:17px;\n  color:#8994a3;font-size:10px;line-height:1.65;\n  margin:11px 0 0;\n}\n.syl-classroom-v5 .syl-classroom-sidebar{\n  position:sticky;top:107px;overflow:hidden;\n}\n.syl-classroom-v5 .syl-classroom-sidebar-head{\n  padding:20px 18px 17px;\n  background:linear-gradient(122deg,#fff,#fdf7f9);\n  border-bottom:1px solid #eceef2;\n}\n.syl-classroom-v5 .syl-classroom-sidebar-head h2{\n  font:850 20px/1.25 'Plus Jakarta Sans',sans-serif;\n  letter-spacing:-.04em;color:#243043;margin:6px 0 6px;\n}\n.syl-classroom-v5 .syl-classroom-sidebar-head p{\n  margin:0;color:#8893a2;font-size:11px;\n}\n.syl-classroom-v5 .syl-classroom-sidebar-progress{\n  width:100%;height:7px;margin:14px 0 8px;\n  background:#eef0f4;border-radius:999px;overflow:hidden;\n}\n.syl-classroom-v5 .syl-classroom-sidebar-progress>span{\n  display:block;height:100%;border-radius:inherit;\n  background:linear-gradient(90deg,#cf2850,#ee7c95);\n}\n.syl-classroom-v5 .syl-classroom-sidebar-head>small{\n  color:#8c96a5;font-size:10px;font-weight:700;\n}\n.syl-classroom-v5 .syl-classroom-chapter-list{\n  overflow-y:auto;max-height:min(58vh,575px);\n  overscroll-behavior:contain;\n  scrollbar-width:thin;\n}\n.syl-classroom-v5 .syl-classroom-chapter{\n  display:flex;align-items:center;gap:10px;\n  width:100%;min-height:66px;padding:11px 12px;\n  text-align:left;border:0;border-bottom:1px solid #f0f1f4;\n  background:#fff;color:#475466;\n  transition:background .18s ease;\n}\n.syl-classroom-v5 .syl-classroom-chapter:last-child{border-bottom:0}\n.syl-classroom-v5 .syl-classroom-chapter:hover{background:#faf6f8}\n.syl-classroom-v5 .syl-classroom-chapter.is-current{\n  background:#fff4f6;\n  box-shadow:inset 3px 0 0 #d52a52;\n}\n.syl-classroom-v5 .syl-classroom-chapter-index{\n  display:grid;place-items:center;\n  width:31px;height:31px;flex:none;\n  border-radius:9px;\n  font:850 10px/1 'Plus Jakarta Sans',sans-serif;\n  color:#738093;background:#f1f3f6;\n}\n.syl-classroom-v5 .syl-classroom-chapter.is-current .syl-classroom-chapter-index{\n  background:#f5dce4;color:#c02a4d;\n}\n.syl-classroom-v5 .syl-classroom-chapter.is-done .syl-classroom-chapter-index{\n  background:#e7f6f0;color:#128664;\n}\n.syl-classroom-v5 .syl-classroom-chapter-index svg{width:16px;height:16px}\n.syl-classroom-v5 .syl-classroom-chapter-copy{\n  display:flex;flex-direction:column;gap:4px;\n  min-width:0;flex:1;\n}\n.syl-classroom-v5 .syl-classroom-chapter-copy strong{\n  display:-webkit-box;-webkit-line-clamp:2;\n  -webkit-box-orient:vertical;line-clamp:2;overflow:hidden;\n  color:#313b4b;\n  font:750 11px/1.45 'Plus Jakarta Sans',sans-serif;\n}\n.syl-classroom-v5 .syl-classroom-chapter-copy small{\n  color:#8b96a5;font-size:10px;\n}\n.syl-classroom-v5 .syl-classroom-chapter-active{\n  display:grid;place-items:center;flex:none;\n  color:#c52e52;\n}\n.syl-classroom-v5 .syl-classroom-chapter-active svg{width:15px;height:15px}\n.syl-classroom-v5 .syl-classroom-sidebar-foot{\n  display:flex;flex-direction:column;gap:4px;\n  border-top:1px solid #eceef2;\n  background:#f9fafc;padding:14px 17px 15px;\n}\n.syl-classroom-v5 .syl-classroom-sidebar-foot span{\n  color:#8e98a7;font-size:10px;\n}\n.syl-classroom-v5 .syl-classroom-sidebar-foot strong{\n  font-size:12px;color:#485569;font-weight:850;\n}\n.syl-classroom-v5 .syl-classroom-lower-grid{\n  display:grid;grid-template-columns:1fr 1fr;\n  gap:17px;margin-top:18px;\n}\n.syl-classroom-v5 .syl-classroom-tool-card,\n.syl-classroom-v5 .syl-classroom-notes-card{\n  padding:19px 20px 20px;\n}\n.syl-classroom-v5 .syl-classroom-section-header{\n  margin-bottom:17px;\n}\n.syl-classroom-v5 .syl-classroom-section-header h2{\n  font:850 20px/1.25 'Plus Jakarta Sans',sans-serif;\n  color:#263144;letter-spacing:-.04em;\n  margin:6px 0;\n}\n.syl-classroom-v5 .syl-classroom-section-header p{\n  font-size:11px;line-height:1.6;color:#8591a0;margin:0;\n}\n.syl-classroom-v5 .syl-classroom-tool-links{\n  display:flex;flex-direction:column;gap:9px;\n}\n.syl-classroom-v5 .syl-classroom-tool-links button{\n  display:flex;align-items:center;gap:12px;\n  width:100%;min-height:66px;\n  border:1px solid #edf0f4;border-radius:12px;\n  padding:11px 12px;\n  background:#fafbfc;color:#475568;text-align:left;\n}\n.syl-classroom-v5 .syl-classroom-tool-links button:hover{\n  background:#fff5f7;border-color:#f3d5dc;\n}\n.syl-classroom-v5 .syl-classroom-tool-icon{\n  display:grid;place-items:center;\n  flex:none;width:39px;height:39px;\n  border-radius:11px;background:#fbe7ed;color:#c43356;\n}\n.syl-classroom-v5 .syl-classroom-tool-icon svg{width:19px;height:19px}\n.syl-classroom-v5 .syl-classroom-tool-links button>span:nth-child(2){\n  display:flex;flex-direction:column;gap:3px;flex:1;min-width:0;\n}\n.syl-classroom-v5 .syl-classroom-tool-links button strong{\n  color:#2b3746;font-size:12px;font-weight:800;\n}\n.syl-classroom-v5 .syl-classroom-tool-links button small{\n  color:#8996a4;font-size:10px;\n}\n.syl-classroom-v5 .syl-classroom-tool-links button>svg:last-child{\n  width:16px;height:16px;color:#bf3252;\n}\n.syl-classroom-v5 .syl-classroom-notes-card label{\n  display:block;margin:2px 0 9px;\n  color:#49586b;font-size:11px;font-weight:800;\n}\n.syl-classroom-v5 .syl-classroom-notes-card textarea{\n  display:block;width:100%;min-height:162px;\n  resize:vertical;border:1px solid #e5eaf0;\n  border-radius:12px;outline:none;background:#fafbfc;\n  color:#253143;font-size:12px;line-height:1.65;\n  padding:13px 14px;\n}\n.syl-classroom-v5 .syl-classroom-notes-card textarea:focus{\n  border-color:#d6335c;box-shadow:0 0 0 3px rgba(214,51,92,.09);\n}\n.syl-classroom-v5 .syl-classroom-notes-bottom{\n  display:flex;align-items:center;justify-content:space-between;\n  gap:10px;margin-top:11px;\n}\n.syl-classroom-v5 .syl-classroom-notes-bottom small{\n  font-size:10px;color:#8d99a7;\n}\n.syl-classroom-v5 .syl-classroom-notes-bottom button{\n  display:inline-flex;align-items:center;justify-content:center;gap:6px;\n  min-height:40px;padding:9px 13px;\n  border:0;border-radius:10px;\n  background:#202f42;color:#fff;\n  font-size:11px;font-weight:800;\n}\n.syl-classroom-v5 .syl-classroom-notes-bottom button svg{width:15px;height:15px}\n.syl-classroom-v5 .syl-classroom-disclaimer{\n  margin:16px 1px 0;\n  font-size:10px;line-height:1.65;color:#929baa;\n}\n.syl-classroom-v5 button:focus-visible,\n.syl-classroom-v5 a:focus-visible{\n  outline:3px solid #dc3e64;outline-offset:2px;\n}\n@media(max-width:1000px){\n  .syl-classroom-v5 .syl-classroom-layout{\n    grid-template-columns:minmax(0,1.55fr) minmax(245px,.85fr);\n    gap:13px;\n  }\n  .syl-classroom-v5 .syl-classroom-lower-grid{gap:13px}\n}\n@media(max-width:760px){\n  .syl-classroom-v5 .syl-classroom-layout{grid-template-columns:1fr}\n  .syl-classroom-v5 .syl-classroom-sidebar{position:static;top:auto}\n  .syl-classroom-v5 .syl-classroom-chapter-list{max-height:none;overflow:visible}\n  .syl-classroom-v5 .syl-classroom-sidebar-head{padding:16px 16px 14px}\n  .syl-classroom-v5 .syl-classroom-lower-grid{grid-template-columns:1fr}\n}\n@media(max-width:640px){\n  .syl-classroom-v5{padding:10px 0 34px}\n  .syl-classroom-v5 .syl-classroom-topline{margin-bottom:13px;gap:7px}\n  .syl-classroom-v5 .syl-classroom-return{font-size:10px}\n  .syl-classroom-v5 .syl-classroom-crumb{font-size:10px}\n  .syl-classroom-v5 .syl-classroom-class-tag{display:none}\n  .syl-classroom-v5 .syl-classroom-heading{margin-bottom:14px;align-items:center}\n  .syl-classroom-v5 .syl-classroom-heading h1{font-size:23px;line-height:1.22}\n  .syl-classroom-v5 .syl-classroom-heading p{font-size:11px}\n  .syl-classroom-v5 .syl-classroom-heading-progress strong{font-size:20px}\n  .syl-classroom-v5 .syl-classroom-heading-progress span{font-size:9px}\n  .syl-classroom-v5 .syl-classroom-main{gap:12px}\n  .syl-classroom-v5 .syl-classroom-player-card{border-radius:14px}\n  .syl-classroom-v5 .syl-classroom-player-label{padding:8px 10px;min-height:37px}\n  .syl-classroom-v5 .syl-classroom-player-label strong{font-size:10px}\n  .syl-classroom-v5 .syl-classroom-player-label>span:last-child{font-size:9px}\n  .syl-classroom-v5 .syl-classroom-video-caption{padding:10px 11px;gap:7px}\n  .syl-classroom-v5 .syl-classroom-video-caption>span,\n  .syl-classroom-v5 .syl-classroom-video-caption a{font-size:9px}\n  .syl-classroom-v5 .syl-classroom-lesson-card{padding:16px 13px 14px;border-radius:14px}\n  .syl-classroom-v5 .syl-classroom-lesson-card h2{font-size:20px}\n  .syl-classroom-v5 .syl-classroom-lesson-actions{gap:10px}\n  .syl-classroom-v5 .syl-classroom-study-button{width:100%;min-height:44px}\n  .syl-classroom-v5 .syl-classroom-step-buttons{width:100%}\n  .syl-classroom-v5 .syl-classroom-step-buttons button{flex:1;min-width:0}\n  .syl-classroom-v5 .syl-classroom-sidebar{border-radius:14px}\n  .syl-classroom-v5 .syl-classroom-sidebar-head h2{font-size:18px}\n  .syl-classroom-v5 .syl-classroom-chapter{min-height:62px}\n  .syl-classroom-v5 .syl-classroom-tool-card,\n  .syl-classroom-v5 .syl-classroom-notes-card{padding:17px 15px;border-radius:14px}\n  .syl-classroom-v5 .syl-classroom-section-header h2{font-size:18px}\n}\n@media(prefers-reduced-motion:reduce){\n  .syl-classroom-v5 .syl-classroom-study-button,\n  .syl-classroom-v5 .syl-classroom-chapter,\n  .syl-classroom-v5 .syl-classroom-tool-links button{transition:none!important}\n}\n";
 const lessonNoteKey=(id,index)=>'sylution_yt-note-'+String(id||'')+'-'+Math.max(0,Number(index)||0);
 const lessonNote=(id,index)=>{try{return String(localStorage.getItem(lessonNoteKey(id,index))||'').slice(0,6000)}catch(e){return ''}};
-/* Immersive, edge-to-edge watch experience. Entire viewport rotates together in portrait.
-   No rotated iframe, duplicated navbar, in-player fake YouTube controls, or sidebar. */
+/* Cinema Mode V1: fullscreen only the video element. Study tools live outside cinema.
+   YouTube retains ownership of its embedded controls, links and attribution. */
 function watch(){
  const c=V.state.selected,l=V.currentLesson();
  if(!c||!l)return course();
@@ -172,10 +172,11 @@ function watch(){
  }).join('');
  return '<section class="screen syl-immersive-page" aria-label="SYLearn video lesson">'+
   '<div class="syl-immersive-view" id="syl-immersive-view">'+
-   '<div class="syl-immersive-player" id="syl-video-fullscreen"><iframe id="yt-lesson-frame" src="'+src+'" title="'+esc(l.title)+' — '+esc(c.creator)+'" loading="eager" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>'+
+   '<div class="syl-immersive-player" id="syl-video-fullscreen"><iframe id="yt-lesson-frame" src="'+src+'" title="'+esc(l.title)+' — '+esc(c.creator)+'" loading="eager" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>'+ 
+   '<button type="button" class="syl-cinema-tools" data-action="yt-cinema-tools" aria-label="Exit cinema and open study tools">'+icon('back')+'<span>Study tools</span></button>'+
    '<header class="syl-immersive-topbar"><button type="button" class="syl-immersive-iconbtn" data-action="yt-back" aria-label="Back to course">'+icon('back')+'</button>'+
     '<div class="syl-immersive-identity"><strong>SYLearn <span>CLASSROOM</span></strong><small>Lesson '+(index+1)+' / '+lessons.length+' · '+esc(l.title)+'</small></div>'+
-    '<button type="button" class="syl-immersive-top-action" data-action="yt-panel" data-panel="chapters" aria-controls="syl-immersive-drawer" aria-expanded="false">'+icon('book')+' Chapters</button></header>'+
+    '<button type="button" class="syl-immersive-top-action" data-action="yt-cinema-watch" aria-label="Watch video in fullscreen">'+icon('play')+' Cinema</button></header>'+
    '<nav class="syl-immersive-dock" aria-label="Lesson controls">'+
     '<button type="button" data-action="yt-prev" '+(index===0?'disabled':'')+' aria-label="Previous chapter">'+icon('back')+'<span>Prev</span></button>'+
     '<button type="button" data-action="yt-complete" class="syl-immersive-complete'+(completed?' is-done':'')+'" '+(completed?'disabled':'')+' aria-label="'+(completed?'Chapter marked studied':'Mark this chapter studied')+'">'+icon('check')+'<span>'+(completed?'Studied':'Mark studied')+'</span></button>'+
@@ -189,14 +190,69 @@ function watch(){
     '<div class="syl-immersive-panel syl-panel-chapters" data-content="chapters"><p class="syl-immersive-hint">'+lessons.length+' chapters · '+percentage+'% marked studied</p><div class="syl-immersive-progress"><span style="width:'+percentage+'%"></span></div><div class="syl-immersive-chapter-list">'+chapterButtons+'</div><p class="syl-immersive-credit">Original educator: '+esc(c.creator)+'</p></div>'+
     '<div class="syl-immersive-panel syl-panel-notes" data-content="notes" hidden><label for="syl-lesson-note">Your notes for this chapter</label><textarea id="syl-lesson-note" maxlength="6000" placeholder="Write useful ideas or examples from this lesson...">'+esc(notes)+'</textarea><p class="syl-immersive-hint">Notes are stored on this device.</p><button type="button" class="syl-immersive-save" data-action="yt-note-save">'+icon('check')+' Save notes</button></div>'+
     '<div class="syl-immersive-panel syl-panel-options" data-content="options" hidden><p class="syl-immersive-hint">Choose how you want to watch.</p>'+
-      '<button type="button" class="syl-immersive-option" data-action="yt-fit-view">'+icon('laptop')+' Switch landscape / portrait fit</button>'+
+      '<button type="button" class="syl-immersive-option" data-action="yt-cinema-watch">'+icon('play')+' Return to cinema</button>'+
       '<button type="button" class="syl-immersive-option" data-action="yt-retry-player">'+icon('repeat')+' Retry official video player</button>'+
       '<a class="syl-immersive-option" href="'+original+'" target="_blank" rel="noopener noreferrer">'+icon('arrow')+' Watch original on YouTube</a>'+
-      '<button type="button" class="syl-immersive-option" data-action="yt-native-fullscreen">'+icon('play')+' Request device fullscreen</button>'+
+      
      '</div>'+
    '</aside>'+
   '</div></section>';
 }
+
+let cinemaFullscreenWasActive=false;
+function cinemaPlayer(){
+ return document.getElementById('syl-video-fullscreen');
+}
+function releaseCinemaOrientation(){
+ try{screen.orientation?.unlock?.()}catch(e){}
+}
+function exitCinemaFullscreen(){
+ const player=cinemaPlayer();
+ if(!player)return;
+ const active=document.fullscreenElement||document.webkitFullscreenElement;
+ if(active===player){
+  const exit=document.exitFullscreen||document.webkitExitFullscreen;
+  if(typeof exit==='function'){try{Promise.resolve(exit.call(document)).catch(()=>{})}catch(e){}}
+ }
+ releaseCinemaOrientation();
+}
+function showCinemaTools(){
+ const view=document.getElementById('syl-immersive-view');
+ if(!view)return;
+ exitCinemaFullscreen();
+ closeImmersivePanel();
+ view.classList.add('syl-cinema-study-mode');
+ view.querySelector('.syl-cinema-tools')?.setAttribute('aria-hidden','true');
+}
+function enterCinemaFullscreen(){
+ const view=document.getElementById('syl-immersive-view'),player=cinemaPlayer();
+ if(!view||!player)return;
+ closeImmersivePanel();
+ view.classList.remove('syl-cinema-study-mode');
+ view.querySelector('.syl-cinema-tools')?.removeAttribute('aria-hidden');
+ const enter=player.requestFullscreen||player.webkitRequestFullscreen;
+ if(typeof enter!=='function')return; // Video-only cinema remains available in restricted browsers.
+ try{
+  const result=enter.call(player);
+  Promise.resolve(result).then(()=>{
+   if((document.fullscreenElement||document.webkitFullscreenElement)!==player)return;
+   cinemaFullscreenWasActive=true;
+   try{const locked=screen.orientation?.lock?.('landscape');Promise.resolve(locked).catch(()=>{})}catch(e){}
+  }).catch(()=>{}); // Fullscreen requires a gesture and is not supported in all WebViews.
+ }catch(e){}
+}
+function onCinemaFullscreenChange(){
+ const player=cinemaPlayer(),active=document.fullscreenElement||document.webkitFullscreenElement;
+ if(player&&active===player){cinemaFullscreenWasActive=true;return}
+ if(!cinemaFullscreenWasActive)return;
+ cinemaFullscreenWasActive=false;
+ releaseCinemaOrientation();
+ // Native back/exit returns to accessible chapter and notes controls, never overlays the movie.
+ const view=document.getElementById('syl-immersive-view');
+ if(view)view.classList.add('syl-cinema-study-mode');
+}
+document.addEventListener('fullscreenchange',onCinemaFullscreenChange);
+document.addEventListener('webkitfullscreenchange',onCinemaFullscreenChange);
 
 let telegramFullscreenOwned=false;
 function telegramLessonFullscreen(){
@@ -227,7 +283,7 @@ if(name==='yt-save'){const yes=V.toggleSaved(data.id);tools.render();tools.toast
 if(name==='yt-filter'){V.state.category=String(data.value||'All');tools.render();return true}
 if(name==='yt-sort'){V.state.sort=['featured','az','beginner','saved'].includes(data.value)?data.value:'featured';tools.render();return true}
 if(name==='yt-open'){open(data.id,tools.nav,tools.render,tools.toast);return true}
-if(name==='yt-start'){const c=V.state.selected;if(!c)return true;telegramLessonFullscreen();const ls=V.lessons();const rows=V.state.courseProgress[c.type+':'+c.id]||[];const next=ls.findIndex((_,i)=>!rows.includes(i));V.setLesson(next<0?0:next);tools.nav('ytwatch',c.id);return true}
+if(name==='yt-start'){const c=V.state.selected;if(!c)return true;const ls=V.lessons();const rows=V.state.courseProgress[c.type+':'+c.id]||[];const next=ls.findIndex((_,i)=>!rows.includes(i));V.setLesson(next<0?0:next);tools.nav('ytwatch',c.id);enterCinemaFullscreen();return true}
 if(name==='yt-share'){
  const c=V.state.selected;if(!c)return true;
  const url=location.href,title='SYLearn: '+c.title;
@@ -236,8 +292,8 @@ if(name==='yt-share'){
  else tools.toast('Use the browser share menu to share this course.');
  return true
 }
-if(name==='yt-lesson'){telegramLessonFullscreen();V.setLesson(Number(data.index));tools.nav('ytwatch',V.state.selected.id);return true}
-if(name==='yt-back'){try{if(document.fullscreenElement)document.exitFullscreen?.().catch?.(()=>{})}catch(e){}exitTelegramLessonFullscreen();tools.nav('ytcourse',V.state.selected.id);return true}
+if(name==='yt-lesson'){V.setLesson(Number(data.index));tools.nav('ytwatch',V.state.selected.id);enterCinemaFullscreen();return true}
+if(name==='yt-back'){exitCinemaFullscreen();exitTelegramLessonFullscreen();tools.nav('ytcourse',V.state.selected.id);return true}
 if(name==='yt-note-save'){
  const c=V.state.selected;if(!c)return true;
  const field=document.getElementById('syl-lesson-note');if(!field)return true;
@@ -257,6 +313,8 @@ if(name==='yt-retry-player'){
  tools.toast('Reloading video. If playback is blocked here, use Watch original.');
  return true
 }
+if(name==='yt-cinema-tools'){showCinemaTools();return true}
+if(name==='yt-cinema-watch'){enterCinemaFullscreen();return true}
 if(name==='yt-panel'){
  const view=document.getElementById('syl-immersive-view');
  const drawer=document.getElementById('syl-immersive-drawer');
@@ -279,26 +337,11 @@ if(name==='yt-panel-close'){closeImmersivePanel();return true}
 if(name==='yt-prev'||name==='yt-next'){
  const n=V.lessons().length;
  const next=V.state.lesson+(name==='yt-prev'?-1:1);
- if(n&&next>=0&&next<n){V.setLesson(next);tools.nav('ytwatch',V.state.selected.id)}
+ if(n&&next>=0&&next<n){V.setLesson(next);tools.nav('ytwatch',V.state.selected.id);enterCinemaFullscreen()}
  return true
 }
 if(name==='yt-fit-view'){
  document.getElementById('syl-immersive-view')?.classList.toggle('syl-immersive-fit');
- closeImmersivePanel();
- return true
-}
-if(name==='yt-native-fullscreen'){
- const shell=document.getElementById('syl-immersive-view');
- if(!shell)return true;
- const enter=shell.requestFullscreen||shell.webkitRequestFullscreen;
- if(typeof enter==='function'){
-  try{
-   const promise=enter.call(shell);
-   Promise.resolve(promise).then(()=>{
-    if(screen.orientation?.lock) return Promise.resolve(screen.orientation.lock('landscape')).catch(()=>{});
-   }).catch(()=>tools.toast('Device fullscreen is restricted here; immersive video mode is still available.'));
-  }catch(e){tools.toast('Your browser blocked native fullscreen; immersive mode is already active.')}
- }else tools.toast('Immersive view already fills this app. Native fullscreen is restricted on this device.');
  closeImmersivePanel();
  return true
 }
