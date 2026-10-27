@@ -264,3 +264,55 @@
   transition:none!important;animation:none!important;
  }
 }
+
+
+/* SYLearn official S/book-arrow brand placements (2026-10-27).
+   User-supplied logo; transparent on-screen, dark rounded PWA icon. */
+#app .elite-brand .syl-brand-header-logo{
+ display:block!important;flex:0 0 auto!important;
+ width:42px!important;height:42px!important;max-width:42px!important;
+ object-fit:contain!important;padding:3px!important;
+ border-radius:13px!important;
+ background:linear-gradient(145deg,#191e31,#0e1625)!important;
+ border:1px solid rgba(235,71,118,.42)!important;
+ box-shadow:0 0 19px rgba(242,54,106,.14),inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+#app .elite-brand:focus-visible .syl-brand-header-logo{
+ border-color:#48dfed!important;box-shadow:0 0 0 2px rgba(66,224,236,.22)!important;
+}
+#app .syl-profile-v3 .syl-p3-brand-icon{
+ display:grid!important;place-items:center!important;overflow:hidden!important;
+ background:linear-gradient(145deg,rgba(31,40,61,.85),rgba(24,19,40,.8))!important;
+ border:1px solid rgba(248,84,138,.29)!important;
+ box-shadow:0 0 15px rgba(247,57,116,.08)!important;
+}
+#app .syl-profile-v3 .syl-p3-brand-icon img{
+ display:block;width:32px!important;height:32px!important;
+ max-width:100%;object-fit:contain!important;
+ filter:drop-shadow(0 2px 5px rgba(0,0,0,.2));
+}
+#app .elite-footer-minimal .syl-footer-brand{
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;
+ gap:8px!important;min-height:31px!important;
+}
+#app .elite-footer-minimal .syl-footer-brand img{
+ display:inline-block!important;width:29px!important;height:29px!important;
+ object-fit:contain!important;flex:none!important;
+}
+#app .elite-footer-minimal .syl-footer-brand strong{color:#f5f8ff!important}
+#app .syl-welcome-brand{
+ display:inline-flex!important;align-items:center!important;gap:7px!important;
+ letter-spacing:.08em!important;
+}
+#app .syl-welcome-brand img{
+ width:23px!important;height:23px!important;object-fit:contain!important;
+}
+@media(max-width:420px){
+ #app .elite-brand .syl-brand-header-logo{
+  width:39px!important;height:39px!important;max-width:39px!important;
+  padding:3px!important;border-radius:12px!important;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ #app .elite-brand .syl-brand-header-logo{animation:none!important}
+}
