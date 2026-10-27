@@ -1,0 +1,132 @@
+/* SYLearn Cinema Mode V1 — video-only fullscreen / study tools outside playback.
+   Overrides the legacy whole-viewport 90-degree rotation: never rotate buttons or iframe.
+   Preserve YouTube branding, attribution and original player controls. */
+body.syl-video-immersive-active #app .syl-immersive-view{
+ inset:0!important;top:0!important;left:0!important;right:0!important;bottom:0!important;
+ width:100vw!important;height:100dvh!important;max-width:none!important;max-height:none!important;
+ transform:none!important;transform-origin:center center!important;
+ display:block!important;overflow:hidden!important;isolation:isolate;
+ background:#030509!important;
+}
+body.syl-video-immersive-active #app .syl-immersive-view:not(.syl-cinema-study-mode) .syl-immersive-player{
+ position:absolute!important;top:0!important;right:0!important;bottom:0!important;left:0!important;
+ inset:0!important;display:grid!important;place-items:center!important;
+ width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;
+ border:0!important;border-radius:0!important;
+ background:#000!important;overflow:hidden!important;
+ box-shadow:none!important;transform:none!important;z-index:0!important;
+}
+body.syl-video-immersive-active #app .syl-immersive-view:not(.syl-cinema-study-mode) .syl-immersive-player iframe{
+ position:absolute!important;top:50%!important;left:50%!important;right:auto!important;bottom:auto!important;
+ inset:auto!important;width:min(100vw,177.7778dvh)!important;
+ height:min(100dvh,56.25vw)!important;
+ max-width:100vw!important;max-height:100dvh!important;
+ border:0!important;border-radius:0!important;
+ transform:translate(-50%,-50%)!important;
+ background:#000!important;
+}
+/* Only the video player is promoted to native fullscreen, never classroom chrome. */
+body.syl-video-immersive-active #app .syl-immersive-player:fullscreen,
+body.syl-video-immersive-active #app .syl-immersive-player:-webkit-full-screen{
+ position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;
+ display:grid!important;place-items:center!important;
+ background:#000!important;overflow:hidden!important;border:0!important;
+}
+body.syl-video-immersive-active #app .syl-immersive-view:not(.syl-cinema-study-mode)
+ :is(.syl-immersive-topbar,.syl-immersive-dock,.syl-immersive-backdrop,.syl-immersive-drawer){
+ display:none!important;visibility:hidden!important;pointer-events:none!important;
+}
+/* Tiny, reachable exit hatch only for browsers that decline native fullscreen.
+   Native fullscreen paints the player element, so this sibling never covers the movie. */
+body.syl-video-immersive-active #app .syl-cinema-tools{
+ position:fixed!important;top:max(11px,env(safe-area-inset-top))!important;
+ left:max(9px,env(safe-area-inset-left))!important;z-index:2147483550!important;
+ display:inline-flex;align-items:center;justify-content:center;gap:6px;
+ min-height:38px;min-width:38px;padding:7px 9px;
+ border:1px solid rgba(255,255,255,.18)!important;border-radius:12px!important;
+ background:rgba(9,16,29,.65)!important;color:#fff!important;
+ box-shadow:none!important;backdrop-filter:blur(8px);
+ font:750 10px/1.2 'DM Sans',sans-serif;
+ opacity:.67;transition:opacity .2s ease,background .2s ease;
+ cursor:pointer;
+}
+body.syl-video-immersive-active #app .syl-cinema-tools svg{width:16px;height:16px;flex:none}
+body.syl-video-immersive-active #app .syl-cinema-tools:hover,
+body.syl-video-immersive-active #app .syl-cinema-tools:focus-visible{opacity:1}
+body.syl-video-immersive-active #app .syl-cinema-tools:focus-visible{
+ outline:2px solid #44d9e8!important;outline-offset:2px!important;
+}
+body.syl-video-immersive-active #app .syl-cinema-study-mode .syl-cinema-tools{display:none!important}
+@media(max-width:660px){
+ body.syl-video-immersive-active #app .syl-cinema-tools{padding:7px!important;width:38px!important;min-width:38px!important}
+ body.syl-video-immersive-active #app .syl-cinema-tools span{display:none!important}
+}
+/* Pressing Study Tools or leaving device fullscreen reveals the lesson workspace,
+   in normal document order, underneath a standard 16:9 player, never over video. */
+body.syl-video-immersive-active #app .syl-immersive-view.syl-cinema-study-mode{
+ display:flex!important;flex-direction:column!important;align-items:stretch!important;
+ overflow-x:hidden!important;overflow-y:auto!important;
+ overscroll-behavior-y:contain!important;-webkit-overflow-scrolling:touch;
+ padding:0 0 calc(24px + env(safe-area-inset-bottom))!important;
+ background:linear-gradient(165deg,#08111c,#101b2d 65%,#090f18)!important;
+}
+body.syl-video-immersive-active #app .syl-cinema-study-mode .syl-immersive-topbar{
+ position:relative!important;inset:auto!important;top:auto!important;left:auto!important;right:auto!important;
+ order:0;display:flex!important;flex:none!important;
+ width:100%!important;min-height:56px!important;height:auto!important;
+ padding:10px max(12px,env(safe-area-inset-left))!important;
+ background:#111d2d!important;border-bottom:1px solid #27394c!important;
+ pointer-events:auto!important;
+}
+body.syl-video-immersive-active #app .syl-cinema-study-mode .syl-immersive-player{
+ position:relative!important;inset:auto!important;top:auto!important;left:auto!important;right:auto!important;bottom:auto!important;
+ display:block!important;order:1;flex:none!important;
+ width:100%!important;height:auto!important;
+ aspect-ratio:16/9!important;min-height:0!important;max-width:none!important;max-height:none!important;
+ background:#000!important;border-radius:0!important;
+ overflow:hidden!important;transform:none!important;
+}
+body.syl-video-immersive-active #app .syl-cinema-study-mode .syl-immersive-player iframe{
+ position:absolute!important;top:0!important;left:0!important;right:0!important;bottom:0!important;inset:0!important;
+ width:100%!important;height:100%!important;
+ max-width:100%!important;max-height:100%!important;
+ border:0!important;transform:none!important;background:#000!important;
+}
+body.syl-video-immersive-active #app .syl-cinema-study-mode .syl-immersive-dock{
+ position:relative!important;inset:auto!important;left:auto!important;right:auto!important;bottom:auto!important;
+ z-index:2!important;order:2;flex:0 0 auto!important;
+ width:100%!important;height:auto!important;min-height:0!important;
+ display:flex!important;flex-wrap:wrap!important;gap:9px!important;
+ align-items:center!important;justify-content:center!important;
+ padding:15px 12px 18px!important;margin:0!important;
+ background:#111b2b!important;border-bottom:1px solid #2c3d51!important;
+ pointer-events:auto!important;
+}
+body.syl-video-immersive-active #app .syl-cinema-study-mode .syl-immersive-dock button{
+ min-height:41px!important;white-space:normal!important;opacity:1!important;
+ background:#1d2d43!important;border-color:#40536b!important;
+}
+body.syl-video-immersive-active #app .syl-cinema-study-mode .syl-immersive-dock button.syl-immersive-complete{
+ background:#bd2757!important;border-color:#ef6390!important;
+}
+body.syl-video-immersive-active #app .syl-cinema-study-mode .syl-immersive-dock button:disabled{opacity:.35!important}
+body.syl-video-immersive-active #app .syl-cinema-study-mode .syl-immersive-backdrop{
+ position:fixed!important;inset:0!important;z-index:20!important;
+}
+body.syl-video-immersive-active #app .syl-cinema-study-mode .syl-immersive-drawer{
+ position:fixed!important;top:0!important;right:0!important;bottom:0!important;
+ z-index:21!important;max-height:100dvh!important;
+}
+body.syl-video-immersive-active #app .syl-cinema-study-mode .syl-immersive-identity small{
+ color:#becade!important;
+}
+@media(max-width:460px){
+ body.syl-video-immersive-active #app .syl-cinema-study-mode .syl-immersive-topbar{gap:9px!important}
+ body.syl-video-immersive-active #app .syl-cinema-study-mode .syl-immersive-dock{gap:7px!important;padding:12px 9px!important}
+ body.syl-video-immersive-active #app .syl-cinema-study-mode .syl-immersive-dock button{
+  min-height:38px!important;flex:0 1 auto;padding:9px 10px!important;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ body.syl-video-immersive-active #app .syl-cinema-tools{transition:none!important}
+}
