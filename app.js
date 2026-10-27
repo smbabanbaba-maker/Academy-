@@ -116,7 +116,7 @@ const header=()=>{
  const page=state.page;
  const isCourse=['courses','ytlibrary','ytcourse','ytwatch','ytassessment','ytcompletion','saved'].includes(page);
  return "<header class='topbar syl-topbar elite-topbar'><div class='container topbar-inner elite-topbar-row'>"+
-  "<button type='button' class='elite-brand' data-go='home' aria-label='SYLearn home'><img class='elite-brand-icon' src='./icon.svg' alt='' /><span class='elite-brand-copy'><strong><span>SY</span>Learn</strong><small>Digital Skills Academy</small></span></button>"+
+  "<button type='button' class='elite-brand' data-go='home' aria-label='SYLearn home'><img class='elite-brand-icon syl-brand-header-logo' src='./sylearn-brand.svg' alt='' width='48' height='48' /><span class='elite-brand-copy'><strong><span>SY</span>Learn</strong><small>Digital Skills Academy</small></span></button>"+
   "<nav class='elite-desktop-nav' aria-label='Main navigation'>"+
   [['home','Home'],['courses','Courses'],['live','Live'],['progress','Learning'],['profile','Profile']].map(([pg,label])=>"<button type='button' class='"+(page===pg||(pg==='courses'&&isCourse)?'is-active':'')+"' data-go='"+pg+"'>"+label+"</button>").join('')+"</nav>"+
   "<div class='elite-header-actions'><button type='button' class='elite-header-icon' data-action='elite-search' aria-label='Search courses'>"+ico('search',20)+"</button><button type='button' class='elite-header-avatar' data-go='profile' aria-label='Open profile'>"+(profilePhoto(state.user)?"<img src='"+profilePhoto(state.user)+"' alt='' style='width:100%;height:100%;border-radius:50%;object-fit:cover'/>":esc((state.user.name||'L').charAt(0).toUpperCase()))+"</button></div>"+
@@ -129,7 +129,7 @@ const navBar=()=>{
  .map(([pg,icon,label])=>"<button type='button' class='nav-item elite-nav-item "+(selected===pg?'active':'')+"' aria-label='"+label+"' aria-current='"+(selected===pg?'page':'false')+"' data-go='"+pg+"'><span class='elite-nav-icon'>"+ico(icon,22)+"</span><span class='elite-nav-label'>"+label+"</span></button>").join('')+
  "</nav></div>";
 };
-const footer=()=>"<footer class='footer syl-footer elite-footer elite-footer-minimal'><strong>SYLearn</strong><p>Learn. Build. Grow. <span>·</span> Powered by SYLUTION</p></footer>";
+const footer=()=>"<footer class='footer syl-footer elite-footer elite-footer-minimal'><span class='syl-footer-brand'><img src='./sylearn-brand.svg' alt='' width='30' height='30'/><strong>SYLearn</strong></span><p>Learn. Build. Grow. <span>·</span> Powered by SYLUTION</p></footer>";
 
 /* Published Home promotions are presentation-only, not learning progress or enrolment. */
 const promotions=()=>{
@@ -441,7 +441,7 @@ function profile(){
  ];
  return '<section class="screen profile-screen syl-profile-v3">'+
   '<div class="syl-p3-hero"><div class="syl-p3-hero-glow" aria-hidden="true"></div>'+
-   '<div class="syl-p3-topline"><span>'+ico('cap',16)+' SYLEARN · STUDENT PROFILE</span><span class="syl-p3-topicon">'+ico('spark',20)+'</span></div>'+
+   '<div class="syl-p3-topline"><span>'+ico('cap',16)+' SYLEARN · STUDENT PROFILE</span><span class="syl-p3-topicon syl-p3-brand-icon"><img src="./sylearn-brand.svg" alt="" width="31" height="31"/></span></div>'+
    '<div class="syl-p3-identity"><div class="syl-p3-avatar">'+photoHtml+'</div>'+
     '<div class="syl-p3-identity-copy"><span class="syl-p3-identity-label">YOUR PERSONAL LEARNING SPACE</span><h1>'+esc(name)+'</h1><p>'+esc(subtitle)+'</p>'+
      '<span class="syl-p3-local-label">'+ico('info',13)+' Saved on this device</span></div>'+
@@ -608,7 +608,7 @@ function instructor(){
 return '<section class="screen instructor-screen theme-purple"><button class="back-btn" data-go="profile">'+ico('back')+' Profile</button><div class="screen-header"><h1>Instructor Studio</h1><p class="muted">Create course drafts for review before publishing.</p></div><div class="split"><div class="panel" style="padding:24px"><h2>New Course Draft</h2><form id="draft-form"><div class="field"><label>Course title</label><input name="title" maxlength="70" required placeholder="e.g. Introduction to IoT"/></div><div class="field"><label>Category</label><select name="cat">'+['Programming','AI & Automation','Cybersecurity','Design & Creative','Data & Analytics','Engineering & IoT','Business & Office'].map(c=>'<option>'+c+'</option>').join('')+'</select></div><div class="field"><label>Description</label><textarea name="desc" rows="4" required maxlength="300" placeholder="What students will learn"></textarea></div><button class="btn btn-primary btn-block">Save Course Draft '+ico('arrow')+'</button></form></div><div><div class="panel" style="padding:22px"><h2>My Drafts</h2><p class="small muted">Saved in this browser only; publishing requires a secure instructor backend.</p>'+(state.drafts.length?state.drafts.map((d,i)=>'<div class="module"><span class="module-num">'+(i+1)+'</span><span class="module-text"><strong>'+esc(d.title)+'</strong><small>'+esc(d.cat)+' · Draft</small></span>'+badge('Draft')+'</div>').join(''):'<div class="empty" style="padding:25px"><h3>No drafts yet</h3><p class="small muted">Your course drafts will appear here.</p></div>')+'</div></div></div></section>';}
 
 function welcome(){
-return '<section class="screen"><div class="hero" style="height:310px">'+img(PHOTOS.hero,'SYLearn students').replace('<img','<img class="hero-photo"')+'<div class="hero-content"><div class="heading-eyebrow">WELCOME TO SYLUTION LEARN</div><h1>Everything to learn.<br><span class="red">One place.</span></h1><p>Practical courses in technology, creative skills and digital business.</p><button class="btn btn-primary" data-go="signup">Get Started '+ico('arrow')+'</button></div></div>'+
+return '<section class="screen"><div class="hero" style="height:310px">'+img(PHOTOS.hero,'SYLearn students').replace('<img','<img class="hero-photo"')+'<div class="hero-content"><div class="heading-eyebrow syl-welcome-brand"><img src="./sylearn-brand.svg" alt="" width="22" height="22"/> WELCOME TO SYLEARN</div><h1>Everything to learn.<br><span class="red">One place.</span></h1><p>Practical courses in technology, creative skills and digital business.</p><button class="btn btn-primary" data-go="signup">Get Started '+ico('arrow')+'</button></div></div>'+
 heading('Your learning journey begins here','','')+
 '<div class="grid-2 onboarding-features">'+[['book','Learn at your pace','Explore structured courses and practise when you want.'],['laptop','Develop real skills','Explore programming, design, technology and business.'],['brain','Study with AI','Explore guided study answers in Hausa or English.'],['trophy','Celebrate progress','Track chapters you study and record eligible knowledge-check results.']].map(([i,t,d])=>'<div class="panel" style="padding:20px"><div class="red">'+ico(i,28)+'</div><h3 class="mt-2">'+t+'</h3><p class="muted small">'+d+'</p></div>').join('')+'</div><div class="row gap-2 mt-3"><button class="btn btn-primary" data-go="signup">Create Learning Profile '+ico('arrow')+'</button><button class="btn btn-outline" data-go="home">Explore as Guest</button></div></section>';
 }
