@@ -236,12 +236,6 @@ function home(){
  },0);
  const overall=totalChapters?Math.round(markedChapters/totalChapters*100):0;
  const savedCount=curated.filter(c=>VIDEO.state.saved.includes(c.id)).length;
- const name=String(state.user?.name||'Learner').trim()||'Learner';
- const firstName=name.split(/\s+/)[0];
- const hours=new Date().getHours();
- const greeting=hours<12?'Good morning':hours<17?'Good afternoon':'Good evening';
- const photo=typeof profilePhoto==='function'?profilePhoto(state.user):'';
- const avatar=photo?"<img src='"+photo+"' alt=''/>":esc(firstName.charAt(0).toUpperCase());
  const quick=[
   ['book','All Courses',curated.length+' available','courses','crimson'],
   ['radio','Live Classes','Sessions & workshops','live','magenta'],
@@ -269,7 +263,6 @@ function home(){
   "<div class='syl-promo-arrows'><button type='button' class='syl-promo-arrow' data-action='promo-prev' aria-label='Previous promotion'>"+ico('back',16)+"</button><button type='button' class='syl-promo-arrow' data-action='promo-next' aria-label='Next promotion'>"+ico('arrow',16)+"</button></div></div></section>":"";
 
  return "<section class='screen elite-home syl-neon-home'>"+
- "<div class='syl-n-welcome'><div class='syl-n-welcome-avatar'>"+avatar+"</div><div class='syl-n-welcome-copy'><small>"+greeting+",</small><h1>"+esc(firstName)+" <span aria-hidden='true'>✦</span></h1><p>Learn. Build. Grow. Your next step starts here.</p></div><button type='button' class='syl-n-welcome-profile' data-go='profile' aria-label='View profile'>"+ico('user',22)+"</button></div>"+
  "<form id='home-search-form' class='elite-course-search elite-search-top syl-n-search' role='search'>"+ico('search',21)+"<input id='home-search' name='search' type='search' autocomplete='off' placeholder='Search Python, AI, design, robotics...' aria-label='Search digital skills courses' value='"+esc(VIDEO.state.query||'')+"'/><button type='submit'>Search "+ico('arrow',16)+"</button></form>"+
  promoMarkup+
  "<section class='syl-n-shortcuts' aria-label='Quick access'>"+shortcuts+"</section>"+
