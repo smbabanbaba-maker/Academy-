@@ -230,6 +230,15 @@ revoke all on table public.payment_records from anon, authenticated;
 alter table public.learning_completion_records enable row level security;
 revoke all on table public.learning_completion_records from anon, authenticated;
 
+-- Backend-only Supabase role keeps full access even on projects with
+-- restricted/default-deny table privileges. Never ship this role's key to clients.
+grant all on table
+ public.staff_users,public.profiles,public.courses,public.course_chapters,
+ public.saved_courses,public.chapter_progress,public.study_notes,
+ public.assessment_attempts,public.live_sessions,public.saved_live_sessions,
+ public.live_registrations,public.payment_records,public.learning_completion_records
+ to service_role;
+
 -- Public discovery is read-only.
 grant select on public.courses, public.course_chapters, public.live_sessions to anon, authenticated;
 grant select on public.staff_users to authenticated;
