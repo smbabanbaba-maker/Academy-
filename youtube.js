@@ -497,6 +497,7 @@ const entry=Array.isArray(state.courseProgress[key])?state.courseProgress[key]:[
 if(!entry.includes(i))entry.push(i);
 state.courseProgress[key]=entry;
 try{localStorage.setItem('sylution_yt-progress',JSON.stringify(state.courseProgress))}catch(e){}
+window.SYLEARN_CLOUD?.markChapter(c.id,i,/playback/i.test(String(source||''))?'client_playback':'learner_marked');
 return progress(c)
 }
 function finish(){return markChapter(state.lesson,'Manual study log')}
@@ -505,6 +506,7 @@ function toggleSaved(id){
 if(!validVideo(id))return false;
 const n=state.saved.indexOf(id);if(n>=0)state.saved.splice(n,1);else state.saved.push(id);
 try{localStorage.setItem('sylution_yt-saved',JSON.stringify(state.saved))}catch(e){}
+window.SYLEARN_CLOUD?.saveCourse(id,state.saved.includes(id));
 return state.saved.includes(id)
 }
 const categories=['All','Programming','Artificial Intelligence','Data & Analytics','Business & Office','Web Development','Design & Creative','Cybersecurity','Engineering & IoT','Mathematics & Science','Languages','Agriculture'];
