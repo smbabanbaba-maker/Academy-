@@ -481,7 +481,7 @@ function cloudAccountBox(){
  const user=cloud.user;
  const badge=user?(cloud.linked?'Cloud sync enabled':'Device link required'):'Secure student account';
  const headline=user?'Signed in as '+esc(user.email||'learner'):'Keep your learning across devices.';
- const summary=user?(cloud.linked?'Your bookmarks, chapter progress and study notes can sync automatically.':'Confirm that existing study records on this device belong to your account before linking.'):'Register or sign in with email to keep your saved courses and progress when you switch devices.';
+ const summary=user?(cloud.linked?'Bookmarks, chapter progress, notes and unverified quiz results can sync automatically.':'Confirm that the saved learning records on this device belong to you before importing to your account.'):'Register or sign in with email to keep your saved courses and progress when you switch devices.';
  const intro='<div class="syl-cloud-card-head"><span class="syl-cloud-mark">'+ico('lock',21)+'</span><div><span class="syl-cloud-overline">SYLearn · CLOUD ACCOUNT</span><h2>'+headline+'</h2><p>'+summary+'</p></div></div>';
  let actions='';
  if(user&&cloud.recovery){
