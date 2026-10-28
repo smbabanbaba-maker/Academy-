@@ -16,7 +16,7 @@ const db=sdk&&typeof sdk.createClient==='function'?
  }):null;
 const PREFIX='sylearn-cloud-';
 const COURSES=new Map((V?.curated||[]).map(c=>[c.id,c]));
-let user=null,linked=false,connecting=false,uploading=false,pending=false,notice='',catalogOnline=false,authReady=false;
+let user=null,linked=false,connecting=false,uploading=false,pending=false,notice='',catalogOnline=false,authReady=false,recovery=false;
 let currentUserId='',queueTimer=null;
 const safeJSON=(s,fallback)=>{try{return s?JSON.parse(s):fallback}catch(e){return fallback}};
 const get=(k)=>{try{return localStorage.getItem(k)}catch(e){return null}};
@@ -55,7 +55,7 @@ const emit=()=>{
 };
 const status=()=>({
  available:!!db,user:user?{id:user.id,email:user.email}:null,
- linked,connecting,pending,authReady,notice,catalogOnline,
+ linked,connecting,pending,authReady,notice,catalogOnline,recovery,
  unsynced:user?Object.keys(safeJSON(get(queueKey(user.id)),{})).length:0
 });
 const check=resp=>{if(resp?.error)throw Error(resp.error.message||'Cloud request failed');return resp?.data};
@@ -169,6 +169,7 @@ function applyRemote(rows){
   put('sylution_user',next);
  }
  storeSnapshot(user.id);
+ try{window.dispatchEvent(new Event('sylearn-cloud-data'))}catch(e){}
 }
 async function refresh(){
  if(!db||!user||!linked||connecting)return false;
@@ -216,14 +217,22 @@ async function linkDevice(){
 async function activate(next){
  authReady=true;
  if(!next){
+  const previousOwner=get(path('owner'));
+  if(previousOwner&&get(snapshotKey('guest'))!==null){
+   storeSnapshot(previousOwner);restoreSnapshot('guest');del(path('owner'));
+   setTimeout(()=>location.reload(),0);
+  }
   user=null;linked=false;pending=false;currentUserId='';
   notice='Sign in to sync your learning across devices.';emit();return;
  }
  if(currentUserId===next.id&&user)return;
  const previousOwner=get(path('owner'));
+ let swapped=false;
  if(previousOwner&&previousOwner!==next.id){
   storeSnapshot(previousOwner);
   restoreSnapshot(next.id);
+  put(path('owner'),next.id);
+  swapped=true;
  }else if(!previousOwner){
   if(get(snapshotKey('guest'))===null)storeSnapshot('guest');
   const existing=safeJSON(get(snapshotKey(next.id)),null);
@@ -243,6 +252,7 @@ async function activate(next){
   notice='Signed in. Loading your cloud learning records.';
   emit();setTimeout(()=>{refresh().catch(()=>{})},0);
  }
+ if(swapped)setTimeout(()=>location.reload(),0);
 }
 async function boot(){
  if(!db){authReady=true;notice='Cloud sign-in could not load. Device learning still works.';emit();return}
@@ -250,7 +260,12 @@ async function boot(){
   const {data,error}=await db.auth.getSession();
   if(error)throw error;
   await activate(data.session?.user||null);
-  db.auth.onAuthStateChange((_event,session)=>{setTimeout(()=>{activate(session?.user||null).catch(()=>{})},0)});
+  db.auth.onAuthStateChange((event,session)=>{
+   if(event==='PASSWORD_RECOVERY'){
+    recovery=true;location.hash='#/account';emit();
+   }
+   setTimeout(()=>{activate(session?.user||null).catch(()=>{})},0);
+  });
  }catch(err){authReady=true;notice='Unable to check cloud account right now.';emit()}
  loadCatalog().catch(()=>{});
 }
@@ -292,6 +307,12 @@ async function signUp(email,password,name){
  }});
  if(error)throw error;return data;
 }
+async function updatePassword(password){
+ if(!db||!user)throw Error('Sign in using the recovery link first.');
+ const {error}=await db.auth.updateUser({password});
+ if(error)throw error;
+ recovery=false;notice='Password updated successfully.';emit();
+}
 async function resetPassword(email){
  if(!db)throw Error('Cloud sign-in unavailable.');
  const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
@@ -314,7 +335,7 @@ document.addEventListener('visibilitychange',()=>{
  if(!document.hidden&&user&&linked)flushQueue().catch(()=>{});
 });
 window.SYLEARN_CLOUD={
- status,signIn,signUp,signOut,resetPassword,linkDevice,refresh,loadCatalog,
+ status,signIn,signUp,signOut,resetPassword,updatePassword,linkDevice,refresh,loadCatalog,
  saveCourse:(id,saved)=>{if(courseValid(id))queue({type:'saved',course:id,value:!!saved})},
  markChapter:(id,index,source)=>{if(chapterValid(id,index))queue({type:'progress',course:id,index,source:source==='client_playback'?'client_playback':'learner_marked'})},
  saveNote:(id,index,body)=>{if(chapterValid(id,index))queue({type:'note',course:id,index,body:String(body||'').slice(0,6000)})},
