@@ -1,0 +1,124 @@
+/* SYLearn Cloud Identity V1 — responsive student account, existing neon styling intact. */
+#app .syl-account-v3 .syl-cloud-card{
+ --cloud-rose:#ff5587;--cloud-cyan:#40d4e4;--cloud-text:#f4f6ff;
+ position:relative;isolation:isolate;overflow:hidden;
+ background:radial-gradient(ellipse at 95% -30%,rgba(71,210,233,.12),transparent 45%),
+  radial-gradient(ellipse at 8% -15%,rgba(255,64,128,.13),transparent 45%),
+  linear-gradient(115deg,#151e31,#101a2a 70%,#151a2a);
+ color:var(--cloud-text);border:1px solid #3a4d68;border-radius:21px;
+ padding:22px;max-width:100%;margin:0 0 19px;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.055),0 17px 35px rgba(3,8,18,.2);
+}
+#app .syl-cloud-card:before{
+ content:"";position:absolute;inset:0 0 auto;height:2px;pointer-events:none;
+ background:linear-gradient(90deg,transparent,#ff5587 26%,#b58bff 65%,#40d4e4 95%);
+}
+#app .syl-cloud-card-head{display:flex;align-items:flex-start;gap:13px;margin-bottom:14px}
+#app .syl-cloud-card-head>div{flex:1;min-width:0}
+#app .syl-cloud-mark{
+ flex:none;display:grid;place-items:center;width:43px;height:43px;
+ border:1px solid #71375b;border-radius:14px;
+ color:#ff8aac;background:#2c1b35;
+ box-shadow:0 0 23px rgba(255,64,125,.11);
+}
+#app .syl-cloud-overline{
+ color:#55dbe9!important;font-size:9px;font-weight:850;letter-spacing:.14em;
+}
+#app .syl-cloud-card h2{
+ margin:5px 0 6px!important;color:#f5f8ff!important;
+ font:850 clamp(17px,2.1vw,24px)/1.25 'Plus Jakarta Sans',sans-serif!important;
+ letter-spacing:-.035em;
+ overflow-wrap:anywhere;
+}
+#app .syl-cloud-card p{
+ margin:0!important;color:#b5c3d7!important;font:500 12px/1.65 'DM Sans',sans-serif!important;
+}
+#app .syl-cloud-tabs{
+ display:grid;grid-template-columns:1fr 1fr;
+ gap:5px;background:#0a1422;border:1px solid #33455c;border-radius:13px;
+ padding:5px;margin:12px 0 16px;
+}
+#app .syl-cloud-tabs button{
+ border:0!important;background:transparent!important;
+ color:#a0b2c6!important;border-radius:9px!important;min-height:37px;
+ padding:9px 10px!important;font:800 12px 'Plus Jakarta Sans',sans-serif!important;
+ cursor:pointer;
+}
+#app .syl-cloud-tabs button.is-active{
+ color:#fff!important;background:linear-gradient(116deg,#dc336d,#972d78)!important;
+ box-shadow:0 4px 14px rgba(245,44,100,.16)!important;
+}
+#app .syl-cloud-form{display:flex;flex-direction:column;gap:8px;max-width:470px}
+#app .syl-cloud-form label{color:#dce8f6;font:750 11px 'DM Sans',sans-serif;margin-top:5px}
+#app .syl-cloud-form input{
+ width:100%;min-height:45px;outline:0;
+ background:#0d1827!important;color:#f7faff!important;
+ border:1px solid #3b516a!important;border-radius:11px!important;
+ padding:11px 13px!important;font:500 13px 'DM Sans',sans-serif!important;
+}
+#app .syl-cloud-form input::placeholder{color:#8092aa!important}
+#app .syl-cloud-form input:focus{border-color:#55d6e4!important;box-shadow:0 0 0 3px rgba(61,207,232,.13)!important}
+#app .syl-cloud-primary,
+#app .syl-cloud-secondary{
+ display:inline-flex;align-items:center;justify-content:center;gap:9px;
+ border-radius:11px!important;min-height:43px;
+ padding:11px 17px!important;
+ font:800 12px/1.3 'Plus Jakarta Sans',sans-serif!important;
+ cursor:pointer;text-align:center;
+}
+#app .syl-cloud-primary{
+ color:#fff!important;background:linear-gradient(115deg,#ef346b,#a5368b)!important;
+ border:1px solid #fa6196!important;
+ box-shadow:0 7px 23px rgba(232,40,102,.16)!important;
+}
+#app .syl-cloud-form .syl-cloud-primary{margin-top:8px;width:100%}
+#app .syl-cloud-secondary{
+ color:#dce9fc!important;background:#142337!important;border:1px solid #3c5370!important;
+}
+#app .syl-cloud-button-row{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0 6px}
+#app .syl-cloud-button-row button{flex:1 1 150px}
+#app .syl-cloud-card button:disabled{opacity:.58;cursor:progress}
+#app .syl-cloud-card button:focus-visible{outline:2px solid #6de3ee!important;outline-offset:3px}
+#app .syl-cloud-forgot{
+ display:inline-flex;background:transparent;border:0;color:#79ddec!important;
+ font-weight:750;padding:10px 0;cursor:pointer;font-size:11px;
+}
+#app .syl-cloud-fine{margin:12px 0 0!important;font-size:10px!important}
+#app .syl-cloud-status-line{
+ display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+ margin:17px 0 12px;border:1px solid #3b4960;
+ background:#101c2b;border-radius:11px;padding:12px 13px;
+}
+#app .syl-cloud-status-line strong{color:#e6f0ff;font-size:12px}
+#app .syl-cloud-status-line small{color:#d0a5b5;font-size:10px;margin-left:auto}
+#app .syl-cloud-light{
+ height:9px;width:9px;flex:none;border-radius:50%;background:#f6ac53;
+ box-shadow:0 0 0 4px rgba(243,169,79,.1);
+}
+#app .syl-cloud-light.is-online{background:#52dfb6;box-shadow:0 0 0 4px rgba(64,212,170,.1)}
+#app .syl-cloud-link-warning{
+ display:flex;gap:9px;align-items:flex-start;
+ background:#302437;border:1px solid #664460;color:#eacada;
+ padding:12px 13px;border-radius:11px;
+ font:650 11px/1.55 'DM Sans',sans-serif;
+}
+#app .syl-cloud-link-warning svg{flex:none;height:17px;width:17px}
+#app .syl-cloud-card .syl-cloud-foot{
+ display:flex;align-items:flex-start;gap:8px;
+ font-size:10px!important;color:#91a6bc!important;
+ margin:17px 0 0!important;padding-top:12px;
+ border-top:1px solid rgba(155,180,214,.14);
+}
+#app .syl-cloud-card .syl-cloud-foot svg{width:15px;height:15px;flex:none}
+@media(max-width:600px){
+ #app .syl-account-v3 .syl-cloud-card{padding:15px 13px;border-radius:16px;margin-bottom:14px}
+ #app .syl-cloud-card-head{gap:10px;margin-bottom:12px}
+ #app .syl-cloud-mark{height:36px;width:36px;border-radius:11px}
+ #app .syl-cloud-card h2{font-size:17px!important}
+ #app .syl-cloud-card p{font-size:11px!important}
+ #app .syl-cloud-button-row{flex-direction:column}
+ #app .syl-cloud-button-row button{flex:auto;min-width:0;width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+ #app .syl-cloud-card :is(button,input){transition:none!important}
+}
