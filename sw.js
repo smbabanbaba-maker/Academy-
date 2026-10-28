@@ -1,6 +1,6 @@
 /* SYLearn Digital Academy PWA: network-first updates, no API response caching. */
-const VERSION='sylution-learn-cinemav1-20261028';
-const ASSETS=['./','./index.html','./styles.css','./premium.css','./palette.css','./responsive.css','./youtube.css','./home-premium.css','./learning.css','./academy-elite.css','./profile-v3.css','./sylearn-tech.css','./sylearn-neon.css','./sylearn-cards.css','./sylearn-promo.css','./sylearn-spectrum.css','./sylearn-course-premium.css','./sylearn-cinema.css','./tech-education-hero.svg','./youtube.js','./learning.js','./learning-ui.js','./learning-player.js','./youtube-ui.js','./live-sessions.js','./promo-slides.js','./app.js','./sylearn-brand.svg','./icon.svg','./manifest.webmanifest'];
+const VERSION='sylution-learn-cloudv1-20261028';
+const ASSETS=['./','./index.html','./styles.css','./premium.css','./palette.css','./responsive.css','./youtube.css','./home-premium.css','./learning.css','./academy-elite.css','./profile-v3.css','./sylearn-tech.css','./sylearn-neon.css','./sylearn-cards.css','./sylearn-promo.css','./sylearn-spectrum.css','./sylearn-course-premium.css','./sylearn-cinema.css','./sylearn-cloud.css','./tech-education-hero.svg','./youtube.js','./learning.js','./learning-ui.js','./learning-player.js','./youtube-ui.js','./live-sessions.js','./promo-slides.js','./sylearn-cloud.js','./app.js','./sylearn-brand.svg','./icon.svg','./manifest.webmanifest'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(VERSION).then(cache=>cache.addAll(ASSETS)));
  self.skipWaiting();
