@@ -298,7 +298,7 @@ if(name==='yt-back'){exitCinemaFullscreen();exitTelegramLessonFullscreen();tools
 if(name==='yt-note-save'){
  const c=V.state.selected;if(!c)return true;
  const field=document.getElementById('syl-lesson-note');if(!field)return true;
- try{localStorage.setItem(lessonNoteKey(c.id,V.state.lesson),String(field.value||'').slice(0,6000));tools.toast('Lesson notes saved on this device.');}
+ try{const note=String(field.value||'').slice(0,6000);localStorage.setItem(lessonNoteKey(c.id,V.state.lesson),note);window.SYLEARN_CLOUD?.saveNote(c.id,V.state.lesson,note);tools.toast(window.SYLEARN_CLOUD?.status().linked?'Notes saved and queued for cloud sync.':'Lesson notes saved on this device.');}
  catch(e){tools.toast('Could not save notes on this device.');}
  return true
 }
