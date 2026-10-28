@@ -91,7 +91,7 @@ const QUESTIONS=[
 ];
 const read=(k,d)=>{try{const x=localStorage.getItem('sylution_'+k);return x?JSON.parse(x):d}catch(e){return d}};
 const save=(k,v)=>{try{localStorage.setItem('sylution_'+k,JSON.stringify(v))}catch(e){}};
-const state={page:'home',category:'All',search:'',sort:'popular',courseId:'python',heroIndex:0,promoIndex:0,detailTab:'overview',lessonTab:'notes',saved:read('saved',[]),enrolled:read('enrolled',[]),completed:read('completed',{}),user:read('user',{name:'Learner',preferred:'Hausa'}),chat:read('chat',[{from:'ai',text:'Welcome to SYLearn Study Companion. Choose a topic such as Python, design or robotics, and explore a guided explanation in Hausa or English!'}]),quizIndex:0,answers:{},quizEnds:0,quizSubmitted:false,quizResult:0,modal:null,lessonPlaying:false,liveTab:'upcoming',liveSaved:read('liveSaved',[]),drafts:read('drafts',[]),toastTimer:null};
+const state={page:'home',category:'All',search:'',sort:'popular',courseId:'python',heroIndex:0,promoIndex:0,cloudAuthMode:'login',detailTab:'overview',lessonTab:'notes',saved:read('saved',[]),enrolled:read('enrolled',[]),completed:read('completed',{}),user:read('user',{name:'Learner',preferred:'Hausa'}),chat:read('chat',[{from:'ai',text:'Welcome to SYLearn Study Companion. Choose a topic such as Python, design or robotics, and explore a guided explanation in Hausa or English!'}]),quizIndex:0,answers:{},quizEnds:0,quizSubmitted:false,quizResult:0,modal:null,lessonPlaying:false,liveTab:'upcoming',liveSaved:read('liveSaved',[]),drafts:read('drafts',[]),toastTimer:null};
 const money=n=>n?'₦'+n.toLocaleString('en-NG'):'Free';
 const course=id=>COURSES.find(c=>c.id===id)||COURSES[0];
 const ct=id=>state.completed[id]||0;
@@ -437,14 +437,14 @@ function profile(){
  const settings=[
   ['user','Personal information','Name, picture and preferences','account'],
   ['globe','Learning language',String(state.user?.preferred||'Hausa'),'account'],
-  ['lock','Account & data','Local profile, backup and restore','account']
+  ['lock','Account & cloud sync',window.SYLEARN_CLOUD?.status?.().linked?'Your learning is cloud connected':'Sign in and back up your learning','account']
  ];
  return '<section class="screen profile-screen syl-profile-v3">'+
   '<div class="syl-p3-hero"><div class="syl-p3-hero-glow" aria-hidden="true"></div>'+
    '<div class="syl-p3-topline"><span>'+ico('cap',16)+' SYLEARN · STUDENT PROFILE</span><span class="syl-p3-topicon syl-p3-brand-icon"><img src="./sylearn-brand.svg" alt="" width="31" height="31"/></span></div>'+
    '<div class="syl-p3-identity"><div class="syl-p3-avatar">'+photoHtml+'</div>'+
     '<div class="syl-p3-identity-copy"><span class="syl-p3-identity-label">YOUR PERSONAL LEARNING SPACE</span><h1>'+esc(name)+'</h1><p>'+esc(subtitle)+'</p>'+
-     '<span class="syl-p3-local-label">'+ico('info',13)+' Saved on this device</span></div>'+
+     '<span class="syl-p3-local-label">'+ico('info',13)+' '+(window.SYLEARN_CLOUD?.status?.().linked?'Cloud connected':'Saved on this device')+'</span></div>'+
     '<button type="button" class="syl-p3-hero-edit" data-go="account">'+ico('edit',16)+' Edit profile</button></div>'+
    '<div class="syl-p3-stats">'+profileStatTile('book',stats.started,'Courses started')+profileStatTile('check',stats.studied,'Chapters studied')+profileStatTile('bookmark',stats.saved,'Saved courses')+'</div>'+
   '</div>'+
@@ -457,13 +457,13 @@ function profile(){
   '<div class="syl-p3-settings">'+
    '<button type="button" class="syl-p3-settings-row" data-action="help"><span class="syl-p3-settings-icon">'+ico('help',20)+'</span><span><strong>Help & support</strong><small>How to use SYLearn and your learning records</small></span><span class="syl-p3-settings-arrow">'+ico('arrow',16)+'</span></button>'+
    '<button type="button" class="syl-p3-settings-row" data-action="about"><span class="syl-p3-settings-icon">'+ico('info',20)+'</span><span><strong>About SYLearn</strong><small>Digital Skills Academy by SYLUTION</small></span><span class="syl-p3-settings-arrow">'+ico('arrow',16)+'</span></button></div>'+
-  '<div class="syl-p3-privacy">'+ico('lock',17)+' <span>Profile details, your study history and saved classes are stored locally. Secure sign-in and automatic cloud synchronisation are not connected yet.</span></div>'+
+  '<div class="syl-p3-privacy">'+ico('lock',17)+' <span>Your study records remain available offline. Email sign-in and cross-device cloud sync are available from Account & cloud sync.</span></div>'+
  '</section>';
 }
 
 function saved(){
  const items=VIDEO.curated.filter(c=>VIDEO.state.saved.includes(c.id));
- return '<section class="screen saved-real"><button class="back-btn" data-go="profile">'+ico('back')+' Profile</button><span class="home-block-eyebrow">YOUR COLLECTION</span><h1>Saved courses</h1><p class="muted">Bookmarks saved on this device.</p>'+
+ return '<section class="screen saved-real"><button class="back-btn" data-go="profile">'+ico('back')+' Profile</button><span class="home-block-eyebrow">YOUR COLLECTION</span><h1>Saved courses</h1><p class="muted">'+(window.SYLEARN_CLOUD?.status?.().linked?'Bookmarks linked to your cloud account.':'Bookmarks saved on this device. Sign in through Profile to sync them.')+'</p>'+
  (items.length?'<div class="yt-course-grid">'+items.map(VIDEO_UI.card).join('')+'</div>':'<div class="real-empty">'+ico('bookmark')+'<h3>No saved courses</h3><p>Use the heart on any course card to save it here.</p><button class="btn btn-primary" data-go="courses">Explore courses</button></div>')+'</section>';
 }
 
@@ -474,11 +474,40 @@ function certificates(){
 }
 
 function downloads(){return '<section class="screen"><button class="back-btn" data-go="profile">'+ico('back')+' Profile</button><h1>My Downloads</h1><div class="empty mt-3">'+ico('download')+'<h3>Offline lessons</h3><p class="muted">Offline video and lesson downloads will be available when the secure media library and storage are connected.</p><button class="btn btn-primary" data-go="courses">Browse Courses</button></div></section>';}
+/* Online student identity is optional; offline guest learning always works. */
+function cloudAccountBox(){
+ const cloud=window.SYLEARN_CLOUD?.status?.();
+ if(!cloud?.available)return '<section class="syl-cloud-card"><div class="syl-cloud-card-head"><span class="syl-cloud-mark">'+ico('lock',20)+'</span><div><h2>Student cloud account</h2><p>Secure sign-in is temporarily unavailable. Your on-device learning remains safe.</p></div></div></section>';
+ const user=cloud.user;
+ const badge=user?(cloud.linked?'Cloud sync enabled':'Device link required'):'Secure student account';
+ const headline=user?'Signed in as '+esc(user.email||'learner'):'Keep your learning across devices.';
+ const summary=user?(cloud.linked?'Your bookmarks, chapter progress and study notes can sync automatically.':'Confirm that existing study records on this device belong to your account before linking.'):'Register or sign in with email to keep your saved courses and progress when you switch devices.';
+ const intro='<div class="syl-cloud-card-head"><span class="syl-cloud-mark">'+ico('lock',21)+'</span><div><span class="syl-cloud-overline">SYLearn · CLOUD ACCOUNT</span><h2>'+headline+'</h2><p>'+summary+'</p></div></div>';
+ let actions='';
+ if(user){
+  actions='<div class="syl-cloud-status-line"><span class="syl-cloud-light '+(cloud.linked?'is-online':'')+'"></span><strong>'+badge+'</strong>'+(cloud.unsynced?'<small>'+cloud.unsynced+' pending changes</small>':'')+'</div>'+
+   (cloud.linked?'<div class="syl-cloud-button-row"><button type="button" class="syl-cloud-primary" data-action="cloud-refresh" '+(cloud.connecting?'disabled':'')+'>'+ico('repeat',16)+' '+(cloud.connecting?'Syncing…':'Sync now')+'</button><button type="button" class="syl-cloud-secondary" data-action="cloud-signout">Sign out</button></div>':
+   '<div class="syl-cloud-link-warning">'+ico('info',15)+' Import only records that belong to you. Your existing data is backed up locally before merging.</div>'+
+   '<div class="syl-cloud-button-row"><button type="button" class="syl-cloud-primary" data-action="cloud-link" '+(cloud.connecting?'disabled':'')+'>'+ico('check',16)+' '+(cloud.connecting?'Connecting…':'Link my device records')+'</button><button type="button" class="syl-cloud-secondary" data-action="cloud-signout">Sign out</button></div>');
+ }else{
+  const register=state.cloudAuthMode==='register';
+  actions='<div class="syl-cloud-tabs" role="group" aria-label="Account action"><button type="button" data-action="cloud-mode" data-value="login" class="'+(!register?'is-active':'')+'" aria-pressed="'+(!register)+'">Sign in</button><button type="button" data-action="cloud-mode" data-value="register" class="'+(register?'is-active':'')+'" aria-pressed="'+register+'">Register</button></div>'+
+    '<form id="cloud-auth-form" class="syl-cloud-form"><label for="cloud-email">Email address</label><input id="cloud-email" type="email" name="email" required autocomplete="email" maxlength="254" placeholder="you@example.com"/>'+
+    '<label for="cloud-password">Password</label><input id="cloud-password" type="password" name="password" required minlength="8" maxlength="128" autocomplete="'+(register?'new-password':'current-password')+'" placeholder="At least 8 characters"/>'+
+    '<button type="submit" class="syl-cloud-primary">'+ico('lock',15)+' '+(register?'Create student account':'Sign in securely')+'</button></form>'+
+    (!register?'<button type="button" class="syl-cloud-forgot" data-action="cloud-reset">Forgot password?</button>':'<p class="syl-cloud-fine">You may need to confirm your email address before signing in.</p>');
+ }
+ return '<section class="syl-cloud-card" aria-label="SYLearn student account">'+intro+actions+
+  '<p class="syl-cloud-foot">'+ico('info',14)+' '+esc(cloud.notice||'Your records stay on this device unless you connect your account.')+'</p>'+
+  '</section>';
+}
+
 function account(){
  const photo=profilePhoto(state.user),name=String(state.user?.name||'Learner');
  const short=(name.match(/\b[\p{L}\p{N}]/gu)||[name[0]||'L']).slice(0,2).join('').toUpperCase();
  return '<section class="screen syl-account-v3"><button type="button" class="syl-account-back" data-go="profile">'+ico('back',17)+' Back to profile</button>'+
   '<div class="syl-account-head"><span class="syl-p3-eyebrow">YOUR ACCOUNT</span><h1>Make it yours.</h1><p>Personalise your student profile and learning experience.</p></div>'+
+  cloudAccountBox()+
   '<div class="syl-account-card"><div class="syl-account-avatar-row"><div class="syl-account-avatar">'+(photo?'<img src="'+photo+'" alt="Your profile photo"/>':'<span>'+esc(short)+'</span>')+'</div>'+
    '<div><h2>Profile picture</h2><p>Upload a clear photo, or use your initials.</p><label class="syl-account-file-label" for="syl-profile-photo">'+ico('camera',16)+' Choose photo</label>'+
    (photo?'<button type="button" class="syl-account-remove" data-action="profile-remove-photo">Remove photo</button>':'')+
@@ -486,11 +515,11 @@ function account(){
    '<form id="account-form"><div class="syl-account-field"><label for="account-name">Display name</label><input id="account-name" name="name" required minlength="2" maxlength="60" autocomplete="nickname" value="'+esc(name)+'" placeholder="Enter your name"/></div>'+
    '<div class="syl-account-field"><label for="account-language">Learning explanations language</label><select name="preferred" id="account-language">'+['Hausa','English'].map(x=>'<option value="'+x+'" '+(state.user.preferred===x?'selected':'')+'>'+x+'</option>').join('')+'</select></div>'+
    '<button type="submit" class="syl-account-primary">'+ico('check',17)+' Save profile changes</button></form>'+
-   '<p class="syl-account-help">'+ico('info',14)+' Your picture and settings are stored on this device, not in an online account.</p></div>'+
+   '<p class="syl-account-help">'+ico('info',14)+' Your picture stays on this device. Name and learning language are saved to cloud when connected.</p></div>'+
   '<div class="syl-account-data"><div><span class="syl-p3-eyebrow">YOUR RECORDS</span><h2>Data & backup</h2><p>Keep a personal copy of your courses, chapters and saved classes. You can restore a backup on another device manually.</p></div>'+
    '<div class="syl-account-data-actions"><button type="button" data-action="profile-export">'+ico('download',18)+' Download backup</button><label for="syl-profile-restore">'+ico('repeat',18)+' Restore backup</label><input type="file" id="syl-profile-restore" accept=".json,application/json" aria-label="Restore SYLearn learning backup"/></div>'+
-   '<p>Restoring a backup replaces the matching records on this device. Automatic syncing is not available yet.</p></div>'+
-  '<div class="syl-account-security"><span>'+ico('lock',20)+'</span><div><h2>Secure student sign-in</h2><p>Email or Google sign-in, account recovery and cloud progress sync require a configured authentication service and database. They are not active yet.</p></div></div>'+
+   '<p>Restoring a backup replaces matching device records. If cloud sync is on, open this page and tap Sync now afterwards.</p></div>'+
+  '<div class="syl-account-security"><span>'+ico('lock',20)+'</span><div><h2>Secure student sign-in</h2><p>Use your email and password above. Cloud records are private to your account. Payments and verified certificates are not enabled.</p></div></div>'+
  '</section>';
 }
 function billing(){
@@ -613,7 +642,7 @@ heading('Your learning journey begins here','','')+
 '<div class="grid-2 onboarding-features">'+[['book','Learn at your pace','Explore structured courses and practise when you want.'],['laptop','Develop real skills','Explore programming, design, technology and business.'],['brain','Study with AI','Explore guided study answers in Hausa or English.'],['trophy','Celebrate progress','Track chapters you study and record eligible knowledge-check results.']].map(([i,t,d])=>'<div class="panel" style="padding:20px"><div class="red">'+ico(i,28)+'</div><h3 class="mt-2">'+t+'</h3><p class="muted small">'+d+'</p></div>').join('')+'</div><div class="row gap-2 mt-3"><button class="btn btn-primary" data-go="signup">Create Learning Profile '+ico('arrow')+'</button><button class="btn btn-outline" data-go="home">Explore as Guest</button></div></section>';
 }
 function signup(){
-return '<section class="screen"><button class="back-btn" data-go="welcome">'+ico('back')+' Back to welcome</button><div class="form-card"><div class="red">'+ico('cap',35)+'</div><h1>Start learning today</h1><p class="muted">Personalise your learning profile to explore courses and save study preferences on this device.</p><form id="signup-form"><div class="field"><label for="student-name">Your name</label><input id="student-name" name="name" required maxlength="60" placeholder="Your full name"/></div><div class="field"><label for="student-goal">What would you like to learn?</label><select name="goal" id="student-goal"><option>Programming</option><option>AI & Automation</option><option>Design & Creative</option><option>Data & Analytics</option><option>Engineering & IoT</option><option>Cybersecurity</option><option>Business & Office</option></select></div><div class="field"><label for="student-language">Explanations in</label><select id="student-language" name="preferred"><option>Hausa</option><option>English</option></select></div><button class="btn btn-primary btn-block" type="submit">Continue to SYLearn '+ico('arrow')+'</button></form><p class="fine-print mt-3">Your profile is saved on this device. Secure email or Google sign-in is not connected yet.</p><button class="btn btn-light btn-block mt-2" data-go="home">Continue as Guest</button></div></section>';
+return '<section class="screen"><button class="back-btn" data-go="welcome">'+ico('back')+' Back to welcome</button><div class="form-card"><div class="red">'+ico('cap',35)+'</div><h1>Start learning today</h1><p class="muted">Personalise your learning profile to explore courses and save study preferences on this device.</p><form id="signup-form"><div class="field"><label for="student-name">Your name</label><input id="student-name" name="name" required maxlength="60" placeholder="Your full name"/></div><div class="field"><label for="student-goal">What would you like to learn?</label><select name="goal" id="student-goal"><option>Programming</option><option>AI & Automation</option><option>Design & Creative</option><option>Data & Analytics</option><option>Engineering & IoT</option><option>Cybersecurity</option><option>Business & Office</option></select></div><div class="field"><label for="student-language">Explanations in</label><select id="student-language" name="preferred"><option>Hausa</option><option>English</option></select></div><button class="btn btn-primary btn-block" type="submit">Continue to SYLearn '+ico('arrow')+'</button></form><p class="fine-print mt-3">Your profile is saved on this device. For online email sign-in and secure cloud sync, open Profile → Account & cloud sync.</p><button class="btn btn-light btn-block mt-2" data-go="home">Continue as Guest</button></div></section>';
 }
 
 function overlay(){
@@ -660,6 +689,40 @@ if(!action)return;
 if(action==='promo-prev'){changePromo(state.promoIndex-1,true);return}
 if(action==='promo-next'){changePromo(state.promoIndex+1,true);return}
 if(action==='promo-dot'){changePromo(Number(b.dataset.index)||0,true);return}
+if(action==='cloud-mode'){
+ state.cloudAuthMode=val==='register'?'register':'login';render();return
+}
+if(action==='cloud-link'){
+ if(!window.confirm('These device learning records belong to you and will be merged with your signed-in SYLearn cloud account. A local backup is kept. Continue?'))return;
+ const cloud=window.SYLEARN_CLOUD;
+ if(!cloud)return;
+ b.disabled=true;
+ cloud.linkDevice().then(data=>{
+  toast('Cloud link complete: '+data.saved+' saved courses, '+data.chapters+' studied chapters.');
+  location.reload();
+ }).catch(err=>{b.disabled=false;toast('Could not link device: '+String(err.message||err).slice(0,110));render()});
+ return
+}
+if(action==='cloud-refresh'){
+ const cloud=window.SYLEARN_CLOUD;if(!cloud)return;
+ b.disabled=true;
+ cloud.refresh().then(ok=>{if(ok){toast('Cloud records updated.');location.reload()}else{toast('Cloud sync unavailable. Device records are safe.');render()}}).catch(err=>{toast(String(err.message||err));render()});
+ return
+}
+if(action==='cloud-signout'){
+ const cloud=window.SYLEARN_CLOUD;if(!cloud)return;
+ b.disabled=true;
+ cloud.signOut().then(()=>location.reload()).catch(err=>{toast('Sign out failed: '+String(err.message||err).slice(0,90));render()});
+ return
+}
+if(action==='cloud-reset'){
+ const cloud=window.SYLEARN_CLOUD;
+ const email=String(document.getElementById('cloud-email')?.value||'').trim();
+ if(!email||!document.getElementById('cloud-email')?.checkValidity()){toast('Enter your email address first.');return}
+ b.disabled=true;
+ cloud.resetPassword(email).then(()=>{toast('If this email has an account, check your inbox for recovery instructions.');b.disabled=false}).catch(err=>{toast(String(err.message||err));b.disabled=false});
+ return
+}
 if(action==='live-tab'){state.liveTab=['upcoming','now','mine','past'].includes(val)?val:'upcoming';render();return}
 if(action==='live-save'){
  const session=liveSessions().find(s=>s.id===id);
@@ -746,13 +809,33 @@ if(action==='session-alert'){state.modal='session';render();return}
 if(action==='close-modal'){if(b.classList&&b.classList.contains('modal-layer')&&e.target!==b)return;state.modal=null;render();return}
 });
 document.addEventListener('submit',e=>{
+if(e.target.id==='cloud-auth-form'){
+ e.preventDefault();
+ const f=new FormData(e.target),email=String(f.get('email')||'').trim().toLowerCase(),
+  password=String(f.get('password')||'');
+ const cloud=window.SYLEARN_CLOUD;
+ if(!cloud||password.length<8){toast('Enter a valid email and a password of at least 8 characters.');return}
+ const button=e.target.querySelector('[type="submit"]');
+ if(button){button.disabled=true;button.textContent='Connecting securely…'}
+ const request=state.cloudAuthMode==='register'?
+  cloud.signUp(email,password,state.user?.name||'Learner'):cloud.signIn(email,password);
+ request.then(data=>{
+  if(data?.session){location.reload();return}
+  toast('Registration received. Check your email to confirm your account.');
+  if(button){button.disabled=false;button.textContent='Create student account'}
+ }).catch(err=>{
+  toast('Account error: '+String(err.message||err).slice(0,110));
+  if(button){button.disabled=false;button.textContent=state.cloudAuthMode==='register'?'Create student account':'Sign in securely'}
+ });
+ return
+}
 if(e.target.id==='yt-search-form'){e.preventDefault();VIDEO_UI.startSearch(e.target,()=>{if(['courses','ytlibrary'].includes(state.page))render()});nav('courses');return}
 if(e.target.id==='home-search-form'){e.preventDefault();const q=String(new FormData(e.target).get('search')||'').trim();VIDEO.state.category='All';VIDEO.state.sort='featured';nav('courses');if(q.length>=2)VIDEO.search(q,'video').then(()=>{if(state.page==='courses')render()});return}
 if(e.target.id==='course-search'){e.preventDefault();state.search=String(new FormData(e.target).get('search')||'');render();return}
 if(e.target.id==='ai-form'){e.preventDefault();const f=new FormData(e.target);const q=String(f.get('message')||'').trim();if(!q)return;state.chat.push({from:'user',text:q},{from:'ai',text:respond(q)});save('chat',state.chat);render();setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}),0);return}
 if(e.target.id==='pronounce-form'){e.preventDefault();checkPronunciation(String(new FormData(e.target).get('spoken')||''));return}
 if(e.target.id==='signup-form'){e.preventDefault();const data=new FormData(e.target);state.user={name:String(data.get('name')||'Learner').trim().slice(0,60),preferred:String(data.get('preferred')||'Hausa')};save('user',state.user);state.category=String(data.get('goal')||'All');nav('courses');toast('Welcome to SYLearn, '+state.user.name+'!');return}
-if(e.target.id==='account-form'){e.preventDefault();const f=new FormData(e.target);state.user={...state.user,name:String(f.get('name')||'Learner').trim().slice(0,60),preferred:['Hausa','English'].includes(String(f.get('preferred')))?String(f.get('preferred')):'Hausa'};save('user',state.user);nav('profile');toast('Account preferences saved on this device.');return}
+if(e.target.id==='account-form'){e.preventDefault();const f=new FormData(e.target);state.user={...state.user,name:String(f.get('name')||'Learner').trim().slice(0,60),preferred:['Hausa','English'].includes(String(f.get('preferred')))?String(f.get('preferred')):'Hausa'};save('user',state.user);nav('profile');window.SYLEARN_CLOUD?.saveProfile(state.user.name,state.user.preferred);toast(window.SYLEARN_CLOUD?.status?.().linked?'Profile saved and queued for cloud sync.':'Profile saved on this device.');return}
 if(e.target.id==='draft-form'){e.preventDefault();const f=new FormData(e.target);state.drafts.push({title:String(f.get('title')).slice(0,70),cat:String(f.get('cat')),desc:String(f.get('desc')).slice(0,300)});save('drafts',state.drafts);render();toast('Your course draft is saved locally.');return}
 });
 document.addEventListener('change',e=>{
@@ -843,6 +926,12 @@ document.addEventListener('touchend',e=>{
 document.addEventListener('keydown',e=>{
 if(e.target.id==='home-search'&&e.key==='Enter'){e.preventDefault();state.search=e.target.value;state.category='All';nav('courses')}
 if(e.key==='Escape'&&state.modal){state.modal=null;render()}
+});
+window.addEventListener('sylearn-cloud-change',()=>{
+ if(state.page==='profile'||state.page==='account'){
+  if(!document.activeElement?.closest?.('#cloud-auth-form')&&
+     !document.activeElement?.closest?.('#account-form'))render();
+ }
 });
 window.addEventListener('popstate',route);
 window.addEventListener('hashchange',route);
