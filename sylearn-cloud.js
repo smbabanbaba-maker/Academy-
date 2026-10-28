@@ -7,13 +7,8 @@
 'use strict';
 const ENDPOINT='https://ctipxeukshkfigbkatnl.supabase.co';
 const PUBLISHABLE_KEY='sb_publishable_lxNkqUvgdVtlEBhT7UYL1Q_e6j6wn89';
-const sdk=window.supabase;
 const V=window.SYLUTION_VIDEO;
-const db=sdk&&typeof sdk.createClient==='function'?
- sdk.createClient(ENDPOINT,PUBLISHABLE_KEY,{
-  auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,
-   storageKey:'sylearn-supabase-auth-v1'}
- }):null;
+let db=null;
 const PREFIX='sylearn-cloud-';
 const COURSES=new Map((V?.curated||[]).map(c=>[c.id,c]));
 let user=null,linked=false,connecting=false,uploading=false,pending=false,notice='',catalogOnline=false,authReady=false,recovery=false;
@@ -369,8 +364,26 @@ window.addEventListener('online',()=>{flushQueue().catch(()=>{});if(user&&linked
 document.addEventListener('visibilitychange',()=>{
  if(!document.hidden&&user&&linked)flushQueue().catch(()=>{});
 });
+function start(){
+ if(db)return true;
+ const sdk=window.supabase;
+ if(!sdk||typeof sdk.createClient!=='function'){
+  authReady=true;notice='Secure sign-in is loading. Guest learning remains available.';emit();return false;
+ }
+ try{
+  db=sdk.createClient(ENDPOINT,PUBLISHABLE_KEY,{
+   auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,
+    storageKey:'sylearn-supabase-auth-v1'}
+  });
+  notice='Connecting to secure student accounts.';
+  authReady=false;emit();boot().catch(()=>{});
+  return true;
+ }catch(err){
+  authReady=true;notice='Cloud service is unavailable. Learning stays on this device.';emit();return false;
+ }
+}
 window.SYLEARN_CLOUD={
- status,signIn,signUp,signOut,resetPassword,updatePassword,linkDevice,refresh,loadCatalog,
+ start,status,signIn,signUp,signOut,resetPassword,updatePassword,linkDevice,refresh,loadCatalog,
  saveCourse:(id,saved)=>{if(courseValid(id))queue({type:'saved',course:id,value:!!saved})},
  markChapter:(id,index,source)=>{if(chapterValid(id,index))queue({type:'progress',course:id,index,source:source==='client_playback'?'client_playback':'learner_marked'})},
  saveNote:(id,index,body)=>{if(chapterValid(id,index))queue({type:'note',course:id,index,body:String(body||'').slice(0,6000)})},
@@ -381,5 +394,5 @@ window.SYLEARN_CLOUD={
  },
  saveProfile:(name,language)=>{if(user&&linked)queue({type:'profile',name:String(name||'Learner').slice(0,60),language:language==='Hausa'?'Hausa':'English'})}
 };
-boot().catch(()=>{});
+start();
 })();
