@@ -272,7 +272,7 @@ async function loadCatalog(){
    original.featured=!!item.is_featured;
    const matching=chapters.filter(x=>x.course_id===item.id).sort((a,b)=>a.chapter_index-b.chapter_index);
    if(matching.length&&matching.every((x,i)=>x.chapter_index===i))
-    original.chapters=matching.map(x=>({title:x.title,seconds:x.start_seconds}));
+    original.chapters=matching.map(x=>[x.title,x.start_seconds]);
   }
   catalogOnline=true;emit();return true;
  }catch(e){catalogOnline=false;emit();return false}
