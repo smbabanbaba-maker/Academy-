@@ -20,7 +20,34 @@ function submit(id){
  const score=Math.round(correct/q.length*100),passed=score>=PASS,previous=record(id);
  const current={score,correct,total:q.length,passed,answers:attempt.answers.slice(),date:new Date().toISOString()};
  store[id]={...previous,latest:current,bestScore:Math.max(previous.bestScore||0,score),attempts:(previous.attempts||0)+1,passedAt:passed?(previous.passedAt||current.date):previous.passedAt};
- persist();return current
+ persist();window.SYLEARN_CLOUD?.saveAssessment(id,correct,q.length,current.date);return current
+}
+/* Synced assessment results are unverified learner-reported activity.
+   Keep original local answers and latest review if they are newer than cloud. */
+function hydrate(rows){
+ if(!Array.isArray(rows))return;
+ const groups=new Map();
+ for(const r of rows){
+  if(!BANK[r.course_id]||!Number.isInteger(r.score)||!Number.isInteger(r.max_score)||
+     r.max_score<=0||r.score<0||r.score>r.max_score)continue;
+  if(!groups.has(r.course_id))groups.set(r.course_id,[]);
+  groups.get(r.course_id).push(r);
+ }
+ for(const [id,records] of groups){
+  records.sort((a,b)=>Date.parse(a.attempted_at||0)-Date.parse(b.attempted_at||0));
+  const prev=record(id),last=records[records.length-1];
+  const score=Math.round(100*last.score/last.max_score);
+  const best=Math.max(prev.bestScore||0,...records.map(r=>Math.round(100*r.score/r.max_score)));
+  const validDate=r=>Number.isFinite(Date.parse(r.attempted_at))?r.attempted_at:new Date().toISOString();
+  const latest=!prev.latest||Date.parse(validDate(last))>Date.parse(prev.latest.date||0)?
+   {score,correct:last.score,total:last.max_score,passed:score>=PASS,answers:[],date:validDate(last),cloud:true}:
+   prev.latest;
+  const passed=records.filter(r=>Math.round(100*r.score/r.max_score)>=PASS);
+  const cloudPassed=passed.length?validDate(passed[0]):null;
+  store[id]={...prev,latest,bestScore:best,attempts:Math.max(prev.attempts||0,records.length),
+   passedAt:prev.passedAt||cloudPassed};
+ }
+ persist();
 }
 function eligible(id,progress){const r=record(id);return progress===100&&!!r.passedAt&&r.bestScore>=PASS}
 function completion(id,progress){
@@ -28,5 +55,5 @@ function completion(id,progress){
  const r=record(id);
  return{id,title:'Local Learning Completion Record',score:r.bestScore,date:r.passedAt,reference:'SL-'+id.toUpperCase()+'-'+r.passedAt.slice(0,10).replace(/-/g,''),verified:false}
 }
-window.SYLUTION_ASSESS={questions,record,start,answer,submit,eligible,completion,get attempt(){return attempt},PASS};
+window.SYLUTION_ASSESS={questions,record,start,answer,submit,hydrate,eligible,completion,get attempt(){return attempt},PASS};
 })();
