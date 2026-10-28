@@ -6,7 +6,12 @@
 -- Applies Supabase Auth user ownership, explicit grants and Row Level Security.
 -- Learner localStorage remains untouched until opt-in account-based synchronization.
 -- The public course catalog credits original third-party video educators.
-begin;
+-- Supabase migration runner owns the transaction (no manual BEGIN/COMMIT).
+-- Privileged helper routines live in a non-exposed private schema.
+
+create schema if not exists sylearn_private;
+revoke all on schema sylearn_private from public, anon, authenticated;
+grant usage on schema sylearn_private to authenticated;
 
 create table public.staff_users (
   user_id uuid primary key references auth.users(id) on delete cascade,
@@ -16,7 +21,7 @@ create table public.staff_users (
 );
 
 -- No client can grant itself a staff role: only trusted SQL/service-side actions.
-create function public.sylearn_is_staff()
+create function sylearn_private.sylearn_is_staff()
 returns boolean language sql stable security definer set search_path = ''
 as $$
   select exists(
@@ -24,8 +29,8 @@ as $$
     where user_id = (select auth.uid()) and active
   );
 $$;
-revoke all on function public.sylearn_is_staff() from public, anon, authenticated;
-grant execute on function public.sylearn_is_staff() to authenticated;
+revoke all on function sylearn_private.sylearn_is_staff() from public, anon, authenticated;
+grant execute on function sylearn_private.sylearn_is_staff() to authenticated;
 
 create table public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
@@ -169,7 +174,7 @@ create table public.learning_completion_records (
 );
 -- SYLearn local learning records are not official/accredited certificates.
 
-create function public.sylearn_touch_updated_at()
+create function sylearn_private.sylearn_touch_updated_at()
 returns trigger language plpgsql set search_path = '' as $$
 begin
   new.updated_at = now();
@@ -177,16 +182,16 @@ begin
 end;
 $$;
 create trigger sylearn_touch_profile before update on public.profiles
-  for each row execute function public.sylearn_touch_updated_at();
+  for each row execute function sylearn_private.sylearn_touch_updated_at();
 create trigger sylearn_touch_course before update on public.courses
-  for each row execute function public.sylearn_touch_updated_at();
+  for each row execute function sylearn_private.sylearn_touch_updated_at();
 create trigger sylearn_touch_note before update on public.study_notes
-  for each row execute function public.sylearn_touch_updated_at();
+  for each row execute function sylearn_private.sylearn_touch_updated_at();
 create trigger sylearn_touch_payment before update on public.payment_records
-  for each row execute function public.sylearn_touch_updated_at();
+  for each row execute function sylearn_private.sylearn_touch_updated_at();
 
 -- Automatically create a profile for newly authenticated learners.
-create function public.sylearn_handle_new_user()
+create function sylearn_private.sylearn_handle_new_user()
 returns trigger language plpgsql security definer set search_path = '' as $$
 begin
   insert into public.profiles(id,display_name,preferred_language)
@@ -198,9 +203,9 @@ begin
   return new;
 end;
 $$;
-revoke all on function public.sylearn_handle_new_user() from public, anon, authenticated;
+revoke all on function sylearn_private.sylearn_handle_new_user() from public, anon, authenticated;
 create trigger sylearn_auth_new_user after insert on auth.users
-  for each row execute function public.sylearn_handle_new_user();
+  for each row execute function sylearn_private.sylearn_handle_new_user();
 
 -- Secure ALL public tables: privileges + row-level security.
 alter table public.staff_users enable row level security;
@@ -264,28 +269,28 @@ create policy sylearn_profile_update on public.profiles
 create policy sylearn_course_public_read on public.courses
  for select to anon,authenticated using(is_published);
 create policy sylearn_course_staff_read on public.courses
- for select to authenticated using((select public.sylearn_is_staff()));
+ for select to authenticated using((select sylearn_private.sylearn_is_staff()));
 create policy sylearn_course_create_staff on public.courses
- for insert to authenticated with check((select public.sylearn_is_staff()));
+ for insert to authenticated with check((select sylearn_private.sylearn_is_staff()));
 create policy sylearn_course_edit_staff on public.courses
- for update to authenticated using((select public.sylearn_is_staff()))
- with check((select public.sylearn_is_staff()));
+ for update to authenticated using((select sylearn_private.sylearn_is_staff()))
+ with check((select sylearn_private.sylearn_is_staff()));
 create policy sylearn_course_delete_staff on public.courses
- for delete to authenticated using((select public.sylearn_is_staff()));
+ for delete to authenticated using((select sylearn_private.sylearn_is_staff()));
 
 create policy sylearn_chapters_public_read on public.course_chapters
  for select to anon,authenticated using(exists(
    select 1 from public.courses c where c.id=course_id and c.is_published
  ));
 create policy sylearn_chapters_staff_read on public.course_chapters
- for select to authenticated using((select public.sylearn_is_staff()));
+ for select to authenticated using((select sylearn_private.sylearn_is_staff()));
 create policy sylearn_chapters_add_staff on public.course_chapters
- for insert to authenticated with check((select public.sylearn_is_staff()));
+ for insert to authenticated with check((select sylearn_private.sylearn_is_staff()));
 create policy sylearn_chapters_edit_staff on public.course_chapters
- for update to authenticated using((select public.sylearn_is_staff()))
- with check((select public.sylearn_is_staff()));
+ for update to authenticated using((select sylearn_private.sylearn_is_staff()))
+ with check((select sylearn_private.sylearn_is_staff()));
 create policy sylearn_chapters_delete_staff on public.course_chapters
- for delete to authenticated using((select public.sylearn_is_staff()));
+ for delete to authenticated using((select sylearn_private.sylearn_is_staff()));
 
 create policy sylearn_saved_course_read on public.saved_courses
  for select to authenticated using(user_id=(select auth.uid()));
@@ -321,14 +326,14 @@ create policy sylearn_assessments_selfreport on public.assessment_attempts
 create policy sylearn_live_public_read on public.live_sessions
  for select to anon,authenticated using(is_published);
 create policy sylearn_live_staff_read on public.live_sessions
- for select to authenticated using((select public.sylearn_is_staff()));
+ for select to authenticated using((select sylearn_private.sylearn_is_staff()));
 create policy sylearn_live_add_staff on public.live_sessions
- for insert to authenticated with check((select public.sylearn_is_staff()));
+ for insert to authenticated with check((select sylearn_private.sylearn_is_staff()));
 create policy sylearn_live_edit_staff on public.live_sessions
- for update to authenticated using((select public.sylearn_is_staff()))
- with check((select public.sylearn_is_staff()));
+ for update to authenticated using((select sylearn_private.sylearn_is_staff()))
+ with check((select sylearn_private.sylearn_is_staff()));
 create policy sylearn_live_delete_staff on public.live_sessions
- for delete to authenticated using((select public.sylearn_is_staff()));
+ for delete to authenticated using((select sylearn_private.sylearn_is_staff()));
 
 create policy sylearn_saved_live_read on public.saved_live_sessions
  for select to authenticated using(user_id=(select auth.uid()));
@@ -451,8 +456,6 @@ values
   ('c9Wg6Cb_YlU', 2, 'User Interface Layout', 1858),
   ('c9Wg6Cb_YlU', 3, 'Polished Mockup', 3998)
 on conflict (course_id,chapter_index) do nothing;
-
-commit;
 
 -- DEPLOYMENT CHECKLIST:
 -- 1. Connect the official Supabase plugin and choose the SYLearn project.
