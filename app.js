@@ -484,7 +484,9 @@ function cloudAccountBox(){
  const summary=user?(cloud.linked?'Your bookmarks, chapter progress and study notes can sync automatically.':'Confirm that existing study records on this device belong to your account before linking.'):'Register or sign in with email to keep your saved courses and progress when you switch devices.';
  const intro='<div class="syl-cloud-card-head"><span class="syl-cloud-mark">'+ico('lock',21)+'</span><div><span class="syl-cloud-overline">SYLearn · CLOUD ACCOUNT</span><h2>'+headline+'</h2><p>'+summary+'</p></div></div>';
  let actions='';
- if(user){
+ if(user&&cloud.recovery){
+  actions='<form id="cloud-password-form" class="syl-cloud-form"><label for="cloud-new-password">Choose a new password</label><input type="password" id="cloud-new-password" name="password" minlength="8" maxlength="128" autocomplete="new-password" required placeholder="At least 8 characters"/><button type="submit" class="syl-cloud-primary">Save new password</button></form>';
+ }else if(user){
   actions='<div class="syl-cloud-status-line"><span class="syl-cloud-light '+(cloud.linked?'is-online':'')+'"></span><strong>'+badge+'</strong>'+(cloud.unsynced?'<small>'+cloud.unsynced+' pending changes</small>':'')+'</div>'+
    (cloud.linked?'<div class="syl-cloud-button-row"><button type="button" class="syl-cloud-primary" data-action="cloud-refresh" '+(cloud.connecting?'disabled':'')+'>'+ico('repeat',16)+' '+(cloud.connecting?'Syncing…':'Sync now')+'</button><button type="button" class="syl-cloud-secondary" data-action="cloud-signout">Sign out</button></div>':
    '<div class="syl-cloud-link-warning">'+ico('info',15)+' Import only records that belong to you. Your existing data is backed up locally before merging.</div>'+
@@ -809,6 +811,16 @@ if(action==='session-alert'){state.modal='session';render();return}
 if(action==='close-modal'){if(b.classList&&b.classList.contains('modal-layer')&&e.target!==b)return;state.modal=null;render();return}
 });
 document.addEventListener('submit',e=>{
+if(e.target.id==='cloud-password-form'){
+ e.preventDefault();
+ const pwd=String(new FormData(e.target).get('password')||'');
+ if(pwd.length<8){toast('Password must contain at least 8 characters.');return}
+ const btn=e.target.querySelector('[type="submit"]');if(btn)btn.disabled=true;
+ window.SYLEARN_CLOUD.updatePassword(pwd).then(()=>{toast('Password updated securely.');render()}).catch(err=>{
+  toast(String(err.message||err));if(btn)btn.disabled=false;
+ });
+ return
+}
 if(e.target.id==='cloud-auth-form'){
  e.preventDefault();
  const f=new FormData(e.target),email=String(f.get('email')||'').trim().toLowerCase(),
@@ -926,6 +938,13 @@ document.addEventListener('touchend',e=>{
 document.addEventListener('keydown',e=>{
 if(e.target.id==='home-search'&&e.key==='Enter'){e.preventDefault();state.search=e.target.value;state.category='All';nav('courses')}
 if(e.key==='Escape'&&state.modal){state.modal=null;render()}
+});
+window.addEventListener('sylearn-cloud-data',()=>{
+ state.user=read('user',state.user);
+ if(['home','courses','progress','profile','account','saved','ytcourse','ytlibrary'].includes(state.page)){
+  const active=document.activeElement;
+  if(!active?.closest?.('form'))render();
+ }
 });
 window.addEventListener('sylearn-cloud-change',()=>{
  if(state.page==='profile'||state.page==='account'){
