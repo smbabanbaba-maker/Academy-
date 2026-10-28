@@ -46,8 +46,10 @@ const restoreSnapshot=owner=>{
 const studyData=records=>{
  const saved=safeJSON(records['sylution_yt-saved'],[]);
  const progress=safeJSON(records['sylution_yt-progress'],{});
+ const assessments=safeJSON(records['sylution-course-assessments-v1'],{});
  return (Array.isArray(saved)&&saved.length>0)||
   (progress&&typeof progress==='object'&&Object.values(progress).some(a=>Array.isArray(a)&&a.length>0))||
+  (assessments&&typeof assessments==='object'&&!Array.isArray(assessments)&&Object.values(assessments).some(r=>r&&r.attempts>0))||
   Object.keys(records).some(k=>k.startsWith('sylution_yt-note-')&&records[k]?.length>0);
 };
 const emit=()=>{
