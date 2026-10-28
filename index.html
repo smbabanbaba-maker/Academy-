@@ -107,7 +107,6 @@
       });
     })();
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0" defer crossorigin="anonymous"></script>
   <script src="./youtube.js?v=20261028cloudv1" defer></script>
   <script src="./learning.js?v=20261028cloudv1" defer></script>
   <script src="./learning-ui.js?v=20261028cloudv1" defer></script>
@@ -117,6 +116,7 @@
   <script src="./promo-slides.js?v=20261028cloudv1" defer></script>
   <script src="./sylearn-cloud.js?v=20261028cloudv1" defer></script>
   <script src="./app.js?v=20261028cloudv1" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0" async crossorigin="anonymous" onload="window.SYLEARN_CLOUD?.start?.()"></script>
   <script>
 if("serviceWorker" in navigator){
   navigator.serviceWorker.addEventListener("controllerchange",()=>{
