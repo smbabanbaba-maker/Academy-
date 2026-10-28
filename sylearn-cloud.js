@@ -64,14 +64,16 @@ const chapterValid=(id,i)=>courseValid(id)&&Number.isInteger(i)&&i>=0&&i<(COURSE
 const validCourseRows=data=>Array.isArray(data)?data.filter(r=>r&&courseValid(r.course_id)):[];
 const readRemote=async()=>{
  if(!user)throw Error('Sign in first');
- const [a,b,c,d]=await Promise.all([
+ const [a,b,c,d,e]=await Promise.all([
   db.from('saved_courses').select('course_id').eq('user_id',user.id),
   db.from('chapter_progress').select('course_id,chapter_index').eq('user_id',user.id),
   db.from('study_notes').select('course_id,chapter_index,body').eq('user_id',user.id),
-  db.from('profiles').select('display_name,preferred_language').eq('id',user.id).maybeSingle()
+  db.from('profiles').select('display_name,preferred_language').eq('id',user.id).maybeSingle(),
+  db.from('assessment_attempts').select('id,course_id,score,max_score,origin,attempted_at').eq('user_id',user.id)
  ]);
  return {saved:validCourseRows(check(a)),progress:validCourseRows(check(b)).filter(r=>chapterValid(r.course_id,r.chapter_index)),
   notes:validCourseRows(check(c)).filter(r=>chapterValid(r.course_id,r.chapter_index)),
+  assessments:validCourseRows(check(e)).filter(r=>Number.isInteger(r.score)&&Number.isInteger(r.max_score)),
   profile:check(d)};
 };
 const localSaved=()=>[...new Set((safeJSON(get('sylution_yt-saved'),[])||[]).filter(id=>typeof id==='string'&&courseValid(id)))];
@@ -96,6 +98,28 @@ const localNotes=()=>{
  }
  return rows;
 };
+/* One imported summary per course: historical question-level attempts may not
+   exist in localStorage. Imported results are explicitly unverified. */
+const localAssessmentRows=()=>{
+ const records=safeJSON(get('sylution-course-assessments-v1'),{}),rows=[];
+ if(!records||Array.isArray(records)||typeof records!=='object')return rows;
+ for(const [course_id,r] of Object.entries(records)){
+  if(!courseValid(course_id)||!r||typeof r!=='object'||!(r.attempts>0))continue;
+  const best=Math.max(0,Math.min(100,Math.round(Number(r.bestScore)||0)));
+  const date=String(r.passedAt||r.latest?.date||'');
+  rows.push({user_id:user.id,course_id,score:best,max_score:100,
+   origin:'legacy_unverified',verified:false,
+   attempted_at:Number.isFinite(Date.parse(date))?date:new Date().toISOString()});
+ }
+ return rows;
+};
+const makeUUID=()=>{
+ if(window.crypto?.randomUUID)return window.crypto.randomUUID();
+ return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,k=>{
+  const r=window.crypto?.getRandomValues?(window.crypto.getRandomValues(new Uint8Array(1))[0]&15):Math.floor(Math.random()*16);
+  return (k==='x'?r:((r&3)|8)).toString(16);
+ });
+};
 const readQueue=()=>safeJSON(get(queueKey(user.id)),{});
 const persistQueue=val=>put(queueKey(user.id),val);
 const send=async op=>{
@@ -113,8 +137,13 @@ const send=async op=>{
    {onConflict:'user_id,course_id,chapter_index'});
  }else if(op.type==='profile'){
   q=db.from('profiles').upsert({id:user.id,display_name:op.name,preferred_language:op.language},{onConflict:'id'});
+ }else if(op.type==='assessment'){
+  q=db.from('assessment_attempts').insert({id:op.id,user_id:user.id,course_id:op.course,
+   score:op.score,max_score:op.total,origin:'self_reported',verified:false,attempted_at:op.date});
  }else return;
- check(await q);
+ const result=await q;
+ if(op.type==='assessment'&&result?.error?.code==='23505')return; // idempotent retry
+ check(result);
 };
 async function flushQueue(){
  if(!db||!linked||!user||uploading||!navigator.onLine)return;
@@ -137,7 +166,7 @@ async function flushQueue(){
 const queue=op=>{
  if(!db||!user||!linked)return;
  const q=readQueue();
- const id=op.type+':'+(op.course||'profile')+':'+(op.index??'');
+ const id=op.type+':'+(op.course||'profile')+':'+(op.id||(op.index??''));
  q[id]=op;persistQueue(q);
  clearTimeout(queueTimer);
  queueTimer=setTimeout(()=>{flushQueue().catch(()=>{})},450);
@@ -162,6 +191,7 @@ function applyRemote(rows){
  if(V){
   V.state.saved=saved.slice();V.state.courseProgress=progress;
  }
+ window.SYLUTION_ASSESS?.hydrate?.(rows.assessments||[]);
  if(rows.profile?.display_name&&rows.profile.display_name!=='Learner'){
   const current=safeJSON(get('sylution_user'),{});
   const next={...current,name:String(rows.profile.display_name).slice(0,60),
@@ -205,6 +235,9 @@ async function linkDevice(){
   if(missingSaved.length)check(await db.from('saved_courses').upsert(missingSaved,{onConflict:'user_id,course_id'}));
   if(missingProgress.length)check(await db.from('chapter_progress').upsert(missingProgress,{onConflict:'user_id,course_id,chapter_index'}));
   if(missingNotes.length)check(await db.from('study_notes').upsert(missingNotes,{onConflict:'user_id,course_id,chapter_index'}));
+  const reported=new Set(rows.assessments.map(r=>r.course_id+':'+Math.round(100*r.score/r.max_score)));
+  const missingAssessments=localAssessmentRows().filter(r=>!reported.has(r.course_id+':'+Math.round(100*r.score/r.max_score)));
+  if(missingAssessments.length)check(await db.from('assessment_attempts').insert(missingAssessments));
   const updated=await readRemote();
   linked=true;pending=false;
   put(linkedKey(uid),'1');put(path('owner'),uid);
@@ -339,6 +372,11 @@ window.SYLEARN_CLOUD={
  saveCourse:(id,saved)=>{if(courseValid(id))queue({type:'saved',course:id,value:!!saved})},
  markChapter:(id,index,source)=>{if(chapterValid(id,index))queue({type:'progress',course:id,index,source:source==='client_playback'?'client_playback':'learner_marked'})},
  saveNote:(id,index,body)=>{if(chapterValid(id,index))queue({type:'note',course:id,index,body:String(body||'').slice(0,6000)})},
+ saveAssessment:(id,correct,total,date)=>{
+  if(courseValid(id)&&Number.isInteger(correct)&&Number.isInteger(total)&&total>0&&correct>=0&&correct<=total)
+   queue({type:'assessment',id:makeUUID(),course:id,score:correct,total,
+    date:Number.isFinite(Date.parse(date))?date:new Date().toISOString()});
+ },
  saveProfile:(name,language)=>{if(user&&linked)queue({type:'profile',name:String(name||'Learner').slice(0,60),language:language==='Hausa'?'Hausa':'English'})}
 };
 boot().catch(()=>{});
